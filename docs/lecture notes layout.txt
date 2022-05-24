@@ -1,0 +1,169 @@
+Licensing
+Acknowledgements
+Preamble
+Table of Contents
+Table of Examples
+Table of Figures
+Table of Equations
+List of Acronyms
+
+Learning Material Setup
+	Autodesk Fusion360
+	(Optional) Fritzing
+	Arduino IDE
+	(Optional) VS Code
+	(Optional) Git and GitHub
+	ELEGOO Arduino Kit Introduction
+
+1. Digital Electronics
+	1.1 Introduction to Binary
+		1.1.1 What is Binary?
+			Example 1.1 Arduino Blink
+		1.1.2 Binary Arithmetic
+	1.2 Introduction to Logic Gates
+		1.2.1 Truth Tables
+		1.2.2 Logic Gates and Usage
+			Example 1.2 Arduino Logic Gate Demonstration Part 1
+	1.3 Boolean Algebra
+		1.3.1 Gate Combination
+			Example 1.3 Arduino Logic Gate Demonstration Part 2
+		1.3.2 Gate Interchangeability
+	1.4 Multiplexing
+	1.5 Registers
+		1.5.1 Register Basics
+		1.5.2 Shift register
+			Example 1.4 Arduino Shift Register
+	1.6 State Machines
+		Example 3.5 Arduino RGB LED State Machine
+	1.7 Analog-to-Digital Conversion
+		1.7.1 ADC Resolution
+			Example 1.6 Analog Voltage Measurement
+		1.7.2 Digital-to-Analog Conversion
+	1.8 TTL Digital Communications
+		1.8.1 Universal Asynchronous Receive and Transmit (UART)
+		1.8.2 RS232
+		1.8.3 Inter-Integrated Circuit (I2C)
+		1.8.4 Serial Peripherial Interface (SPI)
+	1.9 Differential Digital Communications
+		1.9.1 RS485/Ethernet
+		1.9.2 Universal Serial Bus (USB)
+		1.9.3 Controller Area Network Bus (CANbus)
+		1.9.4 Differential-to-TTL Bridges
+
+2. Electrical Hardware
+	2.1 Components
+		2.1.1 Resistors
+		2.1.2 Capacitors
+		2.1.3 Inductors
+		2.1.4 Transistors
+			BJT
+			MOSFET
+		2.1.5 Diodes
+		2.1.5 Integrated Circuits (ICs)
+	2.2 Measurement Equipment
+		2.2.1 Voltmeter, Ammeter, and Multimeters
+		2.2.2 Oscilloscopes
+		2.2.3 Logic Analyzers
+	2.3 Construction of Simple Circuits
+	2.4 Debugging Simple Circuits
+
+3. Electrical Schematics and Printed Circuit Boards (PCBs)
+	3.1 Schematic Basics
+		3.1.1 Frame and Layout
+		3.1.2 Layers
+		3.1.3 Placing Components
+			Consideration: Component package and board footprint
+		3.1.4 Connecting Signals
+			Aside: Bundling Signals Using Busses
+		3.1.5 Submodules
+		3.1.6 Electronics Rule Check (ERC)
+	3.2 PCB Basics
+		3.2.1 Board Shape
+			Aside: Using sketches to derive board shape
+		3.2.2 Laying Out Components
+			Consideration: Grouping components of relied functionality
+			Aside: Keepout zones, restricted zones
+		3.2.3 Routing Traces
+			Aside: Two-Layer versus Four-Layer
+			Aside: Trace lengths, matching, thicknesses
+		3.2.4 Vias
+		3.2.5 Silkscreen
+		3.2.6 Generating Copper Planes
+		3.2.7 Design Rules Check (DRC)
+	3.3 Download Component Library
+		3.3.1 Component Selection
+			Aside: Component searching and filtering in catalog websites like DigiKey
+		3.3.2 Locating a Library Source
+		3.3.3 Installation in Fusion360
+	3.4 Creating A Custom Library
+		3.4.1 Component Selection and Datasheet
+		3.4.2 Creating a Library
+		3.4.3 Creating a Symbol
+		3.4.4 Creating a Footprint
+		3.4.5 Creating a 3D Package
+			Aside: Find user-generated 3D models on sites like GrabCAD
+
+4. Software Basics and Architecture
+	4.1 Arduino Basics
+	4.2 Primative Programming Datatypes
+		4.2.1 Arrays
+	4.3 Logic Flow
+		4.3.1 If/Else Statement
+		4.3.2 Switch/Case Statement
+	4.4 Loops
+		4.4.1 For Loops
+		4.4.2 While Loops
+	4.3 Classes and Objects
+		4.3.1 Classes
+		4.3.2 Structs
+		Example 3.1 Using Arduino Objects
+	4.4 Functions
+	4.5 Interrupt Service Routines
+	4.6 Guided Example: EVE Launchsonde Instrumentation Package
+		4.6.1 Generating Requirements
+		4.6.2 Visualizing Logic Flow
+		4.6.3 Breaking it Down into Code Blocks
+		4.6.5 Writing Each Code Block
+		4.6.6 Wrapping it All Together
+	4.7 Guided Example: Thetis Instrumentation Package
+		4.6.1 Generating Requirements
+		4.6.2 Visualizing Logic Flow
+		4.6.3 Breaking it Down into Code Blocks
+		4.6.5 Writing Each Code Block
+		4.6.6 Wrapping it All Together
+
+5. Wireless Data Transmission
+	5.1 Basic Principle
+	5.2 Wireless Fidelity (Wi-Fi) (802.1n)
+	5.3 BlueTooth
+		5.3.1 BlueTooth Low Energy (BLE)
+	5.4 Long Range (LoRa)
+
+6. Power Considerations
+
+Appendix
+	Syllabus
+	
+	Demonstration: YSI Castaway
+	Demonstration: HOBO Waterlogger
+	Demonstration: Project EVE Launchsonde
+	Demonstration: Lowell and Thetis Instrumentation
+	Demonstration: Sidescan SONAR
+	Demonstration: Magnetometer
+	Demonstration: Soldering workshop
+
+	Exam: Arduino Programming Midterm
+
+	Homework 1: Arduino RGB LED Project
+	Homework 2: Digital Inputs and Interrupts
+	Homework 3: Active Buzzer
+	Homework 4: Servo Control
+	Homework 5: Ultrasonic Sensor Module and LCD
+	Homework 6: DHT Temperature Module and LCD
+	
+	Project: Undergraduate Project Overview and Requirements
+	Project: Graduate Project Overview and Requirements
+	
+	Supplement: Using a Raspberry Pi to Program Arduino Over ICSP
+
+Bibliography

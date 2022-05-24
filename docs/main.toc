@@ -1,0 +1,11 @@
+\@ifundefined {etoctocstyle}{\let \etoc@startlocaltoc \@gobble \let \etoc@settocdepth \@gobble \let \etoc@depthtag \@gobble \let \etoc@setlocaltop \@gobble }{}
+\babel@toc {english}{}\relax
+\contentsline {chapter}{Preface}{v}{chapter*.1}%
+\contentsline {chapter}{\nonumberline Contents}{vii}{chapter*.2}%
+\etoc@startlocaltoc {2}
+\etoc@startlocaltoc {3}
+\contentsline {chapter}{Syllabus}{1}{etoc@tocid.3}%
+\etoc@startlocaltoc {4}
+\etoc@startlocaltoc {5}
+\contentsline {chapter}{Supplement: Using a Raspberry Pi for ICSP}{3}{etoc@tocid.5}%
+\contentsline {chapter}{Alphabetical Index}{11}{section*.23}%
