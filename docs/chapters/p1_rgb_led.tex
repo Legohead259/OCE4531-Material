@@ -1,0 +1,92 @@
+% ===========================================
+% Project 1: RGB LED Cycler
+% Written by: Braidan Duffy
+%
+% Date: 05/22/2022
+% Last Revision: 05/24/2022
+% ============================================
+
+\chapter{Project 1: RGB LED Cycler}
+\labch{p1_rgb_led}
+
+\section*{Overview}
+
+In this project, you will use the RGB LED within your Arduino kit to learn the basics of digital inputs, PWM output, switch-case statements, functions, and various loops.
+The goal of this project will be to activate different modes on the RGB LED using a button to cycle through them and a switch-case statement to execute the appropriate functions.
+Since this is a beginning project, there is some psuedocode below to give you an idea of how the code should be structured.
+It will be up to you to determine what specific functions you want your LED to perform.
+
+\section*{Requirements}
+
+For this project, you must successfully hook up a button, an RGB LED, and any supporting passive components your Arduino and breadboard.
+\marginnote{\textbf{Reminder:} The LED \emph{must} be connected to the Arduino pins with resistors in series in order to protect the diodes. Please consult your Arduino kit manual for specific resistor values}
+You must also have at least three different functions that your LED performs - one of which must include loop. A great example would be the rainbow loop found in Example \ref{} or the breathe example found in Example \ref{} \todo{make these examples and put it in the book}
+
+\section*{Submission}
+
+You will be required to submit the following on Canvas:
+\begin{enumerate}
+    \item a video of the project working with narration of what is occurring
+    \item a well-organized and documented schematic of the project setup
+    \item the Arduino source code file
+\end{enumerate}
+Please package all of these items into a compressed (zipped) folder and upload them to Canvas.
+
+\section*{Grading}
+You will be graded along the following criteria:
+
+\begin{table*}
+    \begin{tabular}{ l | c }
+        \toprule
+        Criterion & Points \\
+
+        \midrule
+        Efficacy & 40 \\
+        3 or more functions & 20 \\
+        1 or more loops & 20 \\
+        Schematic neatness & 10 \\
+        Code neatness & 10 \\
+
+        \bottomrule
+    \end{tabular}
+\end{table*}
+
+\section*{Psuedocode}
+
+\begin{lstlisting}[linewidth=1.5\textwidth]
+    Program: RGB LED Cycler
+
+    Define BUTTON_PIN := [some pin]
+    Define LED_RED_PIN := [some pin]
+    Define LED_GREEN_PIN := [some pin]
+    Define LED_BLUE_PIN := [some pin]
+    Define MAX_LED_FUNCS := [number of LED functions]
+
+    Initialize ledMode := 0
+
+    Function: Setup
+        Initialize Serial communication for debugging
+        Initialize input pins
+        Initialize output pins
+
+    Function: Loop
+        Check for button pressed
+        If button is pressed then
+            If ledMode is set to MAX_LED_FUNCS then
+                Reset ledMode to 0
+            Else
+                Increment ledMode by 1
+        Switch ledMode
+            Case ledMode is set to 0
+                Execute first LED function
+            Case ledMode is set to 1
+                Execute second LED function
+            Case ledMode is set to 2
+                Execute third LED function
+            ...
+    
+    Function: First LED Function
+        [YOUR CODE HERE]
+    ...
+
+\end{lstlisting}
