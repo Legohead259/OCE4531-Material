@@ -33,12 +33,12 @@ Learning Material Setup
 		1.5.1 Register Basics
 		1.5.2 Shift register
 			Example 1.4 Arduino Shift Register
-	1.6 State Machines
-		Example 3.5 Arduino RGB LED State Machine
-	1.7 Analog-to-Digital Conversion
-		1.7.1 ADC Resolution
-			Example 1.6 Analog Voltage Measurement
-		1.7.2 Digital-to-Analog Conversion
+	1.6 Analog-to-Digital Conversion
+		1.6.1 ADC Resolution
+			Example 1.5 Analog Voltage Measurement
+		1.6.2 Digital-to-Analog Conversion
+	1.7 State Machines
+		Example 1.6 Arduino RGB LED State Machine
 	1.8 TTL Digital Communications
 		1.8.1 Universal Asynchronous Receive and Transmit (UART)
 		1.8.2 RS232
