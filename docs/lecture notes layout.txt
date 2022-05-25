@@ -13,7 +13,7 @@ Learning Material Setup
 	Arduino IDE
 	(Optional) VS Code
 	(Optional) Git and GitHub
-	ELEGOO Arduino Kit Introduction
+	Arduino Kit Introduction
 
 1. Digital Electronics
 	1.1 Introduction to Binary
@@ -43,7 +43,7 @@ Learning Material Setup
 		1.8.1 Universal Asynchronous Receive and Transmit (UART)
 		1.8.2 RS232
 		1.8.3 Inter-Integrated Circuit (I2C)
-		1.8.4 Serial Peripherial Interface (SPI)
+		1.8.4 Serial Peripheral Interface (SPI)
 	1.9 Differential Digital Communications
 		1.9.1 RS485/Ethernet
 		1.9.2 Universal Serial Bus (USB)
@@ -105,7 +105,7 @@ Learning Material Setup
 
 4. Software Basics and Architecture
 	4.1 Arduino Basics
-	4.2 Primative Programming Datatypes
+	4.2 Primitive Programming Datatypes
 		4.2.1 Arrays
 	4.3 Logic Flow
 		4.3.1 If/Else Statement
