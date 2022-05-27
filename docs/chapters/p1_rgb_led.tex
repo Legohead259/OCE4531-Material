@@ -60,13 +60,13 @@ If you want to try and get the extra credit points, please let the instructor kn
 \begin{lstlisting}[linewidth=1.5\textwidth]
     Program: RGB LED Cycler
 
-    Define BUTTON_PIN := [some pin]
-    Define LED_RED_PIN := [some pin]
-    Define LED_GREEN_PIN := [some pin]
-    Define LED_BLUE_PIN := [some pin]
-    Define MAX_LED_FUNCS := [number of LED functions]
+    Define an input button pin as some Arduino pin
+    Define the red LED pin as some Arduino pin
+    Define the green LED pin as some Arduino pin
+    Define the blue LED pin as some Arduino pin
+    Define the number of LED functions as the number of modes you want
 
-    Initialize ledMode := 0
+    Initialize the current LED mode as 0
 
     Function: Setup
         Initialize Serial communication for debugging
@@ -76,16 +76,16 @@ If you want to try and get the extra credit points, please let the instructor kn
     Function: Loop
         Check for button pressed
         If button is pressed then
-            If ledMode is set to MAX_LED_FUNCS then
-                Reset ledMode to 0
+            If the current LED mode is the last LED mode
+                Reset the current LED mode to the first one
             Else
-                Increment ledMode by 1
-        Switch ledMode
-            Case ledMode is set to 0
+                Increment the LED mode by 1
+        Switch the current LED mode
+            Case the current LED mode is set to 0
                 Execute first LED function
-            Case ledMode is set to 1
+            Case the current LED mode is set to 1
                 Execute second LED function
-            Case ledMode is set to 2
+            Case the current LED mode is set to 2
                 Execute third LED function
             ...
     
