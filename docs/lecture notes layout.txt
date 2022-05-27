@@ -10,10 +10,28 @@ List of Acronyms
 Learning Material Setup
 	Autodesk Fusion360
 	(Optional) Fritzing
+	(Optional) DrawIO
 	Arduino IDE
 	(Optional) VS Code
 	(Optional) Git and GitHub
 	Arduino Kit Introduction
+		Microcontroller
+			ATmega328
+			ATmega2560
+		MAX7219 LED Module
+		Real Time Clock Module
+		Matrix Keyboard
+		PIR Motion Sensor
+		IR receiver
+		LCD screen
+		Joystick module
+		Ultrasonic distance sensor
+		Sound receiver module
+		ULN2003 motor driver board
+		DHT-11 Sensor module
+		Water level sensor
+		7-Segment display
+
 
 1. Digital Electronics
 	1.1 Introduction to Binary
@@ -53,13 +71,35 @@ Learning Material Setup
 2. Electrical Hardware
 	2.1 Components
 		2.1.1 Resistors
+			Thermistors
+			Photoresistors
+			Potentiometers
 		2.1.2 Capacitors
+			Electrolytic
+			Ceramic
 		2.1.3 Inductors
 		2.1.4 Transistors
 			BJT
 			MOSFET
 		2.1.5 Diodes
-		2.1.5 Integrated Circuits (ICs)
+			Normal
+			Zener
+			LEDs
+		2.1.6 Oscillators
+			Crystals
+			Piezoelectric (buzzers)
+		2.1.7 Switches
+			Pulls and Throws
+			Buttons (momentary switches)
+			Relays
+		2.1.8 Integrated Circuits (ICs)
+		2.1.9 Actuators
+			DC brushed motors
+			DC brushless motors
+			AC motors
+			Servo motors
+			Stepper motors
+		2.1.10 Encoders
 	2.2 Measurement Equipment
 		2.2.1 Voltmeter, Ammeter, and Multimeters
 		2.2.2 Oscilloscopes
@@ -154,10 +194,10 @@ Appendix
 
 	Exam: Arduino Programming Midterm
 
-	Homework 1: Arduino RGB LED Project
+	Homework 1: Arduino RGB LED Cycler
 	Homework 2: Digital Inputs and Interrupts
-	Homework 3: Active Buzzer
-	Homework 4: Servo Control
+	Homework 3: 4-Digit 7-Segment Display Counter
+	Homework 4: Stepper Motor Control with Encoder
 	Homework 5: Ultrasonic Sensor Module and LCD
 	Homework 6: DHT Temperature Module and LCD
 	
