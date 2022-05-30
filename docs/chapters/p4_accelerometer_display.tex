@@ -1,0 +1,112 @@
+% ===========================================
+% Project 4: Accelerometer and LCD Display
+% Written by: Braidan Duffy
+%
+% Date: 05/30/2022
+% Last Revision: 05/30/2022
+% ============================================
+
+\chapter{Project 3: 7-Segment Display Counter}
+\labch{p3_7seg_counter}
+
+\section*{Overview} \labsec{p4_overview}
+This project will introduce to you the concepts of reading sensor values and storing them in a packet, and displaying those values on an LCD display. 
+You will read the accelerometer and gyroscope readings from the MPU6050 sensor (also referred to as the GY-521 module) and store them in an internal structured data packet for reporting to the LCD module.
+Your LCD1602 module will have several different pages: one page will show the accelerometer values, another will show the gyroscope values, a third will show roll and pitch data, and others will show any additional information you desire.
+\marginnote{See the \hyperref[sec:p4_extra_credit]{Extra Credit} section for more details.}
+A button will be used to cycle between the different pages and a buzzer will be used to provide auditory feedback on every press.
+
+\section*{Graduate Students} \labsec{p4_graduate_students}
+You will have some additional work for this project. 
+Since an accelerometer provides accelerations, it will be your task to extrapolate (integrate) velocity and position as well as the other tasks outline above.
+You will be required to store this information in your storage packet and display the velocity and position values on separate pages on the LCD module.
+Since the MPU6050 module lacks a magnetometer, it will also be your task to integrate the heading angle and save it to the telemetry packet.
+You will also program the button to act as position and heading reset after you hold the button down for a certain amount of time.
+
+\section*{Requirements} \labsec{p4_requirements}
+For completion of this project, you must demonstrate the following:
+\begin{outline}
+    \1 Successful wiring of the MPU6050 IMU, LCD1602 module, piezoelectric buzzer, and button input (with appropriate debounce filtering)
+    \1 Reading and calculating a variety of values from the MPU6050 sensor and storing them in a telemetry packet.
+        \2 Acceleration X,
+        \2 Acceleration Y,
+        \2 Acceleration Z,
+        \2 Gyroscope X,
+        \2 Gyroscope Y,
+        \2 Gyroscope Z,
+        \2 Roll,
+        \2 Pitch
+    \1 Display the values on distinct pages on the PCD display with appropriate labels and units
+        \2 Page 1: Acceleration values
+        \2 Page 2: Gyroscope values
+        \2 Page 3: Orientation values
+    \1 Use a button tied to an interrupt service routine on the Arduino to cycle between the different LCD pages
+    \2 Use a buzzer to provide auditory feedback on each button press 
+\end{outline}
+
+\section*{Submission}
+You will be required to submit the following on Canvas:
+\begin{outline}
+    \1 a video of the project working with narration of what is occurring
+    \1 a well-organized and documented schematic of the project setup
+    \1 the source code file
+\end{outline}
+Please package all of these items into a compressed (zipped) folder and upload them to Canvas.
+
+\section*{Grading} \labsec{p4_grading}
+You will be graded on the following criteria:
+\begin{table}[h!]
+    \begin{tabular}{l | c}
+        \toprule
+        Criterion & Points \\
+
+        \midrule
+        Efficacy & 50 \\
+        Well organized and neat schematic & 20 \\
+        Well organized and neat source code & 30 \\
+        Extra Credit Challenge 0 \footnotemark & 20 \\
+        Extra Credit Challenge 1 & 20 \\
+        Extra Credit Challenge 2 & 20 \\
+        Extra Credit Challenge 3 & 20 \\
+        Extra Credit Challenge 4 & 20 \\
+
+        \bottomrule
+    \end{tabular}
+\end{table}
+\footnotetext{Graduate students: this will count towards your normal score}
+
+\section*{Extra Credit} \labsec{p4_extra_credit}
+There exists many opportunities for extra credit on this assignment. 
+Ultimately, this is your chance to really explore and learn how to interact with sensors on a low level and gain an in-depth understanding of the relationship between microcontrollers and sensors.
+To that end, it is highly encouraged to pursue the following challenges and earn as many points as possible.
+A successful demonstration of \emph{all} of the challenges below will earn you \textbf{an exemption from one (1) non-ICP assignment}.
+
+In your submission, please include a note of which challenges you have completed and videos of the challenge working. 
+You will also need to include source code highlighting the specific challenge sections.
+\emph{If it is not clear where your challenge-specific code is, it may not be counted.}
+
+    \subsection*{Challenge 0: Yaw, Velocity, and Position}
+    \marginnote{\textbf{Note:} This challenge is \emph{mandatory} for graduate students.}
+    In this challenge, you are tasked with integrating the heading, velocity, and position values from the accelerometer and gyroscope data.
+    You must store these values in your telemetry packet and display them on separate pages on your LCD module.
+    The button used to change display pages will also act as a position and heading reset button when held for a certain amount of time 
+
+    \subsection*{Challenge 1: Filtering}
+    Depending on what you set the update rate of the MPU6050 sensor, there may be a substantial amount of high frequency noise in your readings.
+    There are a multitude of ways of dealing with this noise.
+    The MPU6050 has a built-in filtering system you can initialize and tune, or you can elect to implement your own Kalman filter or Complimentary filter. 
+    \marginnote{\emph{Hint:} You can view this \href{https://forum.arduino.cc/t/guide-to-gyro-and-accelerometer-with-arduino-including-kalman-filtering/57971}{link} for more information on getting started.}
+
+    \subsection*{Challenge 2: MPU6050 DREDY Interrupt}
+    The MPU6050 has an interrupt pin that can have different uses depending on how you configure the chip.
+    For this challenge, implement the MPU6050 interrupt pin to trigger when data is ready, and have the Arduino automatically update the sensors readings \emph{outside} the main loop.
+
+    \subsection*{Challenge 3: MPU6050 Motion Detect Interrupt}
+    The same interrupt pin on the MPU6050 can be configured to serve as a motion detection trigger.
+    This challenge's task will be to put the Arduino into a sleep mode after the initialization and use the motion detection interrupt to wake the Arduino up and read sensor data for a defined period of time before going back to sleep.
+    
+    \subsection*{Challenge 4: Custom MPU6050 Library}
+    This final challenge will be the most difficult. You are tasked with writing your own library implementation for getting data from the MPU6050 sensor.
+    You will have to write it such that you can initialize the module, read and set accelerometer data, read and set gyroscope data, read and set filter data, and read and set interrupt data.
+    Each of your libraries commands must also return a flag if they were successfully completed or not.
+    Additionally, this library must be written in such a way that the instructor can install it to their boards and use it without any errors and in a logical manner.
