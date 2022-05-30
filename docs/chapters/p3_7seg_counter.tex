@@ -117,17 +117,21 @@ Since this project is more complicated than previous ones, the schematic for the
             Set the buzzer start time to the current millisecond value
     \end{lstlisting}
 
+    \newpage
     \subsection*{Schematic}
     \begin{figure*}[ht!]
         \labfig{p3_7seg_counter_bb_ugrad}
         \caption{Breadboard schematic for Project 3 (Undergraduate Version)}
+        \includegraphics[]{../.secret/project_3_7seg_counter/p3_7seg_counter_ugrad_bb.png}
     \end{figure*}
 
+\newpage
 \section*{Graduate Students} \labsec{p3_grad_students}
 You will wire up five (5) buttons to your Arduino as digital inputs.
 Three buttons will determine the counter increment (e.g. 1, 10, 100), and two buttons will determine the increment direction (increasing or decreasing) and be attached to interrupts to trigger the counter change.
 \marginnote{\emph{Reminder:} Some filtering, either software or hardware-based will be required to accurately change the counter and prevent false readings.} 
 When you hold one of the size buttons and then press either the decrement or increment button, an internal counter will increase or decrease by the size specified and update the number in the 4-digit 7-segment display.
+When the decrement button is held for a certain amount of time, the counter will be reset back to 0.
 For each press of the decrement or increment button, you will make an active buzzer sound as audible feedback to your inputs. \emph{For extra credit:} Figure out how to play a different tone for increment or decrement.
 \marginnote{The display is only capable of showing up to four non-negative digits. So the limits of your counter will be between 0 and 9999. \emph{For extra credit:} Figure out how to make it count higher.}
 
@@ -144,47 +148,76 @@ Since this project is a little more complicated than previous ones, the schemati
         \1 The current counter value will be displayed on a 4-digit, 7-segment display
     \end{outline}
 
+    \newpage
     \subsection*{Schematic}
     \begin{figure*}[ht!]
         \labfig{p3_7seg_counter_bb_grad}
         \caption{Breadboard schematic for Project 3 (Graduate Version)}
+        \includegraphics[]{../.secret/project_3_7seg_counter/p3_7seg_counter_grad_bb.png}
     \end{figure*}
 
-\section*{Submission}
-You will be required to submit the following on Canvas:
-\begin{outline}
-    \1 a video of the project working with narration of what is occurring
-    \1 the source code file
-    \1 a still image of your breadboard and Arduino setup
-\end{outline}
+\newpage
+\begin{widepar}
+    \section*{Submission}
+    You will be required to submit the following on Canvas:
+    \begin{outline}
+        \1 a video of the project working with narration of what is occurring
+        \1 the source code file
+        \1 a still image of your breadboard and Arduino setup
+    \end{outline}
 
-\section*{Grading}
-You will be graded along the following criteria:
+    \section*{Grading}
+    You will be graded along the following criteria:
 
-\begin{table*}[h!]
-    \begin{tabular}{ l | c }
-        \toprule
-        Criterion & Points \\
+    \begin{table*}[h!]
+        \begin{tabular}{ l | c }
+            \toprule
+            Criterion & Points \\
 
-        \midrule
-        Efficacy & 40 \\
-        Wired correctly & 20 \\
-        Breadboard neatness & 20 \\
-        Code neatness & 20 \\
-        Extra credit & 10 \\
-        Extra extra credit \footnotemark & 25 \\
+            \midrule
+            Efficacy & 40 \\
+            Wired correctly & 20 \\
+            Breadboard neatness & 20 \\
+            Code neatness & 20 \\
+            Extra credit & 10 \\
+            Extra extra credit \footnotemark & 25 \\
 
-        \bottomrule
-    \end{tabular}
-\end{table*}
-\footnotetext{Undergraduate students only}
+            \bottomrule
+        \end{tabular}
+    \end{table*}
+    \footnotetext{Undergraduate students only}
 
-\section*{Extra Credit}
-If you are willing to dig in a little bit more, this project has a couple of opportunities to earn extra credit points!
-If you want to try and get the extra credit points, please let the instructor know in the submission and detail why you believe you earn the points.
+    If you are willing to dig in a little bit more, this project has a couple of opportunities to earn extra credit points!
+    If you want to try and get the extra credit points, please let the instructor know in the submission and detail why you believe you earn the points.
 
-\section*{Schematic}
+    \section*{Miscellanea}
+    Since working with bits and registers and 7-segment displays can be tricky for beginners, the binary sequences for various numbers and letters are provided in the table below. Note that these values will change depending on how the shift register is wired to the 7-segment display. The values provided are known and tested to have worked with the schematics shown above.
 
-\begin{lstlisting}[linewidth=1.5\textwidth]
+    \begin{table*}
+        \begin{tabular}{c | c}
+            \toprule
+            Character & Hex Code \\
 
-\end{lstlisting}
+            \midrule
+            0 & 0x3F \\
+            1 & 0x06 \\
+            2 & 0x5B \\
+            3 & 0x4F \\
+            4 & 0x66 \\
+            5 & 0x6D \\
+            6 & 0x7D \\
+            7 & 0x07 \\
+            8 & 0x7F \\
+            9 & 0x6F \\
+            A & 0x77 \\
+            b & 0x7c \\
+            C & 0x39 \\
+            d & 0x5E \\
+            E & 0x79 \\
+            F & 0x71 \\
+              & 0x00 \\
+
+            \bottomrule
+        \end{tabular}
+    \end{table*}
+\end{widepar}
