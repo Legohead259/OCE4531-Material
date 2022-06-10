@@ -1,0 +1,8 @@
+MPU-6050 Offsets
+aX: -2627
+aY: 167
+aZ: 1438
+
+gX: 74
+gY: 18
+gZ: -16
