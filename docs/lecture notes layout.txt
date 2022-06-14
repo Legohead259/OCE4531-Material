@@ -16,8 +16,6 @@ Learning Material Setup
 	(Optional) Git and GitHub
 	Arduino Kit Introduction
 		Microcontroller
-			ATmega328
-			ATmega2560
 		MAX7219 LED Module
 		Real Time Clock Module
 		Matrix Keyboard
