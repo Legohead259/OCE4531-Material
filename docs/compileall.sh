@@ -10,7 +10,8 @@ makeindex main.nlo -s nomencl.ist -o main.nls
 makeindex main
 
 # Compile bibliography
-biber main
+biber bibliographies/main
+biber bibliographies/learning_materials
 
 # Compile document
 pdflatex main
