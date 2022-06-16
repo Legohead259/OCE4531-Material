@@ -16,45 +16,55 @@ In this chapter, we will go into the required course material and give you an ov
 
 These are for your reference, so please follow these instructions closely and pay attention to the component overview parts so you can have more time playing and experimenting than troubleshooting.
 
-\section*{Autodesk Fusion 360}
+% \section*{Autodesk Fusion 360}
 
-    \subsection*{Installation}
+%     \subsection*{Installation}
 
-    \subsection*{Account Setup}
+%     \subsection*{Account Setup}
 
-    \subsection*{Joining the Class}
+%     \subsection*{Joining the Class}
 
-\section*{Fritzing}
+% \section*{Fritzing}
 
-    \subsection*{Download and Installation}
+%     \subsection*{Download and Installation}
 
-\section*{DrawIO}
+% \section*{DrawIO}
 
-    \subsection*{Download}
+%     \subsection*{Download}
 
-\section*{Git for Windows}
+% \section*{Git for Windows}
 
-    \subsection*{Installation}
+%     \subsection*{Installation}
 
-    \subsection*{Initializing your credentials}
+%     \subsection*{Initializing your credentials}
 
-\section*{GitHub}
+% \section*{GitHub}
 
-    \subsection*{Creating an account}
+%     \subsection*{Creating an account}
 
-\section*{Arduino IDE 1.8}
+% \section*{Arduino IDE 1.8}
 
-    \subsection*{Installation}
+%     \subsection*{Installation}
 
-    \subsection*{Overview}
+%     \subsection*{Overview}
 
-\section*{Visual Studio Code}
+% \section*{Visual Studio Code}
 
-    \subsection*{Installation}
+%     \subsection*{Installation}
 
-    \subsection*{Arduino and C++ Extensions}
+%     \subsection*{Arduino and C++ Extensions}
 
-    \subsection*{Git Extension}
+%     \subsection*{Git Extension}
+
+% ======================================
+% === END VISUAL STUDIO CODE SECTION ===
+% ======================================
+
+\pagebreak
+
+% ==============================================
+% === BEGIN ARDUINO KIT INTRODUCTION SECTION ===
+% ==============================================
 
 \section*{Arduino Kit Introduction}
 \marginnote{There is a really cool simulator made in the browser that you may want to consider using to test code before deploying it to hardware, or if you don't have access to the Arduino kit. \url{https://wokwi.com/}}
@@ -91,6 +101,7 @@ Below are some of the more unique parts of the Arduino Mega kit and what they ca
         \labfig{arduino_mega_pinout}
     \end{figure*}
 
+    \pagebreak % Force material past the previous section
     \subsection*{MAX7219 LED Matrix Module}
     The MAX7219 is a common cathode LED driver IC that has a four wire serial interface compatible with all microcontrollers.
     The IC is capable of driving up to 64 LEDs making it perfect for driving dot matrix displays and 7-segment displays.
@@ -133,13 +144,13 @@ Below are some of the more unique parts of the Arduino Mega kit and what they ca
 
     Once you initialize the date and time on the module, you will be able to routinely get the day, month, year, day of the week, hour, minute, and second from the IC over I2C. So long as it has power, it will provide you the time.
 
-    \begin{figure}[h]
-        \includegraphics[height=2.5in]{learning_materials/ds3231-rtc.jpg}
+    \begin{marginfigure}[-2in]
+        \includegraphics[]{learning_materials/ds3231-rtc.jpg}
         \caption[DS3231 RTC Module]{The DS3231 RTC module from the Arduino kit. 
         Retreived from \href{https://alltopnotch.co.uk/wp-content/uploads/imported/9/RTC-Real-Time-Clock-DS3231-I2C-AT24C32-Board-Module-Arduino-ARM-PIC-UK-Seller-361515587149-4.JPG}
         {All Top Notch}}
         \labfig{ds3231_rtc}
-    \end{figure}
+    \end{marginfigure}
 
     \subsection*{Matrix Keypad}
     The ELEGOO kit comes with a 4x4 matrix keypad with 16 individual keys.
@@ -148,7 +159,7 @@ Below are some of the more unique parts of the Arduino Mega kit and what they ca
     By incrementally setting each row pin to low, and checking the input of each column pin, you can determine which button has been pressed.
     For example, if you are checking the second row of buttons by setting that pin to low and the third column pin is also low, than the button in position (2,3) (normally `6') is pressed.
 
-    \begin{figure}[h]
+    \begin{figure}[h!]
         \includegraphics[height=2.5in]{learning_materials/4x4-matrix-keypad.png}
         \caption[4x4 Matrix Keypad]{The pinout and schematic for the 4x4 matrix keypad included in the Arduino starter kit. 
         Retreived from \href{https://dhaneshablogs.blogspot.com/2019/08/interfacing-4x4-matrix-keypad-with.html}
@@ -163,7 +174,7 @@ Below are some of the more unique parts of the Arduino Mega kit and what they ca
     This allows a microcontroller to do basic human sensing applications for monitoring foot traffic in an area, or if someone has entered/left a room.
     Additionally, the PIR sensor has some potentiometers that allow users to tweak the sensativity of the module and the time delay between triggers.
 
-    \begin{figure}[h]
+    \begin{figure}[h!]
         \includegraphics[height=2.5in]{learning_materials/pir_sensor.jpg}
         \caption[PIR Sensor]{The PIR sensor module included in the Arduino kit. 
         Retreived from \href{https://www.tutorialspoint.com/arduino/arduino_pir_sensor.htm}
@@ -172,26 +183,28 @@ Below are some of the more unique parts of the Arduino Mega kit and what they ca
     \end{figure}
 
     \subsection*{IR Receiver}
-    The IR receiver opreates with the same physical principles as the PIR motion sensor, but has much simpler circuitry.
-    Inside a small housing is a crystal that is sensative to IR radiation.
+    The IR receiver operates with the same physical principles as the PIR motion sensor, but has much simpler circuitry.
+    Inside a small housing is a crystal that is sensitive to IR radiation.
     When the crystal is excited, it creates an electrical signal that can be read by a microcontroller on the output pin.
-    All IR remotes (including the one in yyour Arduino kit) encode your button presses as flashes of IR light.
+    All IR remotes (including the one in your Arduino kit) encode your button presses as flashes of IR light.
     When the IR receiver "sees" these flashes, it will convert them to an electrical signal with roughly the same timing as the remote output.
-    This allows you to communicate with your microcontroller over light waves and signal it for different actions or functions. 
-    \marginnote{This is the same exact way older TVs and AV receivers and DVD players function. 
+    This allows you to communicate with your microcontroller over light waves and signal it for different actions or functions.
+
+    This is the same exact way older TVs and AV receivers and DVD players function. 
     Pressing a button on your remote would send an encoded signal to turn up or down the volume, change the channel, or fast forward a movie.
     Universal remotes simply were able to switch between different encoding schema for different devices.
-    Can you decode the messages your TV receives?}
+    Can you decode the messages your TV receives?
 
-    \begin{figure}[h]
-        \includegraphics[height=2.5in]{learning_materials/ir-receiver.jpg}
+    \begin{marginfigure}[-2.5in]
+        \includegraphics[]{learning_materials/ir-receiver.jpg}
         \caption[IR Receiver]{The IR receiver module included in the Arduino kit. 
         Retreived from \href{https://www.circuitbasics.com/arduino-ir-remote-receiver-tutorial/}
         {Circuit Basics}}
         \labfig{ir_receiver}
-    \end{figure}
+    \end{marginfigure}
 
     \subsection*{LCD Screen}
+    \marginnote{You will become very familiar with this module in \hyperref[ch:p4_accelerometer_display]{Project 4}!}
     You kit comes with a neat module called the LCD 1602 Display.
     It can display text, images or icons in a 16-character by 2-column matrix.
     LCD stands for Liquid Crystal Display which is a technology that most screens in the world use. 
@@ -200,7 +213,7 @@ Below are some of the more unique parts of the Arduino Mega kit and what they ca
     This allows light from the backlight to be filtered through so you can see the message written on the display.
     The data used to drive the LCD is sent from the Arduino over the parallel bus which sends multiple bytes over multiple lines \textit{in parallel} to increase overall throughput.
 
-    \begin{figure}[h]
+    \begin{figure}[h!]
         \includegraphics[height=3in]{learning_materials/lcd1602.png}
         \caption[LCD Module]{The LCD1602 module included with the Arduino kit. 
         Retreived from \href{https://www.orientdisplay.com/wp-content/uploads/2020/08/AMC1602AR-B-B6WTDW-I2C-1.jpg}
@@ -208,6 +221,7 @@ Below are some of the more unique parts of the Arduino Mega kit and what they ca
         \labfig{lcd_module}
     \end{figure}
 
+    % \pagebreak % Force material past the previous section
     \subsection*{Joystick}
     The joystick is a ubiquitous human input device (HID).
     If you have every played with a game controller, you have used a joystick.
@@ -217,14 +231,13 @@ Below are some of the more unique parts of the Arduino Mega kit and what they ca
     Same goes for left and right motion on the x-axis.
     Pushing the stick in will press the built-in button, adding another input method to the Arduino.
 
-    \begin{figure}[h]
-        \includegraphics[height=3in]{learning_materials/joystick.png}
-        \caption[LCD Module]{The PS2-style dual axis joystick included with the Arduino Kit. 
+    \begin{marginfigure}[-2in]
+        \includegraphics[]{learning_materials/joystick.png}
+        \caption[Joystick]{The PS2-style dual axis joystick included with the Arduino Kit. 
         Retreived from \href{https://www.orientdisplay.com/wp-content/uploads/2020/08/AMC1602AR-B-B6WTDW-I2C-1.jpg}
         {DH Gate}}
         \labfig{lcd_module}
-    \end{figure}
-
+    \end{marginfigure}
 
     \subsection*{Ultrasonic Distance Sensor}
     The ultrasonic distance sensor included with your kit is a time-of-flight based tool for detecting the proximity of objects.
@@ -232,24 +245,100 @@ Below are some of the more unique parts of the Arduino Mega kit and what they ca
     The sound is emitted from the transmitter, reflects off an object, and is heard by the receiver.
     By measuring the time between the pulse being sent out and the reflected pulse being received, and knowing the speed of sound through air, we can determine the distance to an object.
     
-    \begin{figure}[h]
-        \includegraphics[height=3in]{learning_materials/ultrasonic-sensor.jpg}
+    \begin{marginfigure}[-1.5in]
+        \includegraphics[]{learning_materials/ultrasonic-sensor.jpg}
         \caption[Ultrasonic Sensor]{The ultrasonic distance sensor included with the Arduino Kit. 
         Retreived from \href{https://alexnld.com/wp-content/uploads/2017/12/DIY4002_1.jpg}
         {Alexnld}}
         \labfig{ultrasonic_sensor}
+    \end{marginfigure}
+
+    \subsection*{Sound Detection Module}
+    The KY-038 microphone module is a capactive microphone that is sensative to frequencies from 50-10k Hz and has an amplification circuit on-board.
+    This microphone converts sound pressure waves into an electrical signal that the Arduino can read for various tasks.
+    By fiddling with the sound level potentiometer on the module, a threshold sound amplitude can be controlled.
+    When the microphone detects a sound above the set threshold, it will output a digital signal on an output pin.
+    Additionally, there is an analog output pin which the Arduino can use to detect the amplified sound waveforms captured by the microphone.
+    The pinout for this module is shown below.
+
+    \begin{figure}[h!]
+        \includegraphics[height=3in]{learning_materials/sound-detection-module.png}
+        \caption[Sound Detection Module]{The KY-038 sound detection module included with the Arduino Kit. 
+        Retreived from \href{https://microcontrollerslab.com/ky-038-microphone-sound-sensor-module-arduino-tutorial/}
+        {Micrcontrollers Lab}}
+        \labfig{sound_module}
     \end{figure}
 
-    \subsection*{Sound Receiver}
-
-
     \subsection*{ULN2003 Motor Driver Board}
+    The ULN2003 stepper driver IC is a common motor driver module for stepper motors. \sidenote{You can learn more about stepper motors and how to drive them in the \hl{ACTUATORS SECTION}}
+    This driver uses 4-inputs to determine what sequence to drive the stepper motor poles.
+    By connecting the Arduino to these inputs and setting them high or low in a certain sequence, the ULN2003 module will "step" the motor, rotating it a precise and known amount.
+    This can give you very precise control over rotational and linear motion.
+    There are also a multitude of libraries available to help simplify working with this module and making precise movements.
 
+    \begin{figure}[h!]
+        \includegraphics[height=3in]{learning_materials/uln2003-module-pinout.jpg}
+        \caption[Motor Driver]{The ULN2003 motor driver board included with the Arduino Kit. 
+        Retreived from \href{https://arduinogetstarted.com/images/tutorial/uln2003-module-pinout.jpg}
+        {Arduino Get Started}}
+        \labfig{motor_driver}
+    \end{figure}
 
     \subsection*{DHT-11 Sensor}
+    The DHT-11 sensor module features a humidity and temperature sensor combined into a signal package with a calibrated digital output.
+    The temperature sensor is an Negative Temperature Coefficient (NTC)-type that reduces its resistance as temperature increases.
+    The humidity sensor is a resistive-type component that changes its resistance based on the ambiant humidity.
+    These sensors are connected to a small dedicated microcontroller through a amplifier network.
+    The microcontroller reads in the sensor values and outputs the data over a single wire digital interface.
+    Your Arduino can connect to that interface and get the ambient temperature and humidity using a multitude of libraries.
+    
+    \begin{figure}[h!]
+        \includegraphics[height=3in]{learning_materials/DHT11-Sensor-Module-Parts.png}
+        \caption[DHT-11 Sensor]{The DHT-11 temperature and humidity sensor included with the Arduino Kit. 
+        Retreived from \href{https://circuitdigest.com/sites/default/files/inlineimages/u4/DHT11-Sensor-Module-Parts.png}
+        {Circuit Digest}}
+        \labfig{dht11_sensor}
+    \end{figure}
 
+    \subsection*{Water Level Sensor}
+    The water level sensor has a series of ten traces exposed on its PCB; five are power traces, five are sense traces.
+    These traces are interlaced such that they are not connected until they are submerged in water and bridged together.
+    As the water level increases, more sense traces are connected to more power traces and thus, the overall resistance of the circuit is decreased.
+    This resistance is inversely proportional to the water level (i.e. as the water level increases, the resistance wll decrease).
+    By measuring the voltage across the sensing pin and ground, we can correlate the water level to the voltage reading, much like we would with a potentiometer.
+    One caveat though is that constantly powering the sensor while it is submerged will dramatically increase the galvonic corrosion and reduce the sensor's lifespan.
+    Therefore the positive voltage pin should only be driven high when a reading is actively being taken.
 
-    \subsection*{Capacitive Level Sensor}
-
+    \begin{figure}[h!]
+        \includegraphics[height=3in]{learning_materials/water-sensor-pinout.jpg}
+        \caption[Water Level Sensor]{The water level sensor included with the Arduino Kit. 
+        Retreived from \href{https://arduinogetstarted.com/images/tutorial/water-sensor-pinout.jpg}
+        {Arduino Getting Started}}
+        \labfig{dht11_sensor}
+    \end{figure}
 
     \subsection*{4-Digit 7-Segment Display}
+    \marginnote{You will become very familiar with this module in \hyperref[ch:p3_7seg_counter]{Project 3}!}
+    The 4-digit 7-segment display is a series of 7-segment displays connected together in parallel with a common cathode.
+    Much like the keypad and LED dot matricies, this module can display different numbers and values based off which lines are turned on or off.
+    There are four "digit" lines that are connected to the annode of their respective digit.
+    Driving these lines high, while pulling one of the display LEDs low will cause that LED to illuminate.
+    For example, to display a "0" in the first digit, you would drive the first digit pin high, and pull the LEDs pins A-F low, illuminating a "0".
+
+    On the Arduino, it can be inconvient to connect so many data lines, so often, a shift register like the 74HC595 is used to drive the display LEDs, while the Arduino controls which digits are activated.
+
+    \begin{figure}[h!]
+        \includegraphics[height=3in]{learning_materials/4-digit-7-segment-display.png}
+        \caption[4-Digit 7-Segment]{The 4-digit 7-segment display included with the Arduino Kit with pinout. 
+        Retreived from \href{https://i.ytimg.com/vi/fYAlE1u5rno/maxresdefault.jpg}
+        {Make Crate}}
+        \labfig{4digit_7seg}
+    \end{figure}
+
+    \begin{figure*}[b]
+        \includegraphics[height=3in]{learning_materials/arduino-4-digit-7-segment-insides.png}
+        \caption[4-Digit 7-Segment Schematic]{The inside schematic of the 4-digit 7-segment display. 
+        Retreived from \href{https://lh6.googleusercontent.com/-UVNbhMgaoc4/Thh-bH7d5zI/AAAAAAAAAEQ/FphoqjmYsVg/s800/arduino-4-digit-7-segment-insides.png}
+        {All About EE}}
+        \labfig{4digit_7seg_sch}
+    \end{figure*}
