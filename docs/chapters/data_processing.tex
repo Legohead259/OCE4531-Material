@@ -134,37 +134,190 @@ To that end, this chapter will be about how to process raw data into something m
         
         \pagelayout{wide} % No margins
 
-        \begin{example} Let's say that we are programming a scale to estimate the weight of an ROV placed atop it.
-        For the sake of example, we know that the ROV weighs exactly 10 kilograms and we want to quantify the uncertainty of our scale. 
+        \begin{example} \label{ex:alpha_filter}
+        Let's say that we are programming a scale to estimate the weight of an ROV placed atop it.
+        For the sake of example, we know that the ROV weighs exactly 10 kilograms and we want to quantify the uncertainty of our scale.
         \paragraph{Iteration 0}
-        \begin{gather*}
+        \begin{equation*}
             \begin{aligned} 
                 0:& \text{ We can guess that the initial weight of the ROV is 10-kg: } \hat{x}_{0,0} = 10 \text{ kg} \\
                 3:& \text{ Since the weight should not change, our prediction for the next measurement is: } \hat{x}_{1,0} = \hat{x}_{0,0} = 10 \text{ kg} \\
             \end{aligned}
-        \end{gather*}
+        \end{equation*}
         
         \paragraph{Iteration 1}
-        \begin{gather*}
+        \begin{equation*}
             \begin{aligned} 
                 1:& \text{ We make a measurement on the scale: } z_1 = 10.3 \text{ kg} \\
                 2\text{a}:& \text{ We calculate the correction gain: } \alpha_1 = \frac{1}{N} = \frac{1}{1} = 1 \\
                 2\text{b}:& \text{ We can then estimate the current state: } \hat{x}_{1,1} = \hat{x}_{1,0} + \alpha_1(z_1 - \hat{x}_{1,0}) = 10 + 1(10.3 - 10) = 10.3 \text{ kg} \\
                 3:& \text{ Since the weight should not change: } \hat{x}_{2,1} = \hat{x}_{1,1} = 10.3 \text{ kg} \\
             \end{aligned}
-        \end{gather*}
+        \end{equation*}
 
         \paragraph{Iteration 2}
-        \begin{gather*}
+        \begin{equation*}
             \begin{aligned} 
                 1:& \text{ We make a measurement on the scale: } z_2 = 9.9 \text{ kg} \\
                 2\text{a}:& \text{ We calculate the correction gain: } \alpha_2 = \frac{1}{N} = \frac{1}{2} = 0.5 \\
                 2\text{b}:& \text{ We can then estimate the current state: } \hat{x}_{2,2} = \hat{x}_{2,1} + \alpha_2(z_2 - \hat{x}_{2,1}) = 10.3 + 0.5(9.9 - 10.3) = 10.1 \text{ kg} \\
                 3:& \text{ Since the weight should not change: } \hat{x}_{3,2} = \hat{x}_{2,2} = 10.1 \text{ kg} \\
             \end{aligned}
-        \end{gather*}
+        \end{equation*}
+
+        \hl{FINISH OUT WITH A TABLE OF RESULTS AND EXPLANATION}
 
         \end{example}
 
-        \pagelayout{margins} % Replace margins
+        \pagelayout{margin} % Replace margins
+
+        \subsubsection*{The $\alpha$ and $\beta$ Filter}
+        As demonstrated in Example \ref{ex:alpha_filter}, the $\alpha$ filter makes a major assumption that the state does not change between samples.
+        In reality, this is rarely the case as we typically want to measure a body's movement, or track a variable over time, or measure something that has dependency on another variable.
         
+        For example, if we wished to track a boat moving in a one-dimensional world at a constant velocity (no acceleration), we need to modify our model a bit.
+        For nomenclature, $x_n$ will represent the displacement of the vessel from a known starting point.
+        Since the vessel is moving with a constant velocity, we can model its time rate of change of position as:
+        
+        \begin{equation*}
+            \dot{x} = v = \frac{dx}{dt}
+        \end{equation*}
+
+        If we sample the vessel's displacement at intervals of $\Delta t$ time, then we can define a dynamic model of the vessels movement as:
+
+        \begin{subequations}
+            \labeq{see_dynamic_model}
+            \begin{align}
+                x_{n+1} &= x_n + \Delta t \dot{x}_n \labeq{see_disp}\\
+                \dot{x}_{n+1} &= \dot{x}_n \labeq{see_velocity}
+            \end{align}
+        \end{subequations}
+
+        This is called the \textit{State Extrapolation Equation} \sidenote{or the \textit{State Transistion Equation} or the \textit{State Prediction Equation}} and is another one of the five Kalman equations.
+        If we assume the sample interval is $\Delta t = 5 \text{ seconds}$ at sample $n-1$ and the displacement and velocity of the vessel is estimated as 300-m and 10-m/s, respectively, then using Equations \ref{eq:see_disp} and \ref{eq:see_velocity}, we can predict where the vessel will be and its velocity at sample $n$.
+        
+        \begin{equation*}
+            \begin{gathered}
+                \hat{x}_{n,n-1} = \hat{x}_{n-1,n-1} + \Delta t \hat{\dot{x}}_{n-1,n-1} = 300 + 5(10) = 350 \text{ m} \\
+                \hat{\dot{x}}_{n,n-1} = \hat{x}_{n-1,n-1} = 10 \text{ m/s}
+            \end{gathered}
+        \end{equation*}
+
+        However, at sample $n$, the vessel records a displacement of 320-m, not the expected 350-m; there are two possible reasons:
+
+        \begin{enumerate}
+            \item the vessel displacement measurements are not precise or accurate
+            \item the vessel velocity changed unexpectedly \sidenote{The new velocity would have to be:
+                                                                        \begin{equation*}
+                                                                            \frac{320-300}{5} = 4 \text{ m/s}
+                                                                        \end{equation*}}
+        \end{enumerate}
+
+        We know from the previous section that we can account for the measurement error using an $\alpha$ filter, so lets re-write Equation \ref{eq:see_velocity} to account for error in the velocity:
+
+        \begin{equation}
+            \labeq{see_velocity_b}
+            \hat{\dot{x}}_{n,n} = \hat{\dot{x}}_{n,n-1} + \beta(\frac{z_n - \hat{x}_{n,n-1}}{\Delta t})
+        \end{equation}
+
+        \hl{INSERT FIGURE OF THE $\alpha$ - $\beta$ FILTER ALGORITHM}
+
+        \pagelayout{wide} % Remove margins
+
+        \begin{example} \label{ex:alpha_beta_filter}
+        Consider a boat moving in one dimension. 
+        We are going to assume the following:
+        \begin{itemize}
+            \item $\alpha = 0.2$ (Positional gain)
+            \item $\beta = 0.1$ (Velocity gain)
+            \item $\Delta t = 5$ seconds
+        \end{itemize}
+
+        \paragraph{Iteration 0}
+        \begin{equation*}
+            \begin{aligned} 
+                0:& \text{ Initial conditions: } \hat{x}_{0,0} = 300 \text{ m, } \hat{\dot{x}}_{0,0} = 4 \text{ m/s} \\
+                3\text{a}:& \text{ Predict the next position: } \hat{x}_{1,0} = \hat{x}_{0,0} + \Delta t \hat{\dot{x}}_{0,0} = 300 + 5(4) = \textbf{320 m} \\
+                3\text{b}:& \text{ Predict the next velocity: } \hat{\dot{x}}_{1,0} = \hat{\dot{x}}_{0,0} = \textbf{4 m/s}
+            \end{aligned}
+        \end{equation*}
+        
+        \paragraph{Iteration 1}
+        \begin{equation*}
+            \begin{aligned} 
+                1:& \text{ The vessel makes a positional measurement: } z_1 = \textbf{310 m} \\
+                2\text{a}:& \text{ We estimate the current position: } \hat{x}_{1,1} = \hat{x}_{1,0} + \alpha(z_1 - \hat{x}_{1,0}) = 320 + 0.2(310 - 320) = \textbf{318 m} \\
+                2\text{b}:& \text{ We estimate the current velocity: } \hat{\dot{x}}_{1,1} = \hat{\dot{x}}_{1,0} + \beta(\frac{z_1 - \hat{x}_{1,0}}{\Delta t}) = 4 + 0.1(\frac{310 - 320}{5}) = \textbf{3.8 m/s} \\
+                3\text{a}:& \text{ Predict the next position: } \hat{x}_{2,1} = \hat{x}_{1,1} + \Delta t \hat{\dot{x}}_{1,1} = 318 + 5(3.8) = \textbf{337 m} \\
+                3\text{b}:& \text{ Predict the next velocity: } \hat{\dot{x}}_{2,1} = \hat{\dot{x}}_{1,1} = \textbf{3.8 m/s}
+            \end{aligned}
+        \end{equation*}
+
+        \paragraph{Iteration 2}
+        \begin{equation*}
+            \begin{aligned} 
+                1:& \text{ The vessel makes a positional measurement: } z_2 = \textbf{317 m} \\
+                2\text{a}:& \text{ We estimate the current position: } \hat{x}_{2,2} = \hat{x}_{2,1} + \alpha(z_2 - \hat{x}_{2,1}) = 337 + 0.2(317 - 337) = \textbf{333 m} \\
+                2\text{b}:& \text{ We estimate the current velocity: } \hat{\dot{x}}_{2,2} = \hat{\dot{x}}_{2,1} + \beta(\frac{z_2 - \hat{x}_{2,1}}{\Delta t}) = 3.8 + 0.1(\frac{337 - 317}{5}) = \textbf{3.4 m/s} \\
+                3\text{a}:& \text{ Predict the next position: } \hat{x}_{3,2} = \hat{x}_{2,2} + \Delta t \hat{\dot{x}}_{2,2} = 333 + 5(3.4) = \textbf{350 m} \\
+                3\text{b}:& \text{ Predict the next velocity: } \hat{\dot{x}}_{3,2} = \hat{\dot{x}}_{2,2} = \textbf{3.4 m/s}
+            \end{aligned}
+        \end{equation*}
+
+        \hl{FINISH OUT WITH A TABLE OF RESULTS AND EXPLANATION}
+
+        \end{example}
+
+        \pagelayout{margin} % Replace margins
+
+        \begin{kaobox}[frametitle=Aside: The $\alpha$ and $\beta$ Gains]
+            High values for $\alpha$ and $\beta$ will result in less "smoothing" in certain cases.
+            The current state estimarte may be very close to the measurement values with a higher error in predicted values
+
+            The value of $\beta$ depends on the precision of the vessel's navigation system.
+            If the positional precision is $\sigma = 0.1 \text{ m}$, then it is very likely the vessel speed changed.
+            Therefore, $\beta$ would be very high to adjust the estimated velocity.
+            Conversely, if the positional precision is $\sigma = 10 \text{ m}$, then it is likely the vessel's position measurements are wrong and $\beta$ can be smaller.
+
+            $\alpha$ and $\beta$ depend on the measurement precision.
+            Very precise measurements would prefer a high $\alpha$ and $\beta$ gains that will cause the filter to converge quickly and can adapt to velocity changes.
+            Lower precision measurements would prefer lower $\alpha$ and $\beta$ gains that allow any uncertainties to be smoothed out; this will cause the filter to react slowly to velocity changes or external perturbations, though.
+        \end{kaobox}
+
+        \paragraph{The Importance of Accurate Modelling} Lets expand upon Example \ref{ex:alpha_beta_filter}.
+        Here, we will consider the same vessel under the same assumptions and initial conditions, but we will have a flawed dynamic model.
+        The vessel will begin transiting at a constant velocity of 5-m/s for 15 seconds, then accelerate at a constant 2-m/s/s for 15 seconds.
+        The kinematic plots are displayed below in Figure \ref{} and the numerical results can be found in Table \ref{}.
+
+        \hl{INSERT KINEMATIC GRAPH FIGURE SHOWING VESSEL ACCELERATION, VELOCITY, AND DISPLACEMENT OVER TIME}
+
+        \hl{INSERT TABLE OF NUMERICAL RESULTS FROM THIS EXAMPLE}
+
+        The difference between the real plot (black) and the estimated plot (blue) is called the lag error.
+        The lag error causes the estimates to drastically diverge from the real values as they change with time.
+        Increasing the $\beta$ gain may allow the estimates to converge faster to the real values, but there is a better way.
+
+        \subsubsection*{The $\alpha$ $\beta$ and $\gamma$ Filter}
+        This next filter considers the change of the rate of the change variable. 
+        In the case of moving targets, this means acceleration.
+        This changes the State Extrapolation Equations to:
+
+        \begin{subequations}
+            \labeq{see_dynamic_model_2}
+            \begin{align}
+                \hat{x}_{n+1,n} &= \hat{x}_{n,n} + \Delta t \hat{\dot{x}}_{n,n} + \frac{1}{2} \hat{\ddot{x}}_{n,n} {\Delta t}^2 \labeq{see_disp_2}\\
+                \hat{\dot{x}}_{n+1,n} &= \hat{\dot{x}}_{n,n} + \hat{\ddot{x}}_{n,n} \Delta t \labeq{see_velocity_2} \\
+                \hat{\ddot{x}}_{n+1,n} &= \hat{\ddot{x}}_{n,n}
+            \end{align}
+        \end{subequations}
+
+        Similarly, the State Update Equations become:
+
+        \begin{subequations}
+            \labeq{sue_abg}
+            \begin{align}
+                \hat{x}_{n,n} &= \hat{x}_{n,n-1} + \alpha (z_n - \hat{x}_{n,n-1}) \labeq{sue_abg_disp}\\
+                \hat{\dot{x}}_{n,n} &= \hat{\dot{x}}_{n,n-1} + \beta (\frac{z_n - \hat{x}_{n,n-1}}{\Delta t}) \labeq{sue_abg_velocity} \\
+                \hat{\ddot{x}}_{n,n} &= \hat{\ddot{x}}_{n,n-1} + \gamma (\frac{z_n - \hat{x}_{n,n-1}}{1/2 \Delta t^2) \labeq (sue_abg_accel)
+            \end{align}
+        \end{subequations}
