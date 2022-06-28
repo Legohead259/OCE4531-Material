@@ -18,21 +18,8 @@ To that end, this chapter will be about how to process raw data into something m
     \section{Digital Filtering} \labsec{digital_filtering}
     One of the most fundamental data processing techniques is that of the digital filter.
     The idea behind these filters is to take in data samples and apply mathematical formulations on them to dampen undesirable signals within.
-
-        \subsection{Kalman Filter} \labsec{kalman_filter}
-        \subsubsection*{Introduction} The Kalman Filter is a recursive algorithm introduced in the 1960's as a method to track, estimate, and predict the state of a system and corresponding uncertainties.
-        This filter integrates a dynamic (linear) model of the system, control inputs, measurements, and biases/uncertainties into a single algorithm.
-        This effectively fuses together system inputs and responses and extrapolates what the system is currently doing and expected to do.
-        One key advantage of this algorithm is that it only requires the guess of the previous state to estimate the current state. 
-        This massively decreases the memory and processing costs as the history of inputs, measurements, and uncertainties does not need to be remembered or analyzed.
-        However, it does have some limitations when the sensor data is noisy or the control inputs cannot be linearly mapped to the system state.
-        Random errors in the sensor data may cause the filter to behave unpredictably and non-linearity prevents proper fusion entirely.\sidenote{Though this can be managed with an Extended Kalman Filter}
-
-        This section will discuss the Kalman filter in a higher-order method.
-        Many resources around with Internet can discuss the in-depth mathematics governing this filter and you are free to browse them at your leisure. 
-        For this guide, my primary concern is to get you acquainted with the Kalman filter and its broader practical applications.
         
-        \subsubsection*{Background} This section assumes that you do not have a lot of background knowledge on basic statistics and terminology.
+        \subsection{Background} This section assumes that you do not have a lot of background knowledge on basic statistics and terminology.
         It is important to understand here that mean and expected value are not the same thing.
         In many college lab courses, measurements are taken multiple times and averaged together to find the mean value (often denoted as $\mu$).
         This is assumed to be the absolute correct value with zero uncertainty.
@@ -89,7 +76,8 @@ To that end, this chapter will be about how to process raw data into something m
             \labfig{accuracy_precision}
         \end{figure*}
 
-        \subsubsection*{The $\alpha$ Filter} At any sample, $N$, a value $\hat{x}_{N,N}$ can be estimated using:
+        \subsection{The $\alpha$ Filter} 
+        At any sample, $N$, a value $\hat{x}_{N,N}$ can be estimated using:
         
         \begin{gather*} \labeq{sample_estimate}
             \hat{x}_{n,n} = \frac{1}{N} \sum_{n=1}^{N} (z_n) \\
@@ -130,7 +118,7 @@ To that end, this chapter will be about how to process raw data into something m
         The filter will always require an initial guess to kickstart the algorithm.
         A flow chart describing the algorithm's process is below.
 
-        \hl{INSERT ALPHA FILTER FLOW CHART HERE!}
+        \todo{INSERT ALPHA FILTER FLOW CHART HERE!}
         
         \pagelayout{wide} % No margins
 
@@ -165,13 +153,43 @@ To that end, this chapter will be about how to process raw data into something m
             \end{aligned}
         \end{equation*}
 
-        \hl{FINISH OUT WITH A TABLE OF RESULTS AND EXPLANATION}
+        The calculations and results for this example are summarized in the table and figure below:
+
+        \begin{center}
+            \begin{tabular}{c | c | c | c | c}
+            \toprule
+            & \multicolumn{3}{|c|}{Current Estimates} & Predictions \\
+            \midrule
+            n & $z_n$ & $\alpha_n$ & $\hat{x}_{n,n}$ & $\hat{x}_{n+1,n}$ \\
+            \midrule
+
+            0  & ---- &      ----      & 10.0 & 10.0 \\[4pt]
+            1  & 10.3 &       1        & 10.3 & 10.3 \\[4pt]
+            2  &  9.9 & $\frac{1}{2 }$ & 10.1 & 10.1 \\[4pt]
+            3  &  9.8 & $\frac{1}{3 }$ & 10.0 & 10.0 \\[4pt]
+            4  & 10.3 & $\frac{1}{4 }$ & 10.1 & 10.1 \\[4pt]
+            5  & 10.4 & $\frac{1}{5 }$ & 10.1 & 10.1 \\[4pt]
+            6  & 10.1 & $\frac{1}{6 }$ & 10.1 & 10.1 \\[4pt]
+            7  & 10.3 & $\frac{1}{7 }$ & 10.2 & 10.2 \\[4pt]
+            8  & 10.0 & $\frac{1}{8 }$ & 10.1 & 10.1 \\[4pt]
+            9  &  9.8 & $\frac{1}{9 }$ & 10.1 & 10.1 \\[4pt]
+            10 &  9.5 & $\frac{1}{10}$ & 10.0 & ---- \\[4pt]
+
+            \bottomrule
+            \end{tabular}
+        \end{center}
+
+        \begin{center}
+            \includegraphics[height=3.5in]{examples/alpha_filter_results.png}
+        \end{center}
+
+        The $\alpha$-filter considerably smoothed out the noisy measurement data and will eventually converge on an estimate close to the true value (within 10\%).
 
         \end{example}
 
         \pagelayout{margin} % Replace margins
 
-        \subsubsection*{The $\alpha$ and $\beta$ Filter}
+        \subsection{The $\alpha$ and $\beta$ Filter}
         As demonstrated in Example \ref{ex:alpha_filter}, the $\alpha$ filter makes a major assumption that the state does not change between samples.
         In reality, this is rarely the case as we typically want to measure a body's movement, or track a variable over time, or measure something that has dependency on another variable.
         
@@ -220,7 +238,7 @@ To that end, this chapter will be about how to process raw data into something m
             \hat{\dot{x}}_{n,n} = \hat{\dot{x}}_{n,n-1} + \beta(\frac{z_n - \hat{x}_{n,n-1}}{\Delta t})
         \end{equation}
 
-        \hl{INSERT FIGURE OF THE $\alpha$ - $\beta$ FILTER ALGORITHM}
+        \todo{INSERT FIGURE OF THE $\alpha$ - $\beta$ FILTER ALGORITHM}
 
         \pagelayout{wide} % Remove margins
 
@@ -237,8 +255,8 @@ To that end, this chapter will be about how to process raw data into something m
         \begin{equation*}
             \begin{aligned} 
                 0:& \text{ Initial conditions: } \hat{x}_{0,0} = 300 \text{ m, } \hat{\dot{x}}_{0,0} = 4 \text{ m/s} \\
-                3\text{a}:& \text{ Predict the next position: } \hat{x}_{1,0} = \hat{x}_{0,0} + \Delta t \hat{\dot{x}}_{0,0} = 300 + 5(4) = \textbf{320 m} \\
-                3\text{b}:& \text{ Predict the next velocity: } \hat{\dot{x}}_{1,0} = \hat{\dot{x}}_{0,0} = \textbf{4 m/s}
+                3:& \text{ Predict the next position: } \hat{x}_{1,0} = \hat{x}_{0,0} + \Delta t \hat{\dot{x}}_{0,0} = 300 + 5(4) = \textbf{320 m} \\
+                 :& \text{ Predict the next velocity: } \hat{\dot{x}}_{1,0} = \hat{\dot{x}}_{0,0} = \textbf{4 m/s}
             \end{aligned}
         \end{equation*}
         
@@ -246,10 +264,10 @@ To that end, this chapter will be about how to process raw data into something m
         \begin{equation*}
             \begin{aligned} 
                 1:& \text{ The vessel makes a positional measurement: } z_1 = \textbf{310 m} \\
-                2\text{a}:& \text{ We estimate the current position: } \hat{x}_{1,1} = \hat{x}_{1,0} + \alpha(z_1 - \hat{x}_{1,0}) = 320 + 0.2(310 - 320) = \textbf{318 m} \\
-                2\text{b}:& \text{ We estimate the current velocity: } \hat{\dot{x}}_{1,1} = \hat{\dot{x}}_{1,0} + \beta(\frac{z_1 - \hat{x}_{1,0}}{\Delta t}) = 4 + 0.1(\frac{310 - 320}{5}) = \textbf{3.8 m/s} \\
-                3\text{a}:& \text{ Predict the next position: } \hat{x}_{2,1} = \hat{x}_{1,1} + \Delta t \hat{\dot{x}}_{1,1} = 318 + 5(3.8) = \textbf{337 m} \\
-                3\text{b}:& \text{ Predict the next velocity: } \hat{\dot{x}}_{2,1} = \hat{\dot{x}}_{1,1} = \textbf{3.8 m/s}
+                2:& \text{ We estimate the current position: } \hat{x}_{1,1} = \hat{x}_{1,0} + \alpha(z_1 - \hat{x}_{1,0}) = 320 + 0.2(310 - 320) = \textbf{318 m} \\
+                 :& \text{ We estimate the current velocity: } \hat{\dot{x}}_{1,1} = \hat{\dot{x}}_{1,0} + \beta(\frac{z_1 - \hat{x}_{1,0}}{\Delta t}) = 4 + 0.1(\frac{310 - 320}{5}) = \textbf{3.8 m/s} \\
+                3:& \text{ Predict the next position: } \hat{x}_{2,1} = \hat{x}_{1,1} + \Delta t \hat{\dot{x}}_{1,1} = 318 + 5(3.8) = \textbf{337 m} \\
+                 :& \text{ Predict the next velocity: } \hat{\dot{x}}_{2,1} = \hat{\dot{x}}_{1,1} = \textbf{3.8 m/s}
             \end{aligned}
         \end{equation*}
 
@@ -257,47 +275,74 @@ To that end, this chapter will be about how to process raw data into something m
         \begin{equation*}
             \begin{aligned} 
                 1:& \text{ The vessel makes a positional measurement: } z_2 = \textbf{317 m} \\
-                2\text{a}:& \text{ We estimate the current position: } \hat{x}_{2,2} = \hat{x}_{2,1} + \alpha(z_2 - \hat{x}_{2,1}) = 337 + 0.2(317 - 337) = \textbf{333 m} \\
-                2\text{b}:& \text{ We estimate the current velocity: } \hat{\dot{x}}_{2,2} = \hat{\dot{x}}_{2,1} + \beta(\frac{z_2 - \hat{x}_{2,1}}{\Delta t}) = 3.8 + 0.1(\frac{337 - 317}{5}) = \textbf{3.4 m/s} \\
-                3\text{a}:& \text{ Predict the next position: } \hat{x}_{3,2} = \hat{x}_{2,2} + \Delta t \hat{\dot{x}}_{2,2} = 333 + 5(3.4) = \textbf{350 m} \\
-                3\text{b}:& \text{ Predict the next velocity: } \hat{\dot{x}}_{3,2} = \hat{\dot{x}}_{2,2} = \textbf{3.4 m/s}
+                2:& \text{ We estimate the current position: } \hat{x}_{2,2} = \hat{x}_{2,1} + \alpha(z_2 - \hat{x}_{2,1}) = 337 + 0.2(317 - 337) = \textbf{333 m} \\
+                 :& \text{ We estimate the current velocity: } \hat{\dot{x}}_{2,2} = \hat{\dot{x}}_{2,1} + \beta(\frac{z_2 - \hat{x}_{2,1}}{\Delta t}) = 3.8 + 0.1(\frac{337 - 317}{5}) = \textbf{3.4 m/s} \\
+                3:& \text{ Predict the next position: } \hat{x}_{3,2} = \hat{x}_{2,2} + \Delta t \hat{\dot{x}}_{2,2} = 333 + 5(3.4) = \textbf{350 m} \\
+                 :& \text{ Predict the next velocity: } \hat{\dot{x}}_{3,2} = \hat{\dot{x}}_{2,2} = \textbf{3.4 m/s}
             \end{aligned}
         \end{equation*}
 
-        \hl{FINISH OUT WITH A TABLE OF RESULTS AND EXPLANATION}
+        The data for this example is summarized in the table and figure below:
 
+        \begin{center}
+            \begin{tabular}{c | c | c | c | c | c}
+            \toprule
+            & \multicolumn{3}{|c|}{Current Estimates} & \multicolumn{2}{c}{Predictions} \\
+            \midrule
+            n & $z_n$ & $\hat{x}_{n,n}$ & $ \hat{\dot{x}}_{n,n} $ & $ \hat{x}_{n+1,n}$ & $ \hat{\dot{x}}_{n+1,n} $ \\
+            \midrule
+
+            0  &  ---  & 300.0 & 4.00 & 320.0 & 4.00 \\
+            1  & 322.0 & 320.4 & 4.04 & 340.6 & 4.04 \\
+            2  & 341.0 & 340.7 & 4.05 & 360.9 & 4.05 \\
+            3  & 358.0 & 360.3 & 3.99 & 380.3 & 3.99 \\
+            4  & 374.0 & 379.0 & 3.86 & 398.3 & 3.86 \\
+            5  & 399.0 & 398.5 & 3.88 & 417.9 & 3.88 \\
+            6  & 420.0 & 418.3 & 3.92 & 437.9 & 3.92 \\
+            7  & 436.0 & 437.5 & 3.88 & 456.9 & 3.88 \\
+            8  & 458.0 & 457.1 & 3.90 & 476.7 & 3.90 \\
+            9  & 483.0 & 477.9 & 4.03 & 476.7 & 4.03 \\
+            10 & 501.0 & 498.7 & 4.09 & 498.1 & 4.03 \\
+
+            \bottomrule
+            \end{tabular}
+        \end{center}
+
+        \begin{center}
+            \includegraphics[height=3.5in]{examples/ex_6_4_alpha_beta_filter_results.png}
+        \end{center}
+
+        From the figure, we can see that the filter provides a good "smoothing" effort for the noisy measurement data.
+        High values for $\alpha$ and $\beta$ will result in less "smoothing" in certain cases.
+        The current state estimate may be very close to the measurement values with a higher error in predicted values
+
+        The value of $\beta$ depends on the precision of the vessel's navigation system.
+        If the positional precision is $\sigma = 0.1 \text{ m}$, then it is very likely the vessel speed changed.
+        Therefore, $\beta$ would be very high to adjust the estimated velocity.
+        Conversely, if the positional precision is $\sigma = 10 \text{ m}$, then it is likely the vessel's position measurements are wrong and $\beta$ can be smaller.
+
+        $\alpha$ and $\beta$ depend on the measurement precision.
+        Very precise measurements would prefer a high $\alpha$ and $\beta$ gains that will cause the filter to converge quickly and can adapt to velocity changes.
+        Lower precision measurements would prefer lower $\alpha$ and $\beta$ gains that allow any uncertainties to be smoothed out; this will cause the filter to react slowly to velocity changes or external perturbations, though.
+        
         \end{example}
 
-        \pagelayout{margin} % Replace margins
-
-        \begin{kaobox}[frametitle=Aside: The $\alpha$ and $\beta$ Gains]
-            High values for $\alpha$ and $\beta$ will result in less "smoothing" in certain cases.
-            The current state estimarte may be very close to the measurement values with a higher error in predicted values
-
-            The value of $\beta$ depends on the precision of the vessel's navigation system.
-            If the positional precision is $\sigma = 0.1 \text{ m}$, then it is very likely the vessel speed changed.
-            Therefore, $\beta$ would be very high to adjust the estimated velocity.
-            Conversely, if the positional precision is $\sigma = 10 \text{ m}$, then it is likely the vessel's position measurements are wrong and $\beta$ can be smaller.
-
-            $\alpha$ and $\beta$ depend on the measurement precision.
-            Very precise measurements would prefer a high $\alpha$ and $\beta$ gains that will cause the filter to converge quickly and can adapt to velocity changes.
-            Lower precision measurements would prefer lower $\alpha$ and $\beta$ gains that allow any uncertainties to be smoothed out; this will cause the filter to react slowly to velocity changes or external perturbations, though.
-        \end{kaobox}
+        \pagelayout{margin} % Restore margins
 
         \paragraph{The Importance of Accurate Modelling} Lets expand upon Example \ref{ex:alpha_beta_filter}.
         Here, we will consider the same vessel under the same assumptions and initial conditions, but we will have a flawed dynamic model.
         The vessel will begin transiting at a constant velocity of 5-m/s for 15 seconds, then accelerate at a constant 2-m/s/s for 15 seconds.
         The kinematic plots are displayed below in Figure \ref{} and the numerical results can be found in Table \ref{}.
 
-        \hl{INSERT KINEMATIC GRAPH FIGURE SHOWING VESSEL ACCELERATION, VELOCITY, AND DISPLACEMENT OVER TIME}
+        \todo{INSERT KINEMATIC GRAPH FIGURE SHOWING VESSEL ACCELERATION, VELOCITY, AND DISPLACEMENT OVER TIME}
 
-        \hl{INSERT TABLE OF NUMERICAL RESULTS FROM THIS EXAMPLE}
+        \todo{INSERT TABLE OF NUMERICAL RESULTS FROM THIS EXAMPLE}
 
         The difference between the real plot (black) and the estimated plot (blue) is called the lag error.
         The lag error causes the estimates to drastically diverge from the real values as they change with time.
         Increasing the $\beta$ gain may allow the estimates to converge faster to the real values, but there is a better way.
 
-        \subsubsection*{The $\alpha$ $\beta$ and $\gamma$ Filter}
+        \subsection{The $\alpha$ $\beta$ and $\gamma$ Filter}
         This next filter considers the change of the rate of the change variable. 
         In the case of moving targets, this means acceleration.
         This changes the State Extrapolation Equations to:
@@ -318,6 +363,150 @@ To that end, this chapter will be about how to process raw data into something m
             \begin{align}
                 \hat{x}_{n,n} &= \hat{x}_{n,n-1} + \alpha (z_n - \hat{x}_{n,n-1}) \labeq{sue_abg_disp}\\
                 \hat{\dot{x}}_{n,n} &= \hat{\dot{x}}_{n,n-1} + \beta (\frac{z_n - \hat{x}_{n,n-1}}{\Delta t}) \labeq{sue_abg_velocity} \\
-                \hat{\ddot{x}}_{n,n} &= \hat{\ddot{x}}_{n,n-1} + \gamma (\frac{z_n - \hat{x}_{n,n-1}}{1/2 \Delta t^2) \labeq (sue_abg_accel)
+                \hat{\ddot{x}}_{n,n} &= \hat{\ddot{x}}_{n,n-1} + \gamma (\frac{z_n - \hat{x}_{n,n-1}}{\frac{1}{2} \Delta t^2}) \labeq{sue_abg_accel}
             \end{align}
         \end{subequations}
+
+        This type of filter eliminates the lag error by accounting for a constant acceleration.
+        If we want to account for "jerk", or a change in acceleration, we need to implement a more advanced filter like the Kalman filter.
+
+        \subsection{Kalman Filter} \labsec{kalman_filter}
+        \subsubsection*{Introduction} 
+        The Kalman Filter is a recursive algorithm introduced in the 1960's as a method to track, estimate, and predict the state of a system and corresponding uncertainties.
+        This filter integrates a dynamic (linear) model of the system, control inputs, measurements, and biases/uncertainties into a single algorithm.
+        This effectively fuses together system inputs and responses and extrapolates what the system is currently doing and expected to do.
+        One key advantage of this algorithm is that it only requires the guess of the previous state to estimate the current state. 
+        This massively decreases the memory and processing costs as the history of inputs, measurements, and uncertainties does not need to be remembered or analyzed.
+        However, it does have some limitations when the sensor data is noisy or the control inputs cannot be linearly mapped to the system state.
+        Random errors in the sensor data may cause the filter to behave unpredictably and non-linearity prevents proper fusion entirely.\sidenote{Though this can be managed with an Extended Kalman Filter}
+
+        This section will discuss the Kalman filter in a higher-order method.
+        Many resources around with Internet can discuss the in-depth mathematics governing this filter and you are free to browse them at your leisure. 
+        For this guide, my primary concern is to get you acquainted with the Kalman filter and its broader practical applications.
+
+        \subsubsection*{Kalman Filter in One Dimension}
+        The uni-dimensional Kalman filter is a special, idealized case for the Kalman filter.
+        It is more convenient as a teaching tool as it does not include the complex matrix and vector operations the general multi-dimensional Kalman filter requires.
+        However, this only makes this type useful for tracking and estimating a single variable.
+
+        Multiple uni-dimensional Kalman filters can be run in parallel or chained together to mimic a multi-dimensional filter, however, this will unnecessarily increase the computational resources required for the calculations and will reduce the quality of the filtering overall.
+
+        \paragraph*{The Kalman Gain} In a Kalman filter, the $\alpha-\beta-\gamma$ parameters are calculated at every filter iteration.
+        These parameters are combined together into the Kalman Gain, denoted as $K_n$, which is the third Kalman equation.
+        The Kalman gain is bounded by: $0 <= Kn <= 1$.
+
+        \begin{equation} \labeq{kalman_gain}
+            \begin{aligned}
+                K_n &= \frac{\text{Estimate Uncertainty}}{\text{Estimate Uncertainty + Measurement Uncertainty}} \\
+                    &= \frac{p_{n,n-1}}{p_{n,n-1} + r_n}
+            \end{aligned}
+        \end{equation}
+
+        If we refresh the State Update Equation (Eq. \ref{eq:state_update_eq}) with the Kalman gain, we get:
+
+        \begin{equation} \labeq{kalman_state_update_eq}
+            \begin{aligned}
+                \hat{x}_{n,n} &= \hat{x}_{n,n-1} + K_n(z_n - \hat{x}_{n,n-1}) \\
+                              &= (1-K_n)\hat{x}_{n,n-1} + K_n z_n \\
+            \end{aligned}
+        \end{equation}
+
+        In the above equation, $K_n$ is the weight (importance) given to the measurement.
+        Conversely, $(1-K_n)$ is the weight given to the estimate.
+
+        \marginnote[-1.5in]{\textbf{Important note:} When measurement uncertainty is very large, and the estimate uncertainty is small, $K_n << 1$, hence big weight to the estimate and small weight to the measurement. When the opposite is true, $K_n -> 1$, meaning a large weight to the measurement and a small weight to the estimate. This is how the Kalman filter can regulate and smooth out noisy data by knowing the uncertainties.}
+
+        \paragraph*{The Estimate Uncertainty Update Equation} the fourth Kalman equation is the \textit{Estimate Uncertainty Update}. \sidenote{Also referred to as the \textit{Covariance Update Equation}.}
+        The estimate uncertainty should approach (converge) to 0 with each filter iteration as the filter improves its guessing accuracy.
+        However, if the measurement uncertainty is large ($K_n << 1$), the estimate uncertainty will converge more slowly.
+        The opposite is true if the measurement uncertainty is small.
+        Basically, the more precise your measurements are, the faster the Kalman filter will converge on the best estimate.
+
+        \begin{gather}
+            p_{n,n} = (1-K_n)p_{n,n-1} \\
+            \begin{aligned}
+                \text{where } &p_{n,n} \text{ is the estimate uncertainty at the current state} \\
+                              &K_n \text{ is the Kalman gain at the current state} \\
+                              &p_{n,n-1} \text{ is the estimate uncertainty of the previous state}
+            \end{aligned} \notag
+        \end{gather}
+
+        \paragraph*{The Estimate Uncertainty Extrapolation Equation} The fifth and final Kalman equation is how the filter predicts future uncertainties and is called the \textit{Estimate Uncertainty Extrapolation Equation}. \sidenote{Also referred to as the \textit{Covariance Extrapolation Equation}}
+        Like with the State Extrapolation Equations, this is done with dynamic models and will be unique to every example.
+        If we refer to the previous models from Equations \ref{eq:see_disp} and \ref{eq:see_velocity}, we can define the Estimate Uncertainty Extrapolation Equations as:
+
+        \begin{subequations}
+            \labeq{covariance_extrapolation}
+            \begin{align}
+                p_{n+1,n}^x &= p_{n,n}^x + \Delta t p_{n,n}^{\dot{x}} \\
+                p_{n+1,n}^{\dot{x}} &= p_{n,n}^{\dot{x}}
+            \end{align}
+        \end{subequations}
+
+        For more information on variance and its derivation, see \todo{REFERENCE FOR VARIANCE}
+
+        \paragraph*{Putting it all Together}
+
+        \todo{INCLUDE FIGURE ON THE KALMAN FILTER ALGORITHM AND EXPLANATION}
+
+        \pagelayout{wide} % Remove margins
+
+        \begin{example}
+            In this example, we will be estimating the depth of an ROV using a 1D Kalman filter.
+            We will be assuming the ROV depth remains constant and its location in space does not matter or change.
+            For example's sake, we know for an absolute fact that the ROV is at a depth of 50-meters ($x=50 \text{ m}$).
+            We will also assume that our depth sensor has a standard deviation of 5-meters ($\sigma=5 \text{ m}$), therefore we will have a measurement variance or uncertainty of 25-meters ($r=25 \text{ m}^2$)
+
+            \paragraph*{Iteration 0}
+            \begin{equation*}
+                \begin{aligned}
+                    0 &: \text{Estimate depth: } \hat{x}_{0,0} = \textbf{60 m} \\
+                      &: \text{Estimate uncertainty: } p_{0,0} = \textbf{225 m}^2 \\
+                    3 &: \text{Predicted depth: } \hat{x}_{1,0} = \hat{x}_{0,0} = \textbf{60 m} \\
+                      &: \text{Prediction uncertainty: } p_{1,0} = p_{0,0} = \textbf{225 m}^2 \\
+                \end{aligned}
+            \end{equation*}
+
+            \paragraph*{Iteration 1}
+            \begin{equation*}
+                \begin{aligned}
+                    1 &: \text{Measure depth: } z_1 = \textbf{48.54 m} \\
+                      &: \text{Measurement uncertainty: } r_1 = \textbf{25 m}^2 \\
+                    2 &: \text{Kalman gain} K_1 = \frac{p_{1,0}}{p_{1,0}+r_1} = \frac{255}{255 + 25} = \textbf{0.9} \\
+                      &: \text{Estimated depth: } \hat{x}_{1,1} = \hat{x}_{1,0} + K_1(z_1 - \hat{x}_{1,0}) = 60 + 0.9(48.54-60) = \textbf{49.69 m} \\
+                      &: \text{Estimate uncertainty: } p_{1,1} = (1-K_1)p_{1,0} = (1-0.9)225 = \textbf{22.5 m}^2 \\
+                    3 &: \text{Predicted depth: } \hat{x}_{2,1} = \hat{x}_{1,1} = \textbf{49.69 m} \\
+                      &: \text{Prediction uncertainty: } p_{1,0} = p_{1,1} = \textbf{22.5 m}^2 \\
+                \end{aligned}
+            \end{equation*}
+
+            \paragraph*{Iteration 2}
+            \begin{equation*}
+                \begin{aligned}
+                    1 &: \text{Measure depth: } z_2 = \textbf{47.11 m} \\
+                      &: \text{Measurement uncertainty: } r_2 = \textbf{25 m}^2 \\
+                    2 &: \text{Kalman gain} K_2 = \frac{p_{2,1}}{p_{2,1}+r_2} = \frac{22.5}{22.5 + 25} = \textbf{0.47} \\
+                      &: \text{Estimated depth: } \hat{x}_{2,2} = \hat{x}_{2,1} + K_2(z_2 - \hat{x}_{2,1}) = 49.69 + 0.47(47.11-49.69) = \textbf{48.47 m} \\
+                      &: \text{Estimate uncertainty: } p_{2,2} = (1-K_2)p_{2,1} = (1-0.47)22.5 = \textbf{11.84 m}^2 \\
+                    3 &: \text{Predicted depth: } \hat{x}_{3,2} = \hat{x}_{2,2} = \textbf{48.47 m} \\
+                      &: \text{Prediction uncertainty: } p_{3,2} = p_{2,2} = \textbf{11.84 m}^2 \\
+                \end{aligned}
+            \end{equation*}
+
+            \hl{INSERT TABLE AND GRAPHS FOR THIS EXAMPLE}
+
+        \end{example}
+
+        \pagelayout{margin} % Restore margins
+        
+        \paragraph*{Process Noise} In the real world, there are uncertainties in the system's dynamic model.
+        Uncertainty is caused by unanticipated changes in the system due to external factors.
+        This can be drift caused by ocean current, wind blowing a rocket to the side, drag, friction, even time dilation in extreme cases.
+        Generally, these uncertainties can be combined into the Process Noise gain denoted by "$q$"
+        To account for process noise, it must be included in the Covariance Extrapolation Equation (Equation \ref{eq:covariance_extrapolation})
+
+        If the model is not known to be good or is very noisy, we can increase the process noise gain to reduce the lag error.
+
+        \begin{equation}
+            p_{n+1,n} = p_{n,n} + q
+        \end{equation}

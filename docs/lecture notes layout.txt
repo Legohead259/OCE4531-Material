@@ -188,6 +188,11 @@ Learning Material Setup
 
 6. Data Acquisition and Processing
 	6.0 Background
+		6.0.1 Statistics
+			Standard deviation
+			Variance
+			Distribution
+			Probability Density Functions
 		6.0.1 Time-series Domain
 			Continuous sampling
 			Burst sampling
