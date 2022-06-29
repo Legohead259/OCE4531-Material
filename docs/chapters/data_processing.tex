@@ -309,7 +309,7 @@ To that end, this chapter will be about how to process raw data into something m
         \end{center}
 
         \begin{center}
-            \includegraphics[height=3.5in]{examples/ex_6_4_alpha_beta_filter_results.png}
+            \includegraphics[height=3in]{examples/ex_6_4_alpha_beta_filter_results.png}
         \end{center}
 
         From the figure, we can see that the filter provides a good "smoothing" effort for the noisy measurement data.
@@ -332,11 +332,35 @@ To that end, this chapter will be about how to process raw data into something m
         \paragraph{The Importance of Accurate Modelling} Lets expand upon Example \ref{ex:alpha_beta_filter}.
         Here, we will consider the same vessel under the same assumptions and initial conditions, but we will have a flawed dynamic model.
         The vessel will begin transiting at a constant velocity of 5-m/s for 15 seconds, then accelerate at a constant 2-m/s/s for 15 seconds.
-        The kinematic plots are displayed below in Figure \ref{} and the numerical results can be found in Table \ref{}.
+        The kinematic plots are displayed below in Figure \ref{fig:alpha_beta_acc} and the numerical results can be found in Table \ref{tab:alpha_beta_acc}.
 
-        \todo{INSERT KINEMATIC GRAPH FIGURE SHOWING VESSEL ACCELERATION, VELOCITY, AND DISPLACEMENT OVER TIME}
+        \begin{table}[h!]
+            \labtab{alpha_beta_acc}
+            \begin{tabular}{c | c | c | c | c | c}
+            \toprule
+            & \multicolumn{3}{|c|}{Current Estimates} & \multicolumn{2}{c}{Predictions} \\
+            \midrule
+            n & $z_n$ & $\hat{x}_{n,n}$ & $ \hat{\dot{x}}_{n,n} $ & $ \hat{x}_{n+1,n}$ & $ \hat{\dot{x}}_{n+1,n} $ \\
+            \midrule
 
-        \todo{INSERT TABLE OF NUMERICAL RESULTS FROM THIS EXAMPLE}
+            0  & ----- & 30.0  & 5.00 & 55.0  & 5.00 \\
+            1  & 60.0  & 56.0  & 5.10 & 81.5  & 5.10 \\
+            2  & 77.0  & 80.6  & 5.01 & 105.7 & 5.01 \\
+            3  & 107.0 & 105.9 & 5.03 & 131.1 & 5.03 \\
+            4  & 154.0 & 135.7 & 5.50 & 163.2 & 5.50 \\
+            5  & 252.0 & 181.0 & 7.30 & 217.5 & 7.30 \\
+            6  & 407.0 & 255.4 & 11.1 & ----- & ---- \\
+
+            \bottomrule
+            \end{tabular}
+            \caption[Alpha-Beta Filter with Lag]{Numerical results for the $\alpha-\beta$ filter not accounting for acceleration}
+        \end{table}
+
+        \begin{figure}[h!]
+            \labfig{alpha_beta_acc}
+            \includegraphics[height=3.5in]{examples/alpha_beta_filter_acc_results.png}
+            \caption[Alpha-Beta Filter Results with Lag]{Graphical results for the $\alpha-\beta$ filter not accounting for acceleration}
+        \end{figure}
 
         The difference between the real plot (black) and the estimated plot (blue) is called the lag error.
         The lag error causes the estimates to drastically diverge from the real values as they change with time.
@@ -493,7 +517,38 @@ To that end, this chapter will be about how to process raw data into something m
                 \end{aligned}
             \end{equation*}
 
-            \hl{INSERT TABLE AND GRAPHS FOR THIS EXAMPLE}
+            \begin{center}
+                \begin{tabular}{c | c | c | c | c | c | c | c}
+                \toprule
+                & \multicolumn{2}{c}{Measurements} & \multicolumn{3}{c}{Current Estimates} & \multicolumn{2}{c}{Predictions} \\
+                \midrule
+                n & $z_n$ & $r_n$ & $K_n$ & $\hat{x}_{n,n}$ & $ p_{n,n} $ & $ \hat{x}_{n+1,n}$ & $ p_{n+1,n} $ \\
+                \midrule
+    
+                0  & ---- & -- & ---- & 60.0 & 225  & 60.0 & 225  \\
+                1  & 48.5 & 25 & 0.90 & 49.7 & 22.5 & 49.7 & 22.5 \\
+                2  & 47.1 & 25 & 0.47 & 48.4 & 11.8 & 48.4 & 11.8 \\
+                3  & 55.0 & 25 & 0.32 & 50.6 & 8.03 & 50.6 & 8.03 \\
+                4  & 55.2 & 25 & 0.24 & 51.7 & 6.08 & 51.7 & 6.08 \\
+                5  & 49.9 & 25 & 0.20 & 51.3 & 4.89 & 51.3 & 4.89 \\
+                6  & 40.6 & 25 & 0.16 & 49.6 & 4.09 & 49.6 & 4.09 \\
+                7  & 46.7 & 25 & 0.14 & 49.2 & 3.52 & 49.2 & 3.52 \\
+                8  & 50.1 & 25 & 0.12 & 49.3 & 3.08 & 49.3 & 3.08 \\
+                9  & 51.3 & 25 & 0.11 & 49.5 & 2.74 & 49.5 & 2.74 \\
+                10 & 50.0 & 25 & 0.10 & 49.6 & 2.47 & 49.6 & 2.47 \\
+    
+                \bottomrule
+                \end{tabular}
+            \end{center}
+
+            \begin{center}
+                \includegraphics[height=3in]{examples/1D_kalman_filter_results.png}
+            \end{center}
+
+            We can see from the figure that the Kalman filter eventually converges on the true value and considerably smoothes out the noisy measurements.
+            The error bars on the estimate plot (blue) also show that the Kalman filter increases its confidence with every iteration as it converges to the true value.
+            The oscillation shown in the estimates are a result of the gains being slightly off from their ideal value.
+            Tuning the process noise variable (q) can cause the filter to converge quickly and confidently to the true value in fewer iterations.
 
         \end{example}
 
