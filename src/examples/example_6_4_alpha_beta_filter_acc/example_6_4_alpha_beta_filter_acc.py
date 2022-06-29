@@ -1,7 +1,7 @@
 # OCE4531 Lecture Notes Material - Alpha-Beta Filter Example with Acceleration
 # Version: 1.0.0
 # Braidan Duffy
-# Created: 06/28/2022, Last Edit: 06/28/2022
+# Created: 06/29/2022, Last Edit: 06/29/2022
 
 # Imports
 import matplotlib.pyplot as plt
