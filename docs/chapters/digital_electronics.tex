@@ -1,0 +1,182 @@
+% ===========================================
+% Digital Logic
+% Written by: Braidan Duffy
+%
+% Date: 07/06/2022
+% Last Revision: 07/06/2022
+% ============================================
+
+\setchapterstyle{kao}
+\chapter{Digital Electronics}
+\setchapterpreamble[u]{\margintoc}
+\labch{digital_electronics}
+
+Computers have existed in some fashion or another for millennia.
+The ancient antikythera mechanism was a hand-powered computer that predicted the position of astronomical bodies throughout the year.
+Mathematicians in the 18th and 19th centuries used complicated machines and mechanisms to run calculus and trigonometric calculations at speeds way faster than possible by humans by hand.
+Then, in the mid-1940's nations used analog computers to compute the trajectories of ballistic projectiles and free falling bombs.
+Today, analog computers are still used in niche applications, but since the transistor revolution of the 1960's and 1970's, almost every computer in the world has transitioned to digital logic.
+
+\section[Introduction to Binary]{Introduction to Binary}
+Digital logic is electrically simple to implement: either current flows (a logical '1') or it does not (a logical '0').
+Even better, the circuit required to calculate digital logic can be generalized or reconfigured, depending on the architecture used.
+This makes digital logic a far more versatile tool compared to analog computers which can only be made for specific applications.
+
+The fundamentals of computing are above the scope of these notes, but it is still important for engineers to understand the basic logic behind digital computations and know about the 1's and 0's that dictate our modern lifestyles
+
+\paragraph*{What is Binary?} Binary is the representation of the state of an object.
+As the latin prefix implies, there are two states represented by binary: on (logical '1') or off (logical '0').
+A lightbulb is a good example of a binary object - it is either on, lighting up a room, or off, leaving the room in darkness.
+
+Binary is fundamentally a numbering system, much like the arabic numerals we use in our day-to-day lives.
+Arabic numerals are in Base10, meaning we comprehend counting in multiples of 10 using the digits 0-9:
+\begin{align*}
+    20     = 10*2 \\
+    450    = 4*10*10 + 5*10 \\
+    245683 = 2*10^5 + 4*10^4 + 5*10^3 + 6*10^2 + 8*10^1 + 3*10^0
+\end{align*}
+
+Binary is counted in Base2, meaning everything is counted in multiples of 2 using the digits 0 and 1. Using the same example as before:
+\begin{align*}
+    20     &= 2^5 + 2^3 \\
+    450    &= 2^8 + 2^7 + 2^6 + 0^5 + 0^4 + 0^3 + 0^2 + 2^1 + 0^0 \\
+    245683 &= 2^{17} + 2^{16} + 2^{15} + 2^{13} + 2^{12} + 2^{11} + 2^{10} + 2^9 + 2^8 + 2^7 + 2^5 + 2^4 + 2^1 + 2^0
+\end{align*}
+        
+While this is inefficient for a human to understand its meaning, a computer can quickly transform this on/off pattern of electrons into numbers for calculations.
+
+Binary numbers are broken down into three groupings: bits (one number), nibbles (four bits), and bytes (two nibbles or eight bits). 
+The groupings are extremely important as the order and number of the bits in a binary representation dictate the number or logical input used in the calculation.
+Each bit is indexed starting from 0, as shown in \hl{FIGURE} and goes from the Least Significant Bit (LSB) at index 0, to the Most Significant Bit (MSB) at the furthest index. 
+\sidenote{These indecies get their names because of how they affect the binary number when changed. 
+The LSB only changes the numerical value by 1.
+The MSB, on the other hand, can change the value by upto an infinite value, depending on how many bits are present in the binary number}
+
+    \subsection{Binary Arithmetic}
+    Much like our beloved arabic numerals, binary numbers can be added, subtracted, multiplied, and divided.
+
+    \paragraph*{Addition} Adding binary numbers is straight-forward.
+    Simply stack the numbers you wish to add on top of each other, ensuring the indices align.
+    Note, binary addition is commutative, meaning the number order does not matter, so long as the indices are aligned.
+    Then, for each index, add the numbers together.
+    If the result is greater than 1, then set the result of the index addition to 0 and carry a '1' over to the next index.
+    Repeat until you have calculated the last index!
+
+    \begin{example}[Adding binary numbers]
+        Let's add $7_{10}$ ($0111_2$) and $11_{10}$ ($1011_2$):
+        \begin{center}
+            \begin{tabular}{ccccc}
+                $^1$  & $0^1$ & $1^1$ & $1^1$ & $1$ \\
+                +     & 1     & 0     & 1     & 1 \\
+                \hline
+                1     & 0     & 0     & 1     & 0 \\
+            \end{tabular}
+        \end{center}
+    \end{example}
+
+    \paragraph*{Subtraction} Subtracting binary numbers is simply the same algorithm for Base10 numbers.
+    Starting at the LSB, subtract the two numbers index-by-index.
+    If a case arises, when the subtrahend \sidenote{bottom number} has a larger number than the same index in the minuend \sidenote{top number}, borrow a '1' from the next index.
+    If you are are unable to borrow a '1', grab one from the next index until you can get a '1' to bring back.
+    When you bring a '1' back, then perform the subtraction.
+    Repeat this process until you have calculated the last index.
+    
+    \begin{example}[Subtracting binary numbers]
+        Let's subtract $24_{10}$ ($11000_2$) and $7_{10}$ ($111_2$):
+        \begin{center}
+            \begin{tabular}{cccccc}
+                  & 1 & $1^0$ & ${0^{10}}^1$ & ${0^{10}}^1$ & ${0^{10}}^1$  \\
+                - & 0 & 0     & 1            & 1            & 1             \\
+                \hline
+                  & 1 & 0     & 0            & 0            & 1             \\
+            \end{tabular}
+        \end{center}
+    \end{example}
+
+    \begin{kaobox}[frametitle=Aside: 2's Complement Method]
+        The above method is easy for humans to understand, but computationally expensive. 
+        For operations that require borrowing, many repetitive borrow operations are performed, wasting CPU cycles.
+        Instead, computers use a complement method to simplify the subtraction operation and increase performance.
+
+        Here, we are going to perform the same calculation as before. Begin by aligning the two numbers as previously, "padding" \sidenote{adding leading zeroes, as necessary} both numbers so they are the same length.
+        
+        \begin{center}
+            \begin{tabular}{cccccc}
+                  & 1 & 1 & 0 & 0 & 0 \\
+                - & 0 & 0 & 1 & 1 & 1 \\
+                \hline
+            \end{tabular}
+        \end{center}
+
+        Then, switch all of the bits in the subtrahend. In this case, 00111 becomes 11000. \sidenote{What is occuring here is known as the 1's complement as we are subtracting '1' from each bit in the number. This only works in binary}
+        Then, we are going to add 1 to the switched term:
+        \begin{equation*}
+            11000 + 1 = 11001
+        \end{equation*}
+        We are then going to change the math problem from subtraction to addition and add the original minuend and the new, switched subtrahend.
+
+        \begin{center}
+            \begin{tabular}{cccccc}
+                  & 1 & 1 & 0 & 0 & 0 \\
+                + & 1 & 1 & 0 & 0 & 1 \\
+                \hline
+                \cancel{1} & 1 & 0 & 0 & 0 & 1 \\
+            \end{tabular}
+        \end{center}
+
+        To finish the algorithm, remove the MSB from the resultant. 
+        You can compare this number to the previous calculation and notice that the final result is the same, depite the radically different method.
+        Even though the complement method is unintuitive for humans to understand, it is vastly superior for a computer to execute as the number of required operations is dramatically smaller than the original method, even with larger values.
+    \end{kaobox}
+
+    \paragraph*{Multiplication} Binary multiplication occurs in the same order as decimal long multiplication.
+    It is a commutative process, like addition, but in order to reduce the number of steps required, it is recommended that the number with the least amount of bits is the multiplicand \sidenote{bottom number} and the other factor is the multiplier \sidenote{top number}.
+    For the operation, you will multiply the multiplier by each bit of the multiplicand to calculate an intermediate value.
+    With every new index of the multiplicand, shift the resulting product over one bit until you have calculated the intermediate product for the last index of the multiplicand.
+    Simply add all the intermediate products together to calculate the final result.
+
+    \begin{example}[Multiplying binary numbers]
+        Let's multiply $14_{10}$ ($1110_2$) and $3_{10}$ ($0011_2$):
+        \begin{center}
+            \begin{tabular}{cccccccc}
+                  &   &   & 1 & 1 & 1 & 0 \\
+                  &   & * & 1 & 0 & 1 & 1 \\
+                \hline
+                  &   &   & 1 & 1 & 1 & 0 \\
+                  &   & 1 & 1 & 1 & 0 &   \\
+                  & 0 & 0 & 0 & 0 &   &   \\
+                0 & 0 & 0 & 0 &   &   &   \\
+                \hline
+                0 & 1 & 0 & 1 & 0 & 1 & 0 \\  
+            \end{tabular}
+        \end{center}
+        This leaves us with the answer to the life, the universe, and everything: $0101010_2$ ($42_{10}$).
+    \end{example}
+
+    \paragraph*{Division} Binary division works exactly like decimal long division.
+    You start with a dividend within the division operator and a divisor operating on it.
+    Compare the divisor to the first digit of the dividend; if the divisor is larger, than a '0' is placed above the first index of the dividend, if it is smaller, than a one goes there.
+    If the latter case occurs, subtract the section of the dividend from the dividend and continue the dividing operation with this new value.
+
+    \begin{example}[Diving binary numbers]
+        Let's divide $69_{10}$ ($0100 0101_2$) by $3_{10}$ ($0011_2$):
+        \[
+        \begin{array}{ rr@{} >{\color{red}}c@{}*{6}{c@{\mkern2mu}} }
+            & 00010111 & & & &  &  \\ \cmidrule[0.6pt](l{-0.385em}){2-8}\\[-16.9pt]
+            0011\;\rlap{\Large)} & 01000101 & & & & & &  \\
+            & -11~~~~~~~~~ & & & & & &  \\ 
+            \cmidrule(l{1ex}){2-4}
+            & 101~~~~~\\
+            & -11~~~~~\\ 
+            \cmidrule(l{1ex}){2-4}
+            & 0100~~~ \\
+            & -11~~~ \\
+            \cmidrule(l{1ex}){2-4}
+            & 11 \\
+            & -11 \\
+            \cmidrule(l{1ex}){2-4}
+            & 0
+        \end{array}
+        \]
+        This is the exact same operation performed in Base10 long division, just everything is in Base2. As you can see, the division leaves us with the correct answer of $10111_2$ ($23_{10}$).
+    \end{example}
