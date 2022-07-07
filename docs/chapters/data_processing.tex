@@ -117,8 +117,6 @@ To that end, this chapter will be about how to process raw data into something m
         This value can be determined by reasoning or physical constraints of the system.
         The filter will always require an initial guess to kickstart the algorithm.
         A flow chart describing the algorithm's process is below.
-
-        \todo{INSERT ALPHA FILTER FLOW CHART HERE!}
         
         \pagelayout{wide} % No margins
 
@@ -237,8 +235,6 @@ To that end, this chapter will be about how to process raw data into something m
             \labeq{see_velocity_b}
             \hat{\dot{x}}_{n,n} = \hat{\dot{x}}_{n,n-1} + \beta(\frac{z_n - \hat{x}_{n,n-1}}{\Delta t})
         \end{equation}
-
-        \todo{INSERT FIGURE OF THE $\alpha$ - $\beta$ FILTER ALGORITHM}
 
         \pagelayout{wide} % Remove margins
 
@@ -467,11 +463,25 @@ To that end, this chapter will be about how to process raw data into something m
             \end{align}
         \end{subequations}
 
-        For more information on variance and its derivation, see \todo{REFERENCE FOR VARIANCE}
+        For more information on variance and its derivation, see \todo{REFERENCE FOR VARIANCe}
 
         \paragraph*{Putting it all Together}
 
-        \todo{INCLUDE FIGURE ON THE KALMAN FILTER ALGORITHM AND EXPLANATION}
+        First, the filter is initialized with a first guess ($\hat{x}_{0,0}$) and an associated uncertainty ($p_{0,0}$).
+        These values are passed into the dynamic model equations and Equation \ref{eq:covariance_extrapolation} to predict the state at the first measurement ($x_{1,0}$) and the associated uncertainty ($p_{1,0}$).
+        This is shown as Step 0 in Figure \ref{fig:kalman_filter}.
+        Then, we can take a measurement ($z_n$) and record its uncertainty ($r_n$), using the latter to determine the Kalman gain with Equation \ref{eq:kalman_gain}.
+        We can then estimate the current state value using Equation \ref{eq:kalman_state_update_eq} using the recorded measurement and the Kalman gain ($K_n$).
+        The current state estimate and its uncertainty can then be outputted from the filter and used in applications; this process is shown as Steps 1, 2a, and 2b in the figure below.
+        These values are then fed into the dynamic model to predict the next state and estimate the associated uncertainty (Step 3 in the below diagram).
+        Optionally, these predicted values can be outputted from the model as well, as the application requires.
+        This process repeats for every measurement with $n$ incrementing every time.
+
+        \begin{figure*}[h!]
+            \includegraphics[height=3in]{data_processing/KalmanFilter.png}
+            \caption[Kalman Filter Diagram]{Process diagram for a Kalman filter.}
+            \labfig{kalman_filter}
+        \end{figure*}
 
         \pagelayout{wide} % Remove margins
 
