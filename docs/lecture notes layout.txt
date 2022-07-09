@@ -38,13 +38,16 @@ Learning Material Setup
 		1.1.2 Binary Arithmetic
 	1.2 Introduction to Logic Gates
 		1.2.1 Truth Tables
-		1.2.2 Logic Gates and Usage
-			Example 1.2 Arduino Logic Gate Demonstration Part 1
-	1.3 Boolean Algebra
-		1.3.1 Gate Combination
-			Example 1.3 Arduino Logic Gate Demonstration Part 2
-		1.3.2 Gate Interchangeability
+			Aside: Karnaugh Maps (K-Maps)
+		1.2.2 Basic Logical Operations
+			Example: Basic Gates 1
+			Example: Basic Gates 2
+		1.2.3 Combination Logical Operations
+		1.2.4 Advanced Logical Operations
+			Example: Advanced Gates
+		1.2.5 Exercise: Arduino and Logic Gates
 	1.4 Multiplexing
+		Demultiplexing
 	1.5 Registers
 		1.5.1 Register Basics
 		1.5.2 Shift register
