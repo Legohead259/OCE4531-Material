@@ -1,8 +1,8 @@
-PWD c:/Users/legoh/OneDrive - Florida Institute of Technology/School/2022 Fall/OCE4531/Lecture Notes/docs/.secret/project_1_rgb_led
+PWD c:/Users/intern04/Documents/Duffy's Things/OCE4531-Material/docs/.secret/project_1_rgb_led
 INPUT c:/texlive/2022/texmf.cnf
 INPUT c:/texlive/2022/texmf-dist/web2c/texmf.cnf
 INPUT c:/texlive/2022/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT c:/Users/legoh/OneDrive - Florida Institute of Technology/School/2022 Fall/OCE4531/Lecture Notes/docs/.secret/project_1_rgb_led/p1_rgb_led_solution.tex
+INPUT c:/Users/intern04/Documents/Duffy's Things/OCE4531-Material/docs/.secret/project_1_rgb_led/p1_rgb_led_solution.tex
 OUTPUT .latexoutput/p1_rgb_led_solution.log
 INPUT c:/texlive/2022/texmf-dist/tex/latex/base/article.cls
 INPUT c:/texlive/2022/texmf-dist/tex/latex/base/article.cls
@@ -140,6 +140,10 @@ INPUT c:/texlive/2022/texmf-dist/tex/latex/graphics-cfg/color.cfg
 INPUT c:/texlive/2022/texmf-dist/tex/latex/graphics-cfg/color.cfg
 INPUT c:/texlive/2022/texmf-dist/tex/latex/graphics-cfg/color.cfg
 INPUT c:/texlive/2022/texmf-dist/tex/latex/graphics-cfg/color.cfg
+INPUT c:/texlive/2022/texmf-dist/tex/latex/graphics/mathcolor.ltx
+INPUT c:/texlive/2022/texmf-dist/tex/latex/graphics/mathcolor.ltx
+INPUT c:/texlive/2022/texmf-dist/tex/latex/graphics/mathcolor.ltx
+INPUT c:/texlive/2022/texmf-dist/tex/latex/graphics/mathcolor.ltx
 INPUT c:/texlive/2022/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 INPUT c:/texlive/2022/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 INPUT c:/texlive/2022/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
