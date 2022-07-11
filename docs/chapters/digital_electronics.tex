@@ -544,10 +544,10 @@ This allows you to "construct" logical equations with visual representations or 
             \toprule
             $A$ & $B$ & $\overline{(A \oplus B)}$  \\
             \midrule
-             0  &  0  &    0    \\
-             0  &  1  &    1    \\
-             1  &  0  &    1    \\
-             1  &  1  &    0    \\
+             0  &  0  &    1    \\
+             0  &  1  &    0    \\
+             1  &  0  &    0    \\
+             1  &  1  &    1    \\
             \bottomrule
         \end{tabular}
     \end{table}
@@ -579,16 +579,47 @@ This allows you to "construct" logical equations with visual representations or 
 
         The second section, I-II is determined by the expression:
         \begin{equation*}
-            \left[ (C \cdot D) \cdot \overline{(E + F)} \right]
+            (C \cdot D) \cdot \overline{(E + F)}
         \end{equation*}
 
-        The final section, I-II can be expressed by:
+        The final section, I-III can be expressed by:
         \begin{equation*}
-            \overline{\overline{(E + F)} \cdot \bar{G]}
+            \overline{\overline{(E + F)} \cdot \bar{G}}
         \end{equation*}
 
-        Next, let's breakdown the middle of the diagram into two more regions we will denote as II-I and II-II.
-        Again, we will determine the logical expression that represents each of these individual sectors.
+        Next, lets break down the last half of the diagram to determine its representative expression.
+        \begin{center}
+            \includegraphics[height=1.5in]{digital_logic/AdvancedGatesEx_II.png}
+        \end{center}
+
+        Here, we can see the representative expression is:
+        \begin{equation*}
+            \overline{(\text{I-I} + \text{I-II}) \oplus \overline{(\text{I-II} \cdot \text{I-III})}}
+        \end{equation*}
+
+        Substituting in the expressions we determined previously, we are left with the representative equation for the whole diagram.
+        \begin{equation*}
+            \overline{
+                (\overline{(A \oplus B) \cdot (C \cdot D)} + (C \cdot D) \cdot \overline{(E + F)}) 
+                \oplus 
+                \overline{((C \cdot D) \cdot \overline{(E + F)} \cdot \overline{\overline{(E + F)} \cdot \bar{G}})}
+            }
+        \end{equation*}
+
+        This expression is a little complicated and is not ideal to determine what inputs wil result in our desired outputs.
+        So, we must create a truth table to effectively organize and summarize the correct inputs.
+        However, this diagram has 7 input channels meaning any truth table we create would have to have $2^7$ or 128 possible combinations.
+        One solution is to use a Karnaugh map to consolidate the truth table, but here, we will use Microsoft Excel to do all of the work for us.
+
+        To begin, let's set up the table in excel like the screenshot below.
+        \begin{center}
+            \includegraphics[]{digital_logic/AdvancedGatesEx-Table.PNG}
+        \end{center}
+
+        Then, we will set up an Excel equation that is equivalent to the diagram expression equation:
+        \begin{lstlisting}
+            =NOT(XOR(OR(NOT(AND(XOR($A2,$B2),AND($C2,$D2))),AND(AND($C2,$D2),NOT(OR($E2,$F2)))),NOT(AND(AND(AND($C2,$D2)),NOT(OR($E2,$F2)),NOT(AND(NOT(OR($E2,$F2)),NOT($G2)))))))
+        \end{lstlisting}
     \end{example}
 
     \pagelayout{margin} % Restore margins
