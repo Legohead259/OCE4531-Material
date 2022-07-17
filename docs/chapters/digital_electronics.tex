@@ -164,7 +164,7 @@ The MSB, on the other hand, can change the value by upto an infinite value, depe
     Compare the divisor to the first digit of the dividend; if the divisor is larger, than a '0' is placed above the first index of the dividend, if it is smaller, than a one goes there.
     If the latter case occurs, subtract the section of the dividend from the dividend and continue the dividing operation with this new value.
 
-    \begin{example}[Diving binary numbers]
+    \begin{example}[Dividing binary numbers]
         Let's divide $69_{10}$ ($0100 0101_2$) by $3_{10}$ ($0011_2$):
         \[
         \begin{array}{ rr@{} >{\color{red}}c@{}*{6}{c@{\mkern2mu}} }
@@ -491,17 +491,13 @@ This allows you to "construct" logical equations with visual representations or 
     \subsection{Advanced Logical Operators}
     Sometimes it is desirable to have some more limited conditions in which an operation will output a logical true.
     
-    \paragraph*{The exclusive OR operation} can be achieved by combining multiple operations like so:
-    \begin{equation*}
-        (A+B) \cdot \overline{(A \cdot B)}
-    \end{equation*}
-    However, this can be a hassle to write, so we can simplify the expression using a special operator symbol $\oplus$.
-    This allows us to write an equivalent expression for the exclusive OR operation:
+    \paragraph*{The exclusive OR operation} is an operation that only outputs a logical true value when both inputs are different and not the same.
+    This gate is represented by the expression:
     \begin{equation*}
         A \oplus B
     \end{equation*}
 
-    This operation can also be expressed by the truth table and gate visualization below:
+    This operation can also be shown by the truth table and gate visualization below:
     \begin{table}[h!]
         \labtab{xor_truth_table}
         \begin{tabular}{c c | c}
@@ -514,6 +510,7 @@ This allows you to "construct" logical equations with visual representations or 
              1  &  1  &    0    \\
             \bottomrule
         \end{tabular}
+        \caption[XOR Gate Truth Table]{The truth table for the XOR gate.}
     \end{table}
 
     As we can see from the truth table, this operation can be best explained as "\textit{either or, but never both}"
@@ -558,68 +555,205 @@ This allows you to "construct" logical equations with visual representations or 
         \caption[XNOR Gate]{Visual representation of the XNOR logical operation with two inputs and one inverted output.}
     \end{figure}
 
-    \pagelayout{wide} % Remove margins
+\section{Boolean Algebra}
+Boolean algebra can be sed to formalize expressions for logic states.
+For these expressions, $A$ and $B$ are binary logical values, meaning they represent either a logical '1' or logical '0'.
+$Q$ is representative of the logical output, again either a '1' or '0'.
+Recall the following basic logical operations, multiplication denotes the AND operation, addition denotes the OR operation:
+\begin{equation*}
+    A \cdot A = A, A + A = A, A + \overline{A} = 1, A \cdot \overline{A} = 0, \overline{\overline{A}} = A
+\end{equation*}
 
-    \begin{example}[Advanced Logic Gates] \label{ex:advanced-logic-gates}
-        For this example, we will be combining everything we have learned through this section into a single problem.
-        We will start with the logic gate diagram shown below:
-        \begin{center}
-            \includegraphics[height=2.5in]{digital_logic/AdvancedGatesEx.png}
-        \end{center}
+Using these basic definitions, we can define all of the logic gates described above as:
 
-        Let's start by breaking down the first third of the diagram into three regions (I-I, I-II, I-III) and determining their individual logical expressions.
-        \begin{center}
-            \includegraphics[height=1.5in]{digital_logic/AdvancedGatesEx_I.png}
-        \end{center}
+\begin{itemize}
+    \item [AND: ]{$Q = A \cdot B$}
+    \item [OR: ]{$Q = A + B$}
+    \item [NOT: ]{$Q = \overline{A}$}
+    \item [NAND: ]{$Q = \overline{A \cdot B}$}
+    \item [NOR: ]{$Q = \overline{A + B}$}
+    \item [XOR: ]{$Q = A \oplus B$}
+    \item [XNOR:]{$Q = \overline{A \oplus B}$}
+\end{itemize}
 
-        The first section, I-I has an output determined by the expression:
-        \begin{equation*}
-            \overline{(A \oplus B) \cdot (C \cdot D)}
-        \end{equation*}
+\begin{example}[Logic Gate Equivalency]
+    In this example, we will be breaking down the XOR gate into it's composite boolean algebra expressions and logic gates.
+    From Table \ref{tab:xor_truth_table} we can see this gate can be represented by the boolean algebra equation:
+    
+    \begin{equation*}
+        Q = A \cdot \overline{B} + \overline{A} \cdot B
+    \end{equation*}
+    
+    This garners the logic gate equality shown below:
 
-        The second section, I-II is determined by the expression:
-        \begin{equation*}
-            (C \cdot D) \cdot \overline{(E + F)}
-        \end{equation*}
+    \includegraphics[height=3.5in]{digital_logic/XORGateBreakdown.png}
+\end{example}
 
-        The final section, I-III can be expressed by:
-        \begin{equation*}
-            \overline{\overline{(E + F)} \cdot \bar{G}}
-        \end{equation*}
+    \subsection[]{Logical Optimization}
+    It is possible to represent any logical problem using an expression containing the appropriate order of AND and OR operations.
+    However, for arbitrary truth tables and problems, this can create a lengthy process that is cumbersome, hard to write and follow, and can lead to extensive errors.
+    This expression can also be needlessly inefficient and computationally expensive for calculators.
+    Therefore, we can implement some strategies to reduce the computational load and optimize an arbitrary expression so we can improve computational efficiency and performance.
 
-        Next, lets break down the last half of the diagram to determine its representative expression.
-        \begin{center}
-            \includegraphics[height=1.5in]{digital_logic/AdvancedGatesEx_II.png}
-        \end{center}
+    For this process, two methods can be used: algebraic optimization and Karnaugh mapping.
+    The former can be done by hand for relatively simple problems, or by a computer analysis when there are a large number of binary inputs.
+    The latter is most commonly done by hand and drastically reduces the size of a truth table.
+    This can make the logical problem easier to understand and represent.
+    However, this method is limited to a maximum of four binary inputs.
 
-        Here, we can see the representative expression is:
-        \begin{equation*}
-            \overline{(\text{I-I} + \text{I-II}) \oplus \overline{(\text{I-II} \cdot \text{I-III})}}
-        \end{equation*}
+    Let's examine a problem where we are given the arbitrary truth table shown in Table \ref{tab:optimize_table}.
 
-        Substituting in the expressions we determined previously, we are left with the representative equation for the whole diagram.
-        \begin{equation*}
-            \overline{
-                (\overline{(A \oplus B) \cdot (C \cdot D)} + (C \cdot D) \cdot \overline{(E + F)}) 
-                \oplus 
-                \overline{((C \cdot D) \cdot \overline{(E + F)} \cdot \overline{\overline{(E + F)} \cdot \bar{G}})}
-            }
-        \end{equation*}
+    \begin{table}
+        \labtab{optimize_table}
+        \begin{tabular}{c c c c | c}
+            \toprule
+            Input D & Input C & Input B & Input A & Output \\
+            \midrule
+                0    &    0     &    0     &    0     &    1    \\
+                0    &    0     &    0     &    1     &    0    \\
+                0    &    0     &    1     &    0     &    0    \\
+                0    &    0     &    1     &    1     &    1    \\
+                0    &    1     &    0     &    0     &    0    \\
+                0    &    1     &    0     &    1     &    0    \\
+                0    &    1     &    1     &    0     &    0    \\
+                0    &    1     &    1     &    1     &    0    \\
+                1    &    0     &    0     &    0     &    1    \\
+                1    &    0     &    0     &    1     &    1    \\
+                1    &    0     &    1     &    0     &    1    \\
+                1    &    0     &    1     &    1     &    1    \\
+                1    &    1     &    0     &    0     &    1    \\
+                1    &    1     &    0     &    1     &    0    \\
+                1    &    1     &    1     &    0     &    0    \\
+                1    &    1     &    1     &    1     &    1    \\
+            \bottomrule
+        \end{tabular}
+        \caption[Optimization Truth Table]{An arbitrary truth table ripe for optimization}
+    \end{table}
 
-        This expression is a little complicated and is not ideal to determine what inputs wil result in our desired outputs.
-        So, we must create a truth table to effectively organize and summarize the correct inputs.
-        However, this diagram has 7 input channels meaning any truth table we create would have to have $2^7$ or 128 possible combinations.
-        One solution is to use a Karnaugh map to consolidate the truth table, but here, we will use Microsoft Excel to do all of the work for us.
+    We can begin exploring the algebraic optimization by writing the algebraic expression for the true values of the table:
+    
+    \begin{equation*}
+        Q = \overline{ABCD} + C + A + AC + AB + ABD + ABC + ABCD 
+    \end{equation*}
 
-        To begin, let's set up the table in excel like the screenshot below.
-        \begin{center}
-            \includegraphics[]{digital_logic/AdvancedGatesEx-Table.PNG}
-        \end{center}
+    Using algebraic simplification:
 
-        Then, we will set up an Excel equation that is equivalent to the diagram expression equation:
-        \begin{lstlisting}
-            =NOT(XOR(OR(NOT(AND(XOR($A2,$B2),AND($C2,$D2))),AND(AND($C2,$D2),NOT(OR($E2,$F2)))),NOT(AND(AND(AND($C2,$D2)),NOT(OR($E2,$F2)),NOT(AND(NOT(OR($E2,$F2)),NOT($G2)))))))
-        \end{lstlisting}
-    \end{example}
+    \begin{align}
+        Q &= \cancel{\overline{ABCD}} + \cancel{ABCD} + CD + A(1 + C + B + BD + \cancel{BC}) \nonumber \\
+          &= C + A(1 + C + B + BD) \nonumber \\
+          &= C + A + \cancel{AC} + AB + BD \nonumber \\
+        Q &= C + A + AB + ABD \nonumber
+    \end{align}
 
-    \pagelayout{margin} % Restore margins
+    \marginnote[-1.5in]{Here, you will notice some AND expressions have been cancelled out (re: $BC$ and $AC$).
+    This has occurred because the expressions $ B + C + BC$ and $A + C + AC$ simplify down to the first OR operation.
+    Let's explore this by drawing out the truth table for these expressions: \\
+    \begin{tabular}{c c | c}
+        \toprule
+        $B$ & $C$ & $B+C+BC$ \\
+        \midrule
+        0 & 0 & 0 \\
+        0 & 1 & 1 \\
+        1 & 0 & 1 \\
+        1 & 1 & 1 \\
+        \bottomrule
+    \end{tabular} \\
+    You will notice that this truth table is the exact same for the OR gate (Table \ref{tab:or_truth_table}) and therefore proves the simplification and cancellation of the AND operation.
+    }
+
+    This expression is complicated and would require three OR gates, and three AND gates to represent.
+    Let's see if we can simplify this using a Karnaugh map.
+
+    \paragraph*{Karnaugh Maps} or K-maps, are condensed representations of truth tables that combine up to four distinct inputs into a two-dimensional table.
+    These not only condense truth tables into a simpler form for easier understanding, but they can simultaneously simplify the algebraic expression for the truth table.
+    K-Maps have a special property where if any logical true outputs that are grouped together in powers of 2 can be combined into a simpler AND operation.
+
+    For the example found in Table \ref{tab:optimize_table}, the corresponding K-Map would be:
+
+    \begin{karnaugh-map}(label=corner)[4][4][1][$B$][$A$][$D$][$C$]
+        \manualterms{1,0,1,0,0,0,0,0,1,0,1,0,1,1,1,1}
+        \implicant{12}{14}
+        \implicantcorner
+    \end{karnaugh-map}
+
+    The highlighted groupings mean the truth table from before can be represented by the algebraic expression:
+
+    \begin{equation*}
+        Q = AB + \overline{BD}
+    \end{equation*}
+
+\pagelayout{wide} % Remove margins
+
+\begin{example}[Applied Logic Gate Simplification] \label{ex:advanced-logic-gates}
+    For this example, we will be combining everything we have learned through this section into a single problem.
+    We will start with the logic gate diagram shown below:
+    
+    \begin{center}
+        \includegraphics[height=2.5in]{digital_logic/AdvancedGatesEx.png}
+    \end{center}
+
+    We can represent these gates with the expression:
+
+    \begin{equation*}
+        Q = (A+B)C \oplus \overline{D}
+    \end{equation*}
+
+    Which expands to:
+
+    \begin{equation*}
+        Q = \left((AC + BC)\overline{D}\right) + \left((\overline{AB} + \overline{C})D\right)
+    \end{equation*}
+
+    This expression is a little complicated and is not ideal to determine what inputs will result in our desired outputs.
+    Therefore, we will construct a truth table to represent these logic gates so that we can directly check a given output with an expected output.
+
+    \begin{center}
+        \begin{tabular}{c c c c | c}
+            \toprule
+            Input D & Input C & Input B & Input A & Output \\
+            \midrule
+                0    &    0     &    0     &    0     &    0    \\
+                0    &    0     &    0     &    1     &    1    \\
+                0    &    0     &    1     &    0     &    0    \\
+                0    &    0     &    1     &    1     &    0    \\
+                0    &    1     &    0     &    0     &    0    \\
+                0    &    1     &    0     &    1     &    1    \\
+                0    &    1     &    1     &    0     &    1    \\
+                0    &    1     &    1     &    1     &    0    \\
+                1    &    0     &    0     &    0     &    0    \\
+                1    &    0     &    0     &    1     &    1    \\
+                1    &    0     &    1     &    0     &    1    \\
+                1    &    0     &    1     &    1     &    0    \\
+                1    &    1     &    0     &    0     &    0    \\
+                1    &    1     &    0     &    1     &    1    \\
+                1    &    1     &    1     &    0     &    1    \\
+                1    &    1     &    1     &    1     &    0    \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+
+    Both the representative expression and truth table are a little large and inefficient.
+    If we look at the representative expression, we will notice that it is difficult, if not impossible, to algebraically simplify by hand. 
+    So, we will simplify the truth table with a Karnaugh map and determine the simplified algebraic expression from there.
+    
+    \begin{center}
+        \begin{karnaugh-map}(label=corner)[4][4][1][$B$][$A$][$D$][$C$]
+            \manualterms{0,0,0,0,1,1,1,1,0,1,1,1,0,0,0,0}
+            \implicant{4}{6}
+            \implicant{9}{11}
+            \implicant{11}{10}
+        \end{karnaugh-map}
+    \end{center}
+
+    From the K-map, we can simplify the algebraic expression for the logic diagram as:
+
+    \begin{equation*}
+        Q = \overline{C}D + BC\overline{D} + AC\overline{D}
+    \end{equation*}
+
+    This expression is the most basic form for the logic diagram and now we can check any arbitrary value of $A$, $B$, $C$, or $D$ without have to directly look it up in the truth table or run it through the logic diagram.
+\end{example}
+
+% TODO: Integrate Arduino exercise as a subsection
+
+\pagelayout{margin} % Restore margins
