@@ -75,6 +75,31 @@
 % Reset sidenote counter at chapters
 %\counterwithin*{sidenote}{chapter}
 
+\usepackage{xcolor}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
 %----------------------------------------------------------------------------------------
 
 \begin{document}
@@ -213,6 +238,7 @@
 \input{chapters/learning_materials.tex}
 \input{chapters/digital_electronics.tex}
 \input{chapters/electrical_schematics.tex}
+\input{chapters/software_basics_and_arch.tex}
 \input{chapters/data_processing.tex}
 
 \appendix % From here onwards, chapters are numbered with letters, as is the appendix convention
