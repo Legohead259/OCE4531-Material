@@ -63,6 +63,38 @@
 % Load the package for hyperreferences
 \usepackage{kaorefs}
 
+\usepackage{authblk}
+
+\usepackage{listings}
+
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=4
+}
+
+\lstset{style=mystyle}
+
 \graphicspath{{images/}} % Paths in which to look for images
 
 \makeindex[columns=3, title=Alphabetical Index, intoc] % Make LaTeX produce the files required to compile the index
@@ -114,7 +146,11 @@
 \title{Instrumentation Design and Measurement Analysis}
 \subtitle{A Compendium of Knowledge}
 
-\author{Braidan Duffy}
+\author[1]{Braidan Duffy \thanks{bduffy2018@my.fit.edu}}
+\author[2]{Wensen Liu \thanks{wliu1215@terpmail.umd.edu}}
+
+\affil[1]{Department of Ocean Engineering and Marine Sciences, Florida Insitute of Technology}
+\affil[2]{A. James Clark School of Engineering, Department of Mechanical Engineering, University of Maryland}
 
 \date{May 5, 2022}
 

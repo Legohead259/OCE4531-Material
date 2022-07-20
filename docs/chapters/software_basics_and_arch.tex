@@ -1,0 +1,108 @@
+% ===========================================
+% Data Processing
+% Written by: Wensen Liu
+%
+% Date: 07/20/2022
+% Last Revision: 07/20/2022
+% ============================================
+
+\setchapterstyle{kao}
+\chapter{Software Basics and Architecture}
+\setchapterpreamble[u]{\margintoc}
+\labch{software_basics_and_arch}
+% \addcontentsline{toc}{chapter}{Data Processing} % Add the preface to the table of contents as a chapter
+
+While the world of physical hardware can be harnassed to develop systems that accomplish tasks, oftentimes these implementations become prohibitively complex as the scale of
+implementation grows larger. For example, a modern computer processor contains billions of transistors and it would be impossible to set and reset each one of these transistors
+by hand. Thankfully, as you probably already know, modern programming consists of several layers of abstraction above the transistor level, which allow us to develop meaningful
+software solutions while leveraging the expansive amount of hardware that we have access to.
+
+This chapter will focus on introducing you to the fundamentals of hardware-based software development. You may find that several if not all of these topics are also covered in
+introductory programming courses. However, since we do not presume that everyone who has taken this class has had background programming experience, we will cover all the topics
+necessary for this course from the ground up.
+
+\section{Arduino Basics} \labsec{arduino_basics}
+Lorem Ipsum Dolores
+
+\section{Primitive Programming Datatypes} \labsec{primitive_programming_datatypes}
+The baseline for every programming language is an understanding of datatypes.
+Datatypes are how we can classify the characteristics of the blocks of information that our program will process.
+These blocks of information can be collected data from the environment, information that the program stores internally, function inputs/outputs, etc.
+Additional information on arduino datatypes (and in general, most arduino syntax) can be found on
+\href{https://www.tutorialspoint.com/arduino/arduino_data_types.htm}{tutorialspoint} or the \href{https://www.arduino.cc/reference/en/}{Arduino Language Reference}
+\marginnote{For the following sections, example code blocks will be given. As such, please note that the \enquote{$\backslash\backslash$} symbol is used to denote a \enquote{comment} and therefore
+is not code that will execute and that the capitalization of keywords is deliberate (since Arduino C is case sensitive)}
+
+    \subsection{void}
+    The most basic of datatypes, the \textbf{void} keyword is used to represent \enquote{nothing}. For arduino programming, it is primarily used to denote that a function
+    does not give us back any output. Do note, however, that the \textbf{void} datatype cannot be applied to variables.
+    \marginnote{We will go more depth into functions in a later section, but for the purposes of this section you can think of functions as boxes that produce output from
+    a given input. In the case of \textbf{void} we have no output.}
+    
+    \paragraph*{Proper usage of Void} The following code block demonstrates the proper usage of the \textbf{void} datatype.
+    \begin{lstlisting}[linewidth=1.5\textwidth, language=C++]
+        void function_name (\\ input variables) {
+            \\ function code
+            \\ note how there is no return statement (we are outputting nothing)
+        }\end{lstlisting}
+
+    \paragraph*{Improper usage of void} The following code block demonstrates the improper usage of the \textbf{void} datatype.
+    \begin{lstlisting}[linewidth=1.5\textwidth, language=C++]
+        void variable_name = \\ some value;\end{lstlisting}
+    
+    \subsection{bool}
+    Boolean datatypes are used to store logic values, in this case the logic values of \textbf{True} or \textbf{False}. The \textbf{bool} keyword is used in both function and
+    variable declarations to classify the function output or variable type as boolean logic.
+
+    \paragraph*{Boolean usage} The following code block demonstrates how the \textbf{bool} keyword is used in a function declaration and a variable declaration
+    \begin{lstlisting}[linewidth=1.5\textwidth, language=C++]
+        bool function_name (\\ input variables) {
+            bool variable_name = True;
+            return variable_name;
+        }\end{lstlisting}
+
+    \subsection{Char}
+    Character datatypes are special when programming in Arduino C. While they do represent what you would conventionally think as a character (for example, the letter \enquote{a}),
+    they are defined based on their ascii value (\href{https://en.cppreference.com/w/cpp/language/ascii}{ASCII Reference}), which allow you to manipulate many more characters than
+    what can be typed by a keyboard.
+
+    The \textbf{Char} keyword is used in variable and function declarations to classify the result as a character, and there are two ways to syntaxically represent a character.
+    \paragraph*{Method 1: Using Single Quotes} The first form of syntax makes more sense visually, and involves wrapping a typed character within two single quotes
+    \begin{lstlisting}[linewidth=1.5\textwidth, language=C++]
+        Char variable_name = 'a';\end{lstlisting}
+    Do note, however, that this method restricts you to the characters that can be typed using a conventional keyboard. In addition, when declaring a character in this form, you
+    cannot wrap multiple characters inside the quotes.
+    \begin{lstlisting}[linewidth=1.5\textwidth, language=C++]
+        Char variable_name = 'abc'; \\ this is improper declaration \end{lstlisting}
+    \paragraph*{Method 2: Using ASCII Values} As mentioned previously, characters are encoded via ASCII values when used in a programming context. As such, we can define a
+    character using its corresponding ASCII value.
+    \begin{lstlisting}[linewidth=1.5\textwidth, language=C++]
+        Char variable_name = 97; \\ ASCII value 97 corresponds to character 'a'\end{lstlisting}
+    Since one character is equivalent to one byte of data, the maximum decimal value that can be used in a character declaration is 255.
+
+    \begin{kaobox}[frametitle=Aside: Some quirks with characters]
+        For all intents and purposes, characters are 8-bit binary numbers (0-255 in decimal). They become \enquote{characters} based on how they are interpreted when output to
+        a display. Because of this dual interpretation, you can manipulate characters as if they were numbers. For example
+        \begin{equation*}
+            'a' + 1 = 'b'
+        \end{equation*}
+        However, if you were to use \enquote{1} (the character representation of 1) as the input you would get
+        \begin{equation*}
+            'a' + '1' = 97 + 49 = 156
+        \end{equation*} 
+        Which, for those that are curious, 156 represents the ASCII character \oe. In addition, there are special characters that can be typed using the single quotes 
+        method that do not strictly follow the \enquote{only one character} rule. In particular, the $'\backslash n'$ (newline) and $'\backslash t'$ (tab) characters are often used.
+    \end{kaobox}
+
+    \subsection{unsigned char and byte}
+    The unsigned character and byte datatypes are both datatypes that are used to represent a byte of data (8 bits, 0-255 in decimal). While they share the same range of values
+    as the char datatype, they should not be used interchangeably with the char datatype. The \textbf{unsigned char} and \textbf{byte} keywords are used to define function output
+    and variable values.
+    \marginnote{Generally speaking, it is conventional to use the \textbf{byte} keyword over the \textbf{unsigned char} keyword for both brevity and code readability}
+    \paragraph*{unsigned char and byte usage} the following block of code demonstrates how to use the \textbf{unsigned char} and \textbf{byte} keywords
+    \begin{lstlisting}[linewidth=1.5\textwidth, language=C++]
+        byte function_name (\\ input variables) {
+            byte variable_name_1 = 0;
+            unsigned_char variable_name_2 = 128;
+            return variable_name_1;
+        }\end{lstlisting}
