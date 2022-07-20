@@ -84,43 +84,35 @@ In your submission, please include a note of which challenges you have completed
 You will also need to include source code highlighting the specific challenge sections.
 \emph{If it is not clear where your challenge-specific code is, it may not be counted.}
 
+    \subsection*{Challenge 0: Velocity, and Position}
+    \marginnote{\textbf{Note:} This challenge is \emph{mandatory} for graduate students.}
+    In this challenge, you are tasked with integrating the velocity, and position values from the accelerometer and gyroscope data.
+    You must store these values in your telemetry packet and display them on separate pages on your LCD module.
+    The button used to change display pages will also act as a position reset button when held for a certain amount of time.
+    If you combine the previous challenges together, you should be able to get pretty accurate readings based on how you move your board.
+
+    \textbf{FOR CREDIT:} In your submission video, find a ruler and place your board next to it with one of the acclerometer axes parallel to the straight edge, and the accelerometer chip centered on the ruler's 0 mark.
+    Change the LCD to the position display page and reset the position.
+    Push the board 6-10 inches along the ruler and stop, showing the position of the board and the reading it captured.
+    \textit{Make sure you are constantly accelerating it for the best results!}
+
     \subsection*{Challenge 1: Filtering}
     Depending on what you set the update rate of the MPU6050 sensor, there may be a substantial amount of high frequency noise in your readings.
     There are a multitude of ways of dealing with this noise.
     For this challenge, implement a Butterworth filter on the Arduino to act as a low-pass digital filter for your data. 
-    You need to tune your Butterworth filter to significantly attenuate noisy movements in your data, \textit{significantly} attenuating the good data signal.
+    You need to tune your Butterworth filter to significantly attenuate noisy movements in your data, without \textit{significantly} attenuating the good data signal.
     \marginnote{\emph{Hint:} You can view this \href{https://tttapa.github.io/Arduino-Filters/Doxygen/index.html}{link} for more information on getting started.}
     
     \textbf{FOR CREDIT:} Show two plots using the Arduino Serial plotter: one should show the unfiltered signal, the other should show the \textit{filtered} signal. 
     Only one axis should be shown.
 
     \subsection*{Challenge 2: Removing Gravity}
-    This challenge will expand upon the filtering concpet introduced previously and show you how we can make gravity disappear! (At least in the sensor's frame of reference.)
-    You will first need to calculate the angle between your board's reference frame and the Earth's reference frame.
-    % \marginnote{\textit{Reminder:} Linear algebra shows this can be calculated with:
-    %     \begin{math}
-    %         A\dotB=|A||B|cos(\theta)
-    %     \end{math}
-    % Where A would be the Earth's acceleration vector [0 0 9.81] and B would be your recorded acceleration vector.}
-    With the angle calculated, you will generate a \href{https://en.wikipedia.org/wiki/Rotation_matrix}{rotation matrix} and rotate your board acclerations to Earth-referenced accelerations.
-    Then, simply remove Earth's acceleration vector from your measured accelerations and apply the inverse rotation matrix to get the measurements back into board-referenced space.
-    This final value will be linear accelerations recorded by your accelerometer.
-    Display this linear acceleration value on a page of your LCD module.
+    This challenge will involve understanding some of the higher order concepts of inertial measurements and motion.
+    Your task will be to record the linear acceleration of the sensor, i.e. acceleration \textit{without} gravity measured.
+    
 
     \textbf{FOR CREDIT:} Show two plots using the Arduino Serial plotter of the board's Z-axis reading. 
     One plot should be the raw or filtered accelerations, the other should be the linear acceleration. 
-
-    \subsection*{Challenge 4: Velocity, and Position}
-    \marginnote{\textbf{Note:} This challenge is \emph{mandatory} for graduate students.}
-    In this challenge, you are tasked with integrating the velocity, and position values from the accelerometer and gyroscope data.
-    You must store these values in your telemetry packet and display them on separate pages on your LCD module.
-    The button used to change display pages will also act as a position reset button when held for a certain amount of time.
-    If you combine the previous challenges together, you should be able to get pretty accurate readings based on how you move your board.
-    
-    \textbf{FOR CREDIT:} In your submission video, find a ruler and place your board next to it with one of the acclerometer axes parallel to the straight edge, and the accelerometer chip centered on the ruler's 0 mark.
-    Change the LCD to the position display page and reset the position.
-    Push the board 6-10 inches along the ruler and stop, showing the position of the board and the reading it captured.
-    \textit{Make sure you are constantly accelerating it for the best results!}
     
     \subsection*{Challenge 4: MPU6050 Motion Detect Interrupt}
     The interrupt pin on the MPU6050 can be configured to serve as a motion detection trigger.
