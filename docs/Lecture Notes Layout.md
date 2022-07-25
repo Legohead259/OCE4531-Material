@@ -88,7 +88,7 @@
  - [ ] Cellular
  - [ ] Satellite Communications (SATCOM)
 ---
-## Electrical Schematics and Printed Circuit Boards (PCBs)
+## Electrical Schematics
 ### Schematic Basics
  - [ ] Frame and Layout
  - [ ] Component symbols
@@ -117,6 +117,7 @@
              - [ ] BJT
              - [ ] MOSFETS (P-Type, N-Type)
          - [ ] Operational amplifiers
+         - [ ] External connectors
          - [ ] Common Examples
      - [ ] Integrated circuits
          - [ ] Example: Voltage Regulator
@@ -127,6 +128,8 @@
  - [ ] Layers
  - [ ] Submodules
  - [ ] Electronics Rule Check (ERC)
+---
+## Printed Circuit Boards
 ### PCB Basics
  - [ ] Board Shape
      - [ ] Aside: Using sketches to derive board shape

@@ -3,11 +3,11 @@
 % Written by: Braidan Duffy
 %
 % Date: 07/18/2022
-% Last Revision: 07/18/2022
+% Last Revision: 07/25/2022
 % ============================================
 
 \setchapterstyle{koa}
-\chapter{Electrical Schematics and PCBs}
+\chapter{Electrical Schematics}
 \setchapterpreamble[u]{\margintoc}
 \labch{electrical_schemcatics}
 
@@ -19,6 +19,65 @@ The electrical schematic is a key piece of documentation that communicates to en
 All modern electronic devices have schematics of varying complexity and depth that describe how electrons flow from one piece to another and document what behaviors can be expected during operations.
 To understand these documents is to understand how a product fundamentally works, and to understand how to make these documents well is a skill that needs to practiced and refined by reviewing schematics and having yours reviewed.
 For now, we will go over the basics and give you a fundamental understanding of what the schematic entails and what most of the symbols you might encounter mean.
+\section{Basic Notation}
 
-    \subsection{Basic Notation}
+
+\section{Component Symbols}
+The core of the schematic are the 2D representations of the components in the design called, \emph{symbols}. 
+There are a variety of symbols that all mean different things and can have slightly different meanings depending on the drawer and application.
+The symbols covered henceforth are the standard-accepted versions so they should be what you see in most schematics you may encounter or be asked to work with or design.
+
+    \subsection{Power Symbols} 
+    Power symbols are the set of symbols that indicate where the electrical power is coming from, and where it is going.
+
+        \subsubsection*{The Power Source Rail} 
+        the power source rail is typically denoted by a vertical "T" or arrow as shown below, and can be labelled with 3V3,\sidenote{Sometimes, it is easier to use a letter to represent a decimal point. 
+        In this case, 3V3 is 3.3 volts.}
+        5V, VBAT, VBUS, or any other source name.
+
+        \todo{Include image of power source rails symbols}
+
+        \subsubsection*{The Power Sink Rail} 
+        The power sink rail is the "ground" path from electrical energy will flow back to the negative terminal of the power supply. 
+        It is typically represented by a vertical "$\perp$" or upside down tree as shown in \hl{FIGURE}.
+        It should always be labelled "GND" with sometimes a prefix of "A" or "D" to denote a different analog or digital ground reference.
+
+        \todo{Include image of power sink rails symbols}
+
+        \subsubsection*{Power Supplies} are generally represented by a circle with a positive and negative input.
+        In order to differentiate a DC supply and AC supply, we can use either a plus/minus or sine wave, respectively.
+        Both of these symbols are represented in the figure below.
+
+        \todo{Include image of general DC/AC power supply symbols}
+
+        \paragraph*{The Battery} is a subset of DC power supply for embedded applications or circuits that will not have access to a general DC power supply.
+        These components are meant to store a large amount of electrical charge for a long duration and be able to discharge it into a circuit to run it.
+        Some batteries, like Lithium Ion batteries, are capable of being recharged using special integrated circuits and power supplies.
+        Others, like alkaline batteries, are only usable once and must be disposed of properly when they are depleted.
+
+    \marginnote{The different sized lines that comprise the battery symbol represent the different plates that are within modern battery construction.}
+
+    \todo{Include image of battery symbol}
+
+    \subsection{Basic Components} 
+    The following basic component symbols represent discreet components within an electrical circuit.
+    Most of these components perform a single service within the circuit and must be used in conjunction with other basic parts to achieve an action.
+
+        \subsubsection*{Resistors} 
+        Resistors are components that resist the flow of current and can be used to dissipate energy, reduce voltage levels, or limit current going into other components.
+        There are represented with a jagged line or box with "whiskers" \sidenote{European standard} as shown in the figure below.
+
+        \todo{Include image of resistor symbols below, image of resistor in margin}
+
+        \paragraph*{The Potentiometer} is a variable resistor that changes resistance depending on the position of "wiper" across a band of resistive material.
+        Typically, these components are turned by human operators and can be used as an input to determine a variety of things, depending on application.
+
+        \todo{Include image of potentiometer symbol below, image of potentiometer in margin}
+
+        \paragraph*{Photoresistor}
+        The photoresistor is a variable resistor that changes resistance depending on the intensity of light interacting with it
+        Typically, these components are used as basic light sensors that can be used for presence detection, sun tracking, or other light intensity measurement.
+
+        \todo{Include image of photoresistor symbol below, image of photoresistor in margin}
+
     
