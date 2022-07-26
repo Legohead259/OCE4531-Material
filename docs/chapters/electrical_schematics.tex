@@ -65,19 +65,168 @@ The symbols covered henceforth are the standard-accepted versions so they should
 
         \subsubsection*{Resistors} 
         Resistors are components that resist the flow of current and can be used to dissipate energy, reduce voltage levels, or limit current going into other components.
-        There are represented with a jagged line or box with "whiskers" \sidenote{European standard} as shown in the figure below.
+        There are represented with a jagged line or box with "whiskers" as shown in the figure below.
 
-        \todo{Include image of resistor symbols below, image of resistor in margin}
+        \begin{marginfigure}[-2in]
+            \labfig{resistor_real}
+            \includegraphics[]{electrical_schematics/chip_resistors.jpg}
+            \caption[Chip Resistors]{Surface mount chip resistors. 
+            Retrieved from \href{https://www.mpdigest.com/2018/01/24/thick-film-chip-resistors/}{MPDigest}}
+        \end{marginfigure}
+
+        \begin{figure}[h!]
+            \labfig{resistor_symbol}
+            \includegraphics[width=4in]{electrical_schematics/resistors_symbols.png}
+            \caption[Resistor Symbols]{Schematic symbols of resistors. 
+            European standard is the left, US standard to the right.}
+        \end{figure}
 
         \paragraph*{The Potentiometer} is a variable resistor that changes resistance depending on the position of "wiper" across a band of resistive material.
         Typically, these components are turned by human operators and can be used as an input to determine a variety of things, depending on application.
 
-        \todo{Include image of potentiometer symbol below, image of potentiometer in margin}
+        \begin{marginfigure}[-2in]
+            \labfig{potentiometer_real}
+            \includegraphics[]{electrical_schematics/potentiometer.jpg}
+            \caption{Panel mount potentiometer.
+            Retrieved from \href{https://www.phippselectronics.com/product/10k-potentiometer-panel-mount-breadboard-friendly-pack-of-2/}{Phipps Electronics}}
+        \end{marginfigure}
+
+        \begin{figure}[h!]
+            \labfig{potentiometer_symbol}
+            \includegraphics[height=1.5in]{electrical_schematics/potentiometer_symbol.png}
+            \caption[Potentiometer Symbol]{Schematic symbols for potentiometers. Notice the arrow through the resistor to demark it from standard resistors. The value at the bottom is the maximum resistance.}
+        \end{figure}
 
         \paragraph*{Photoresistor}
         The photoresistor is a variable resistor that changes resistance depending on the intensity of light interacting with it
         Typically, these components are used as basic light sensors that can be used for presence detection, sun tracking, or other light intensity measurement.
 
-        \todo{Include image of photoresistor symbol below, image of photoresistor in margin}
+        \begin{marginfigure}[]
+            \labfig{photoresistor_real}
+            \includegraphics[]{electrical_schematics/photoresistor.jpg}
+            \caption{LDR photoresistor.
+            Retrieved from \href{https://www.pixelelectric.com/sensors/light-sound/light-color-sensor/5528-ldr-mini-photoresistor/}{Pixel Electric}}
+        \end{marginfigure}
 
-    
+        \begin{figure}[h!]
+            \labfig{potentiometer_symbol}
+            \includegraphics[height=1.5in]{electrical_schematics/photoresistor_symbol.png}
+            \caption[Potentiometer Symbol]{Schematic symbols for photoresistors. The arrows pointed towards the resistor indicate its light dependency.}
+        \end{figure}
+
+        \subsubsection*{Capacitors}
+        Capacitors are components that store and discharge electrical energy.
+        They use parallel conducting plates isolated from each other with a dielectric that allows charges to build up on one face at a certain voltage, then discharge when at a lower voltage.
+        This gives capacitors the ability to smooth ripples in voltage levels (called a decoupling).
+        This is commonly used to decouple components from electrical noise upstream of their power supply, giving them a cleaner electrical input.
+        Additionally, they can provide a high current energy source that has some advantages over traditional batteries.
+        In most circuits, you will encounter ceramic capacitors (pictured to the side) that do not hold a log of charge, but work for most applications.
+        These capacitors are bi-directional or non-polarized so they can be placed in any orientation on the schematic.
+
+        \todo{insert image of ceramic capacitor and symbols}
+
+        \paragraph*{Electrolytic Capacitors} are polarized or uni-directional capacitors that use a liquid electrolyte compared to the ceramic ones used in non-polarized capacitors.
+        These capacitors must be placed in a specific orientation otherwise they may become damaged and could explode!
+        On electrical schematics, the positive terminal of these capacitors is denoted by a curved line, like shown above.
+        Even though, you must closely pay attention to how the capacitor is orientated, the electrolytic capacitor provides a much high energy density compared to the ceramic capacitors, making them more suited for high power application.
+
+        \todo{insert image of electrolytic capacitor}
+
+        \subsubsection*{Inductors}
+        Inductors are tiny electromagnetics that wind conducting wire around an iron or air core.
+        When alternating electrical current is passed through the inductor, some of the energy is buffered in the magnetic field of the electromagnet. 
+        You can think of them as electrical flywheels that store moving charge and can discharge it to maintain a more constant "flow".
+        This makes inductors useful for resisting changes in current or acting as the analogue to capacitors in AC circuits.
+
+        \todo{insert image of inductor to side and symbol}
+
+        \subsubsection*{Diodes}
+        Diodes are used to restrict current flow in a certain direction.
+        This is accomplished using some electrochemical wizardry and comes at the cost of a little bit of voltage drop through the diode.
+        But, the main property of the diode makes it invaluable for protecting circuits against reverse polarity, dissipating AC current, or even rectifying AC voltages into DC.
+
+        \todo{insert image of diode (from arduinmo kit) to the side and symbols below}
+
+        \paragraph*{Light Emitting Diodes (LEDs)} are diodes that siphon a little bit of electrical energy to emit photons at specific wavelengths.
+        These components are ubiquitus in any application that requires a simple human interface such as light indicators, RGB gaming products, or flashlights.
+        LEDs are smaller, easily scaled to almost any production scale, and more energy efficient compared to most other light sources in use today.
+
+        \todo{Insert image of 5mm LED from arduino kit}
+
+        \paragraph*{Zener Diode} are special diodes that restricts the current flow direction up to a certain breakdown voltage.
+        When that voltage is achieved, current is allowed to flow against the diode, without damaging it, making it useful in applications like circuit protection.
+
+        \paragraph*{Schottky Diode} are other special diodes that have a very low voltage drop across it, making it ideal for applications where flow restriction is necessary, but power loss needs to be considered.
+        These are commonly used to control the flow of charge within a battery pack of multiple cells.
+        As these cells discharge, they can have slightly different voltages, meaning some energy loss will occur as one battery tried to equalize voltage with another in the pack.
+        Schottky diodes ensure the charges flow only from the batteries to the draw outside the pack, without wasting much energy.
+
+        \subsubsection*{Crystal Oscillators}
+        Oscillators resonate at a certain frequency depending on the type of crystal used and the coupling capacitors matched to it.
+        These driving most modern computational circuits as they generate a very clean DC square wave. 
+        Some components use the rising or falling edge of this wave to trigger register shifts, calculations, anything else needed to perform its duty.
+        Therefore, for any circuit that requires a high frequency, high reliability clock signal, most often, crystal oscillators will be present
+
+        \todo{insert image and symbol of oscillator}
+
+        \subsubsection*{Switches}
+        Switches are mechanical contacts that physically direct the flow of electricity.
+        They can have multiple independent circuits called "poles" that can allow current to flow from a common connector to an output connector called a "throw".
+        They are named according to their architecture, e.g. Single Pole Double Throw (SPDT) switches have one circuit with two outputs that are connected to the common pin, depending on the switch position.
+        Double Pole Triple Throw (DP3T) switches have two circuits that connect three output pins to a common input pin, depending on the switch position.
+        Each circuit is mechanically linked so the same output connector in both circuits will be connected to the common.
+        One downside to the mechanical switch is that they can be welded together if a maximum current is exceeded or, they can wear out over thousands of cycles.
+
+        \todo{insert picture of switch to the side, symbols for SPST, SPDT, and DP3T below}
+
+        \paragraph*{Buttons} are typically Single Pole Single Throw (SPST) switches that are spring loaded to remain normally open until pressed.
+        When the button is pressed, a conducting plate makes contact with the common and output pins, completing the circuit through the button.
+        These are commonly used as human input into circuits for calculations, state machines, typing lecture notes, etc.
+
+        \todo{insert image of button from arduino kit to the side, symbol below}
+
+        \paragraph*{Relays} are electromechanical switches that rely on an electromagnetic to move the electrical contact, rather than physical force.
+        These are used for computers to manipulate large currents or direct electrical flow automatically, without human intervention.
+        These relays follow the same nomenclature as normal switches and can be found in any number of configurations of poles and throws.
+
+        \todo{Insert image of relay to the side, symbol below}
+
+        \subsubsection*{Transistors}
+        Transistors are electrical solid-state switches that use electrochemical properties to control the flow of electricity through them.
+        These are typically able to withstand millions, if not billions, of switching cycles before failing and have driven the modern age we find ourselves in today.
+        Everything in modern computing from the simple logic gate to the highest end computer and graphics processors use transistors to perform calculations or "think" about problems.
+        Transistors have a gate that controls current flow from the source to the drain, depending on the voltage applied.
+
+        \todo{insert image of transistor and symbols below}
+
+        \paragraph*{MOSFETs} or Metal-Oxide-Semiconductor Field-Effect-Transistors are some of the most common types of transistors.
+        They are able to be configured (doped) with different silicon structures that give them different electrochemical properties.
+        N-Channel MOSFETs require a positive voltage on the Gate to function, whereas P-Channel MOSFETs require a negative gate voltage.
+        Because of this, N-Channel MOSFETs are typically used for low-side switching (connect circuit to ground) and P-Channels are used for high switching (connect circuit to the voltage source). 
+        There are two main types: depletion, which requires a Gate-Source voltage (Vgs) to switch the gate OFF, equivalent to a normally-closed switch; and enhancement where a Vgs is required to switch the gate ON, acting like a normally-open switch.
+        These transistors are very common in high power applications and signal amplification.
+
+        \todo{include image of MOSFET and symbols for N-type and P-type}
+
+        \todo{insert example from Thetis/EVE circuits - cherry pick some nice ones that use mostly discreet components}
+
+    \subsection{Integrated Circuits}
+    Integrated Circuits (ICs) comprise the backbone of modern electrical design.
+    They combine any combination of discreet components, logic gates, processors, storage, etc. into a single package that can be easily placed into a circuit.
+    For schematic symbols, the representation varies wildly, but generally hold to a few core design features:
+        \paragraph*{Outlines} - represents the chip's presence on the schematic. 
+        It encompasses all of the information about the IC and usually is large enough to fit descriptive text and allows the pins to be arranged in a cohesive manner.
+
+        \paragraph*{Pins} - schematic representations of the chip's physical contacts with the circuit. 
+        Each is uniquely coupled to the physical pin or pad on the real-world design, but does not have to be sequentially ordered in the schematic.
+        Each pin should have a label for its purpose on the IC next to it, within the outline, as well as a label to identify its physical number on the IC.
+
+        \paragraph*{Name} - this is the unique identifier of the IC on the schematic
+
+        \paragraph*{Values} - this is typically the IC's part number for ordering information and implementation
+
+    It is important to note that some IC symbols will opt to include other handy information in the outline so it is more easily accessible without having to refer back to the datasheet constantly.
+
+    \todo{insert image of an IC symbol with leaders pointed to different parts}
+
+    \todo{Inlcude image of IC circuits e.g. voltage regulator}

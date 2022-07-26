@@ -114,7 +114,6 @@
              - [ ] Buttons
              - [ ] Relays
          - [ ] Transistors
-             - [ ] BJT
              - [ ] MOSFETS (P-Type, N-Type)
          - [ ] Operational amplifiers
          - [ ] External connectors
