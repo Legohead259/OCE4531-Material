@@ -35,29 +35,54 @@ The symbols covered henceforth are the standard-accepted versions so they should
         In this case, 3V3 is 3.3 volts.}
         5V, VBAT, VBUS, or any other source name.
 
-        \todo{Include image of power source rails symbols}
+        \begin{figure}[h!]
+            \labfig{power_rail_symbol}
+            \includegraphics[height=1in]{electrical_schematics/power_rail_symbols.png}
+            \caption[Power Rail Symbols]{Schematic symbols for power rails.
+            The value label at the top can be any value like 3V3, 5V, etc.}
+        \end{figure}
 
         \subsubsection*{The Power Sink Rail} 
         The power sink rail is the "ground" path from electrical energy will flow back to the negative terminal of the power supply. 
         It is typically represented by a vertical "$\perp$" or upside down tree as shown in \hl{FIGURE}.
         It should always be labelled "GND" with sometimes a prefix of "A" or "D" to denote a different analog or digital ground reference.
 
-        \todo{Include image of power sink rails symbols}
+        \begin{figure}[h!]
+            \labfig{power_sink_symbol}
+            \includegraphics[height=1.25in]{electrical_schematics/ground_rail_symbols.png}
+            \caption[Power Rail Symbols]{Schematic symbols for ground rails.}
+        \end{figure}
 
         \subsubsection*{Power Supplies} are generally represented by a circle with a positive and negative input.
         In order to differentiate a DC supply and AC supply, we can use either a plus/minus or sine wave, respectively.
         Both of these symbols are represented in the figure below.
 
-        \todo{Include image of general DC/AC power supply symbols}
+        \begin{figure}[h!]
+            \labfig{power_source_symbol}
+            \includegraphics[height=1in]{electrical_schematics/DC_source_symbol.png}
+            \includegraphics[height=1in]{electrical_schematics/AC_source_symbol.png}
+            \caption[Source Symbols]{Schematic symbols for DC and AC power sources, respectively. 
+            Notice how the AC power source uses a sinusoidal wave to differentiate it.}
+        \end{figure}
 
         \paragraph*{The Battery} is a subset of DC power supply for embedded applications or circuits that will not have access to a general DC power supply.
         These components are meant to store a large amount of electrical charge for a long duration and be able to discharge it into a circuit to run it.
         Some batteries, like Lithium Ion batteries, are capable of being recharged using special integrated circuits and power supplies.
         Others, like alkaline batteries, are only usable once and must be disposed of properly when they are depleted.
 
-    \marginnote{The different sized lines that comprise the battery symbol represent the different plates that are within modern battery construction.}
+    \begin{marginfigure}[-2in]
+        \labfig{battery_real}
+        \includegraphics[]{electrical_schematics/battery.jpg}
+        \caption[Chip Resistors]{18650 Li-ion battery. 
+        Retrieved from \href{https://himaxelectronics.com/product-item/18650-3000mah-li-ion-battery-cell/}{Himax Electronics}}
+    \end{marginfigure}
 
-    \todo{Include image of battery symbol}
+    \begin{figure}[h!]
+        \labfig{battery_symbol}
+        \includegraphics[height=1in]{electrical_schematics/battery_symbol.png}
+        \caption[Resistor Symbols]{Schematic symbol for a battery. 
+        The different sized lines that comprise the battery symbol represent the different plates that are within modern battery construction.}
+    \end{figure}
 
     \subsection{Basic Components} 
     The following basic component symbols represent discreet components within an electrical circuit.
@@ -67,7 +92,7 @@ The symbols covered henceforth are the standard-accepted versions so they should
         Resistors are components that resist the flow of current and can be used to dissipate energy, reduce voltage levels, or limit current going into other components.
         There are represented with a jagged line or box with "whiskers" as shown in the figure below.
 
-        \begin{marginfigure}[-2in]
+        \begin{marginfigure}[-1in]
             \labfig{resistor_real}
             \includegraphics[]{electrical_schematics/chip_resistors.jpg}
             \caption[Chip Resistors]{Surface mount chip resistors. 
@@ -84,9 +109,9 @@ The symbols covered henceforth are the standard-accepted versions so they should
         \paragraph*{The Potentiometer} is a variable resistor that changes resistance depending on the position of "wiper" across a band of resistive material.
         Typically, these components are turned by human operators and can be used as an input to determine a variety of things, depending on application.
 
-        \begin{marginfigure}[-2in]
+        \begin{marginfigure}[-1in]
             \labfig{potentiometer_real}
-            \includegraphics[]{electrical_schematics/potentiometer.jpg}
+            \includegraphics[height=1.5in]{electrical_schematics/potentiometer.jpg}
             \caption{Panel mount potentiometer.
             Retrieved from \href{https://www.phippselectronics.com/product/10k-potentiometer-panel-mount-breadboard-friendly-pack-of-2/}{Phipps Electronics}}
         \end{marginfigure}
@@ -101,7 +126,7 @@ The symbols covered henceforth are the standard-accepted versions so they should
         The photoresistor is a variable resistor that changes resistance depending on the intensity of light interacting with it
         Typically, these components are used as basic light sensors that can be used for presence detection, sun tracking, or other light intensity measurement.
 
-        \begin{marginfigure}[]
+        \begin{marginfigure}[-1in]
             \labfig{photoresistor_real}
             \includegraphics[]{electrical_schematics/photoresistor.jpg}
             \caption{LDR photoresistor.
@@ -110,7 +135,7 @@ The symbols covered henceforth are the standard-accepted versions so they should
 
         \begin{figure}[h!]
             \labfig{potentiometer_symbol}
-            \includegraphics[height=1.5in]{electrical_schematics/photoresistor_symbol.png}
+            \includegraphics[height=1in]{electrical_schematics/photoresistor_symbol.png}
             \caption[Potentiometer Symbol]{Schematic symbols for photoresistors. The arrows pointed towards the resistor indicate its light dependency.}
         \end{figure}
 
@@ -123,43 +148,100 @@ The symbols covered henceforth are the standard-accepted versions so they should
         In most circuits, you will encounter ceramic capacitors (pictured to the side) that do not hold a log of charge, but work for most applications.
         These capacitors are bi-directional or non-polarized so they can be placed in any orientation on the schematic.
 
-        \todo{insert image of ceramic capacitor and symbols}
+        \begin{marginfigure}[-2in]
+            \labfig{capacitors_real}
+            \includegraphics[]{electrical_schematics/capacitors.jpg}
+            \caption{Chip ceramic capacitors.
+            Retrieved from \href{https://universal-solder.ca/product/320-pcs-ultimate-smd-1206-ceramic-capacitors-kit-10pf-to-22uf/}{Universal Solder}}
+        \end{marginfigure}
+
+        \begin{figure}[h!]
+            \labfig{capacitors_symbols}
+            \includegraphics[height=1.5in]{electrical_schematics/capacitor_symbols.png}
+            \caption[Potentiometer Symbol]{Schematic symbols for Capacitors. 
+            On the left is the symbol for a non-polarized bi-directional capacitor.
+            On the right is the symbol for an electrolytic or polarized capacitor.}
+        \end{figure}
 
         \paragraph*{Electrolytic Capacitors} are polarized or uni-directional capacitors that use a liquid electrolyte compared to the ceramic ones used in non-polarized capacitors.
         These capacitors must be placed in a specific orientation otherwise they may become damaged and could explode!
-        On electrical schematics, the positive terminal of these capacitors is denoted by a curved line, like shown above.
+        On electrical schematics, the negative terminal of these capacitors is denoted by a curved line, like shown above.
         Even though, you must closely pay attention to how the capacitor is orientated, the electrolytic capacitor provides a much high energy density compared to the ceramic capacitors, making them more suited for high power application.
 
-        \todo{insert image of electrolytic capacitor}
+        \begin{marginfigure}[-1.5in]
+            \labfig{electro_capacitor}
+            \includegraphics[]{electrical_schematics/electro_capacitor.png}
+            \caption{Electrolytic capacitor.
+            Notice the longer lead indicates the positive terminal and the negative terminal is clearly marked with a stripe on the casing.
+            Retrieved from \href{https://www.srgllc.com/us/en/settlements/electronics/electrolytic-capacitors-indirect-purchaser}{SRG LLC}}
+        \end{marginfigure}
 
         \subsubsection*{Inductors}
-        Inductors are tiny electromagnetics that wind conducting wire around an iron or air core.
+        Inductors are tiny electromagnetic that wind conducting wire around an iron or air core.
         When alternating electrical current is passed through the inductor, some of the energy is buffered in the magnetic field of the electromagnet. 
         You can think of them as electrical flywheels that store moving charge and can discharge it to maintain a more constant "flow".
         This makes inductors useful for resisting changes in current or acting as the analogue to capacitors in AC circuits.
 
-        \todo{insert image of inductor to side and symbol}
+        % \begin{marginfigure}[-1in]
+        %     \labfig{inductor_real}
+        %     \includegraphics[]{electrical_schematics/inductor.jpeg}
+        %     \caption{Surface mount inductor.
+        %     Retrieved from \href{https://www.ept.ca/products/shielded-surface-mount-power-inductors-deliver-high-reliability/}{EP\&T}}
+        % \end{marginfigure}
+
+        \begin{figure}[h!]
+            \labfig{inductor_symbol}
+            \includegraphics[height=1in]{electrical_schematics/inductor_symbol.png}
+            \caption[Inductor Symbol]{Schematic symbol for inductors.}
+        \end{figure}
 
         \subsubsection*{Diodes}
         Diodes are used to restrict current flow in a certain direction.
         This is accomplished using some electrochemical wizardry and comes at the cost of a little bit of voltage drop through the diode.
         But, the main property of the diode makes it invaluable for protecting circuits against reverse polarity, dissipating AC current, or even rectifying AC voltages into DC.
 
-        \todo{insert image of diode (from arduinmo kit) to the side and symbols below}
+        \begin{marginfigure}[-1in]
+            \labfig{diode_real}
+            \includegraphics[]{electrical_schematics/diode.jpg}
+            \caption{Through hole diode as commonly found in Arduino kits.
+            Retrieved from \href{https://analyseameter.com/2016/03/diodes-types-operation-symbol-applications.html}{AnalyzeAMeter}}
+        \end{marginfigure}
+
+        \begin{figure}[h!]
+            \labfig{diode_symbol}
+            \includegraphics[height=1in]{electrical_schematics/diode_symbol.png}
+            \caption[Diode Symbol]{Schematic symbol for diodes.}
+        \end{figure}
 
         \paragraph*{Light Emitting Diodes (LEDs)} are diodes that siphon a little bit of electrical energy to emit photons at specific wavelengths.
-        These components are ubiquitus in any application that requires a simple human interface such as light indicators, RGB gaming products, or flashlights.
+        These components are ubiquitous in any application that requires a simple human interface such as light indicators, RGB gaming products, or flashlights.
         LEDs are smaller, easily scaled to almost any production scale, and more energy efficient compared to most other light sources in use today.
 
-        \todo{Insert image of 5mm LED from arduino kit}
+        \begin{figure}[h!]
+            \labfig{led_symbol}
+            \includegraphics[height=1in]{electrical_schematics/led_symbol.png}
+            \caption[LED Symbol]{Schematic symbol for light emitting diodes.}
+        \end{figure}
 
         \paragraph*{Zener Diode} are special diodes that restricts the current flow direction up to a certain breakdown voltage.
         When that voltage is achieved, current is allowed to flow against the diode, without damaging it, making it useful in applications like circuit protection.
+
+        \begin{figure}[h!]
+            \labfig{zener_diode_symbol}
+            \includegraphics[height=1in]{electrical_schematics/zdiode_symbol.png}
+            \caption[Zener Diode Symbol]{Schematic symbol for Zener diodes.}
+        \end{figure}
 
         \paragraph*{Schottky Diode} are other special diodes that have a very low voltage drop across it, making it ideal for applications where flow restriction is necessary, but power loss needs to be considered.
         These are commonly used to control the flow of charge within a battery pack of multiple cells.
         As these cells discharge, they can have slightly different voltages, meaning some energy loss will occur as one battery tried to equalize voltage with another in the pack.
         Schottky diodes ensure the charges flow only from the batteries to the draw outside the pack, without wasting much energy.
+
+        \begin{figure}[h!]
+            \labfig{schottky_diode_symbol}
+            \includegraphics[height=1in]{electrical_schematics/schdiode_symbol.png}
+            \caption[Schottky Diode Symbol]{Schematic symbol for Schottky diodes.}
+        \end{figure}
 
         \subsubsection*{Crystal Oscillators}
         Oscillators resonate at a certain frequency depending on the type of crystal used and the coupling capacitors matched to it.
@@ -167,7 +249,11 @@ The symbols covered henceforth are the standard-accepted versions so they should
         Some components use the rising or falling edge of this wave to trigger register shifts, calculations, anything else needed to perform its duty.
         Therefore, for any circuit that requires a high frequency, high reliability clock signal, most often, crystal oscillators will be present
 
-        \todo{insert image and symbol of oscillator}
+        \begin{figure}[h!]
+            \labfig{oscillator_symbol}
+            \includegraphics[height=1in]{electrical_schematics/oscillator_symbol.png}
+            \caption[Oscillator Symbol]{Schematic symbol for crystal oscillators.}
+        \end{figure}
 
         \subsubsection*{Switches}
         Switches are mechanical contacts that physically direct the flow of electricity.
@@ -177,19 +263,46 @@ The symbols covered henceforth are the standard-accepted versions so they should
         Each circuit is mechanically linked so the same output connector in both circuits will be connected to the common.
         One downside to the mechanical switch is that they can be welded together if a maximum current is exceeded or, they can wear out over thousands of cycles.
 
-        \todo{insert picture of switch to the side, symbols for SPST, SPDT, and DP3T below}
+        % \begin{marginfigure}[-3in]
+        %     \labfig{switch_real}
+        %     \includegraphics[]{electrical_schematics/switch.jpg}
+        %     \caption{A common SPDT switch.
+        %     Retrieved from \href{https://www.gardnerbender.com/en/p/GSW-12/SPDT-Toggle-Switch}{Gardner Bender}}
+        % \end{marginfigure}
+
+        \begin{figure}[h!]
+            \labfig{switch_symbol}
+            \includegraphics[height=1.5in]{electrical_schematics/switch_symbols.png}
+            \caption[Switch Symbols]{Schematic symbols for different switch types.
+            \emph{From left to right:} SPST, SPDT, DPDT.}
+        \end{figure}
 
         \paragraph*{Buttons} are typically Single Pole Single Throw (SPST) switches that are spring loaded to remain normally open until pressed.
         When the button is pressed, a conducting plate makes contact with the common and output pins, completing the circuit through the button.
         These are commonly used as human input into circuits for calculations, state machines, typing lecture notes, etc.
 
-        \todo{insert image of button from arduino kit to the side, symbol below}
+        \begin{marginfigure}[-2in]
+            \labfig{button_real}
+            \includegraphics[]{electrical_schematics/button.jpg}
+            \caption{A common push button found in most Arduino kits.
+            Retrieved from \href{https://www.ebay.co.uk/itm/10-x-6x6x5mm-Momentary-Mini-Push-Button-Tactile-Switch-PCB-Mounted-SPST-/251779595483}{eBay}}
+        \end{marginfigure}
+
+        \begin{figure}[h!]
+            \labfig{button_symbol}
+            \includegraphics[height=0.75in]{electrical_schematics/button_symbol.png}
+            \caption[Switch Symbols]{Schematic symbols for a normally open push button.}
+        \end{figure}
 
         \paragraph*{Relays} are electromechanical switches that rely on an electromagnetic to move the electrical contact, rather than physical force.
         These are used for computers to manipulate large currents or direct electrical flow automatically, without human intervention.
         These relays follow the same nomenclature as normal switches and can be found in any number of configurations of poles and throws.
 
-        \todo{Insert image of relay to the side, symbol below}
+        \begin{figure}[h!]
+            \labfig{relay_symbol}
+            \includegraphics[height=1.5in]{electrical_schematics/relay_symbol.png}
+            \caption[Switch Symbols]{Schematic symbols for an electromechanical relay.}
+        \end{figure}
 
         \subsubsection*{Transistors}
         Transistors are electrical solid-state switches that use electrochemical properties to control the flow of electricity through them.
@@ -197,7 +310,18 @@ The symbols covered henceforth are the standard-accepted versions so they should
         Everything in modern computing from the simple logic gate to the highest end computer and graphics processors use transistors to perform calculations or "think" about problems.
         Transistors have a gate that controls current flow from the source to the drain, depending on the voltage applied.
 
-        \todo{insert image of transistor and symbols below}
+        \begin{marginfigure}[-1in]
+            \labfig{transistor_real}
+            \includegraphics[]{electrical_schematics/transistor.jpeg}
+            \caption{A common transistor found in most Arduino kits.
+            Retrieved from \href{https://www.walmart.com/ip/2N2222A-Plastic-Encapsulate-Power-Transistor-NPN-TO-92-25PCS/283496991}{Walmart}}
+        \end{marginfigure}
+
+        \begin{figure}[h!]
+            \labfig{transistor_symbol}
+            \includegraphics[height=1.5in]{electrical_schematics/transistor_symbol.png}
+            \caption[Switch Symbols]{Schematic symbol for a transistor.}
+        \end{figure}
 
         \paragraph*{MOSFETs} or Metal-Oxide-Semiconductor Field-Effect-Transistors are some of the most common types of transistors.
         They are able to be configured (doped) with different silicon structures that give them different electrochemical properties.
@@ -206,7 +330,13 @@ The symbols covered henceforth are the standard-accepted versions so they should
         There are two main types: depletion, which requires a Gate-Source voltage (Vgs) to switch the gate OFF, equivalent to a normally-closed switch; and enhancement where a Vgs is required to switch the gate ON, acting like a normally-open switch.
         These transistors are very common in high power applications and signal amplification.
 
-        \todo{include image of MOSFET and symbols for N-type and P-type}
+        \begin{figure}[h!]
+            \labfig{transistor_symbol}
+            \includegraphics[height=1.5in]{electrical_schematics/pmosfet_symbol.png}
+            \includegraphics[height=1.5in]{electrical_schematics/nmosfet_synmbol.png}
+            \caption[Switch Symbols]{Schematic symbols for MOSFETs.
+            On the left is a P-Channel MOSFET, on the right is an N-Channel MOSFET.}
+        \end{figure}
 
         \todo{insert example from Thetis/EVE circuits - cherry pick some nice ones that use mostly discreet components}
 
