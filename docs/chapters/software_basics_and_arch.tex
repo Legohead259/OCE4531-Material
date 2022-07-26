@@ -66,18 +66,18 @@ is not code that will execute and that the capitalization of keywords is deliber
     they are defined based on their ascii value (\href{https://en.cppreference.com/w/cpp/language/ascii}{ASCII Reference}), which allow you to manipulate many more characters than
     what can be typed by a keyboard.
 
-    The \textbf{Char} keyword is used in variable and function declarations to classify the result as a character, and there are two ways to syntaxically represent a character.
+    The \textbf{char} keyword is used in variable and function declarations to classify the result as a character, and there are two ways to syntaxically represent a character.
     \paragraph*{Method 1: Using Single Quotes} The first form of syntax makes more sense visually, and involves wrapping a typed character within two single quotes
     \begin{lstlisting}[linewidth=1.5\textwidth, language=C++]
-        Char variable_name = 'a';\end{lstlisting}
+        char variable_name = 'a';\end{lstlisting}
     Do note, however, that this method restricts you to the characters that can be typed using a conventional keyboard. In addition, when declaring a character in this form, you
     cannot wrap multiple characters inside the quotes.
     \begin{lstlisting}[linewidth=1.5\textwidth, language=C++]
-        Char variable_name = 'abc'; \\ this is improper declaration \end{lstlisting}
+        char variable_name = 'abc'; \\ this is improper declaration \end{lstlisting}
     \paragraph*{Method 2: Using ASCII Values} As mentioned previously, characters are encoded via ASCII values when used in a programming context. As such, we can define a
     character using its corresponding ASCII value.
     \begin{lstlisting}[linewidth=1.5\textwidth, language=C++]
-        Char variable_name = 97; \\ ASCII value 97 corresponds to character 'a'\end{lstlisting}
+        char variable_name = 97; \\ ASCII value 97 corresponds to character 'a'\end{lstlisting}
     Since one character is equivalent to one byte of data, the maximum decimal value that can be used in a character declaration is 255.
 
     \begin{kaobox}[frametitle=Aside: Some quirks with characters]
@@ -103,6 +103,75 @@ is not code that will execute and that the capitalization of keywords is deliber
     \begin{lstlisting}[linewidth=1.5\textwidth, language=C++]
         byte function_name (\\ input variables) {
             byte variable_name_1 = 0;
-            unsigned_char variable_name_2 = 128;
+            unsigned char variable_name_2 = 128;
             return variable_name_1;
         }\end{lstlisting}
+
+    \subsection{int and short}
+    Both the \textbf{int} datatype and the \textbf{short} datatype are used to store 16-bit (2 byte) signed integers. This makes their effective range -32,768 to 32,767. By convention, the \textbf{int} datatype
+    is the more commonly used one in variable and output declaration.
+    \marginnote{One of the things that you will have to look out for when using numeric datatypes is \textbf{overflow}; ie. when the number passed into a data field is larger than the range of that datatype.
+    Overflow will \textbf{not} stop the code from compiling, but the code's behavior will arbitrarily differ from what you expect.}
+    \paragraph*{int and short usage} the following block of code demonstrates how to use the \textbf{int} and \textbf{short} keywords
+    \begin{lstlisting}[linewidth=1.5\textwidth, language=C++]
+        int function_name (\\ input variables) {
+            int variable_name_1 = -20000;
+            short variable_name_2 = 12763;
+            return variable_name_1;
+        }\end{lstlisting}
+    
+    \subsection{unsigned int and word}
+    Similar to the case with \textbf{char} and \textbf{unsigned char}, there are also unsigned variants of the \textbf{int} and \textbf{short} datatypes respectively known as \textbf{unsigned int} and
+    \textbf{word}. These datatypes are both 16-bit(2 byte) integers; however, they span only the \textbf{positive} range of 16-bit integers (0 to 65,535).
+    \marginnote{The \textbf{unsigned int} datatype has \textbf{known} overflow behavior unlike \textbf{int}. When the value of an unsigned integer goes below zero, it wraps around to the max of the
+    range (so -1 = 65535, -2 = 65534) and when it exceeds 65535, it wraps back to zero (so 65536 = 0, 65537 = 1)}
+    \paragraph*{unsigned int and word usage} the following block of code demonstrates how to use the \textbf{unsigned int} and \textbf{word} keywords
+    \begin{lstlisting}[linewidth=1.5\textwidth, language=C++]
+        unsigned int function_name (\\ input variables) {
+            unsigned int variable_name_1 = 1203;
+            word variable_name_2 = 55000;
+            return variable_name_1;
+        }\end{lstlisting}
+    
+    \subsection{long and unsigned long}
+    We had previously covered that a \textbf{short} is a 16-bit integer. Therefore, appropriately, a \textbf{long} is a 32-bit signed integer value encompassing the range -2,147,483,648 to 2,147,483,647. As
+    per convention, the \textbf{unsigned long} store a 32-bit unsigned integer value with range 0 to 4,294,967,295.
+    \paragraph*{long and unsigned long usage} the following block of code demonstrates how to use the \textbf{long} and \textbf{unsigned long} keywords
+    \begin{lstlisting}[linewidth=1.5\textwidth, language=C++]
+        long function_name (\\ input variables) {
+            long variable_name_1 = -2000000;
+            unsigned long variable_name_2 = 1000000;
+            return variable_name_1;
+        }\end{lstlisting}
+    
+    \subsection{float and double}
+    There are also datatypes that are used to store decimal values vs. pure integer, these are the \textbf{float} and \textbf{double} datatypes. For the boards that you will be using, the \textbf{float} and
+    the \textbf{double} datatypes are functionally the same. They both cover the range -3.4028235E+38 to 3.4028235E+38, and are both stored in memory as 32-bit values. 
+    \paragraph*{float and double usage} the following block of code demonstrates how to use the \textbf{float} and \textbf{double} keywords
+    \begin{lstlisting}[linewidth=1.5\textwidth, language=C++]
+        float function_name (\\ input variables) {
+            float variable_name_1 = -300.21;
+            double variable_name_2 = 600.123;
+            return variable_name_1;
+        }\end{lstlisting}
+    \paragraph*{Floating point error} One of the issues that you may run into when dealing with floats and doubles is the floating point (roundoff) error. Due to how floating point numbers are represented
+    (for more info on that, you can read up on the \href{https://en.wikipedia.org/wiki/IEEE_754}{IEEE-754 Standard}), and due to the fact that floating point numbers are stored in a finite number of bits (32),
+    floating point numbers are \textbf{not absolutely accurate} and will differ from the true value of a datapoint by a small amount. For the majority of applications, this slight difference between 
+    actual values and real values is trivial and non-impactful to the application. However, for applications that store small magnitude numbers as data, or rely on high-precision calculations, floating
+    point error is something to watch out for.
+    
+    \subsection{Arrays}
+    Arrays are one of the most fundamental structures to understand when working with any programming language. In Arduino C, they are treated as a block of memory that is broken up into chunks, where each
+    chunk stores a single value of a datatype. Arrays in Arduino follow an explicit set of rules that govern how they are defined and used, which we will cover below.
+    \paragraph*{Rule 1: Arrays can only hold 1 data type} Unlike some other languages, an array in Arduino (and in C in general) must be defined to store a single datatype. You cannot have an array that has
+    both int and float datatypes for example. For the reasoning behind this rule, you can take a look at the following aside.
+    \paragraph*{Rule 2: Arrays must have a predefined number of values} When you initialize an array, you must tell the program how many values are going to be stored in the array. After this declaration, you 
+    cannot modify the size of that array. The reasoning behind this rule is also covered in the following aside.
+    \begin{kaobox}[frametitle=Aside: The weird world of memory allocation]
+        C (and its variants) are programming languages that deal directly with memory. While this makes them faster than languages that do not directly modify memory, it also restricts how flexible variables
+        and memory structures can be when using them. When reading or writing to memory, the amount of memory you use and how that memory will be divided up must be explicitly defined. If the variable asks 
+        for 32 bits of memory, it will get 32 bits of memory, no more, no less. In a similar sense, arrays also must explicitly define how much memory they will use. An array that wants to store 10 ints 
+        (16-bit) will be allocated $10 * 16 = 160$ bits of memory divided into 10x 16-bit chunks. If you tried to store a long (32-bit) into one of those chunks, it will not fit and the program will error. Now,
+        while it is possible to allocate a raw chunk of memory to be manually partitioned and used, how to do that is beyond the scope of this class. Those interested can read up on \textbf{memory allocation
+        in C}
+    \end{kaobox}
