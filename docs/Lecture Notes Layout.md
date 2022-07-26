@@ -92,33 +92,34 @@
 ### Schematic Basics
  - [ ] Frame and Layout
  - [ ] Component symbols
-     - [ ] Power symbols
-         - [ ] Power source rail
-         - [ ] Power sink rail (ground)
-         - [ ] DC sources (battery)
-         - [ ] AC sources
-     - [ ] Basic components
-         - [ ] Resistors
-             - [ ] Potentiometer
+     - [X] Power symbols
+         - [X] Power source rail
+         - [X] Power sink rail (ground)
+         - [X] DC sources (battery)
+         - [X] AC sources
+     - [X] Basic components
+         - [X] Resistors
+             - [X] Potentiometer
              - [ ] Thermistor
-             - [ ] Photoresistor
-         - [ ] Capacitors
-             - [ ] Ceramic
-             - [ ] Electrolytic
-         - [ ] Inductors
-         - [ ] Diodes
-             - [ ] Light Emitting Diodes
-             - [ ] Zener diodes
-         - [ ] Crystal oscillators
-         - [ ] Switches
-             - [ ] Buttons
-             - [ ] Relays
-         - [ ] Transistors
-             - [ ] MOSFETS (P-Type, N-Type)
+             - [X] Photoresistor
+         - [X] Capacitors
+             - [X] Ceramic
+             - [X] Electrolytic
+         - [X] Inductors
+         - [X] Diodes
+             - [X] Light Emitting Diodes
+             - [X] Zener diodes
+             - [X] Schottky diodes
+         - [X] Crystal oscillators
+         - [X] Switches
+             - [X] Buttons
+             - [X] Relays
+         - [X] Transistors
+             - [X] MOSFETS (P-Type, N-Type)
          - [ ] Operational amplifiers
          - [ ] External connectors
          - [ ] Common Examples
-     - [ ] Integrated circuits
+     - [X] Integrated circuits
          - [ ] Example: Voltage Regulator
  - [ ] Placing Components
 	 - [ ] Consideration: Component package and board footprint
