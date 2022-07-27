@@ -1,0 +1,298 @@
+% ===========================================
+% Individual Course Project (Undergraduate)
+% Written by: Braidan Duffy
+%
+% Date: 07/27/2022
+% Last Revision: 07/27/2022
+% ============================================
+
+\pagelayout{wide} % remove margins!
+
+\setchapterstyle{koa}
+\chapter{Individual Course Project: Undergraduate}
+\setchapterpreamble[u]{\margintoc}
+\labch{icp_ugrad}
+
+\section*{Overview}
+As part of this course, you are tasked with designing, ordering, and assembling your own Printed Circuit Board (PCB) to perform a measurement task.
+This will be your first foray into the world of instrumentation design and analysis so it is important you consider your project choice carefully.
+You only have a couple weeks to accomplish the goal, so consider your workload, capabilities, and experience when scoping out your ICP idea.
+
+It is generally recommended that you consider taking one of the four previous projects and making that into your ICP.
+For the most part, you already have the schematics and code finished, it is just up to the PCB design and assembly and what you want to do for that.
+You can also make your PCB into an Arduino Uno-compatible shield, for a really slick looking product!
+
+For those that are interested in more of a challenge, you may examine other projects you could do within your Arduino starter kit, or refer to ICP topics addendum.
+There are several projects that will challenge you, but will be sponsored by the UTL outright and will probably be used within the lab for other projects or as a demonstration or teaching tool.
+
+For completion of this project you must submit the following assignments on time, on the date specified in the syllabus and on Canvas, and as specified.
+
+\section*{Assignment 1: Schematic}
+Your first assignment will be to design a schematic for your ICP using industry standard practices, symbols, and nomenclature.
+The lecture notes contain some examples and you are encouraged to look at companies like Adafruit for inspiration on layout, formatting, etc.
+The instructor will also be available during office hours to offer advice and look over your schematic before you submit it.
+It is highly encouraged you take advantage of the instructor's availability to get the best schematic possible.
+
+Also keep in mind what components you have on hand.
+Do not specify a component 
+
+    \subsection*{Requirements}
+    Your schematic must have the following:
+    \begin{itemize}
+        \item A clear frame sized for \emph{either} US Letter/ANSI A (8.5in x 11in) or US Tabloid/ANSI B (11in x 17in)
+        \item Your name, project name, revision, and date created, as well other pertinent information within the title box of the frame.
+        \item A well organized and logical layout for the parts used
+        \item Clear and consistent nomenclature for the part values, net/bus names, and section names
+        \item Effort towards presentability and readability (i.e. it should be easy to read!)
+    \end{itemize}
+
+    \subsection*{Submission}
+    You will submit this assignment on Canvas before 23:59 on the date that it is due in a PDF format as well as the source schematic in an EAGLE-compatible format.
+    Please consult the late policy found in the syllabus for additional details.
+
+    \subsection*{Grading}
+    You will be graded on the following criteria:
+
+    \begin{table}[h!]
+        \begin{tabular}{l | c}
+            \toprule
+            Criterion & Points \\
+
+            \midrule
+            Efficacy/Completeness & 40 \\
+            Neatness and organization & 40 \\
+            Feasibility & 10 \\
+            Component usage & 10 \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+
+\section*{Assignment 2: Printed Circuit Board Design}
+Your second assignment will be to take your schematic and turn it into a PCB for manufacturing.
+This will involve component placement, layout, and wire routing, all of which can be intimidating so please make sure you leave yourself ample time to do the assignment right!
+As always, consult the instructor during their office hours for assistance.
+They are there to help you!
+
+Here, it is important to try and keep things as neat as possible and make your routes direct and to the point to minimize potential issues.
+This will be especially important when you are laying out components before routing them; don't place two components that need to be connected on opposite ends of the boards, unless necessary!
+
+Before submission, run a Design Rules Check to ensure all of the connections have been made, there are not any overlaps or restricted-zone violations, or anything else that may jeopardize the manufacture process.
+If you have any questions or concerns, please consult the instructor!
+
+    \subsection*{Requirements}
+    Your PCB design must have the following:
+    \begin{itemize}
+        \item A clear board that is of appropriate size (< 6in x 6in)
+        \item Your name, revision, date of design (month/year), and project name (optional) in a silkscreen layer somewhere easily visible and unobstructed on the board.
+        \item A well organized and logical layout for the parts used
+        \item A well organized and thorough Bill of Materials for the parts used.
+        \begin{itemize}
+            \item Shall be in an Excel workbook format with the following headers: Item, Manufacturer, Part Number, Supplier, Supplier Part Number, Reference, Value, Package, Price, Qty Used, Component Price, Location, Datasheet, Notes
+        \end{itemize}
+        \item Gerber files for manufacture
+        \item Effort towards aesthetics and user interactions
+    \end{itemize}
+
+    \subsection*{Submission}
+    You will submit this assignment on Canvas before class on the date that it is due in a zipped archive containing the following:
+
+    \begin{itemize}
+        \item PDF containing the overall PCB design file, the top layers, and the bottom layers, all scaled to a readable amount
+        \item Source file in an EAGLE-compatible format
+        \item A complete Bill of Materials in Excel workbook format with the headers specified in the requirements
+        \item Gerber files in a zipped archive as generated by your ECAD software
+    \end{itemize}
+
+    Please note that if this submission is not made on time, you risk your PCB not being ordered with enough time for delivery and assembly for the final report/presentation!
+
+    \subsection*{Grading}
+    You will be graded on the following criteria:
+
+    \begin{table}[h!]
+        \begin{tabular}{l | c}
+            \toprule
+            Criterion & Points \\
+
+            \midrule
+            Efficacy/Completeness & 30 \\
+            Neatness and organization & 30 \\
+            Bill of Materials & 30 \\
+            Gerber files & 10 \\
+            Extra Credit & 25 \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    
+    \subsection*{Extra Credit}
+    There will be an extra credit opportunity with this assignment!
+    If you want to, design a project logo or design that can be silk screened onto your PCB for some custom flair!
+    Alternatively, design your PCb to be in a creative or unique shape.
+    These points will be awarded subjectively by the instructor, but you must specify in your submission that you wish to have the extra credit points.
+
+\section*{Assignment 3: Assembled Printed Circuit Board}
+Your fourth assignment will be to assemble your PCB and test it!
+You may assemble it by any means you desire.
+For extra credit, you may program and use the pick and place machine located within the Underwater Technology Lab.
+Be advised though, that machine is still in a prototype phase and may be difficult to program and use.
+Please give yourself adequate time to learn it and use it.
+Effort to use will still result in extra credit though, depending on how much time you dedicate to it.
+
+Even though it may be your first time soldering, please ensure that all the solder joints are neat looking and the board is clean.
+The PCB should be as presentable as possible!
+
+If there are any issues, please consult the failure policy listed in the syllabus!
+
+As always, please work with the instructor if you have any questions or concerns about assembly.
+If you feel unsafe working with the soldering machines, talk to the instructor and something can be arranged.
+
+    \subsection*{Requirements}
+    Your PCB assembly must have the following:
+    \begin{itemize}
+        \item All components cleanly attached to the PCB
+        \item Working PCB
+    \end{itemize}
+
+    \subsection*{Submission}
+    You will bring your completed PCB to class on the day the assignment is due and perform a quick (~3 minute) show-and-tell for the instructor and your peers.
+    Please have a suitable demonstration and talking points prepared!
+
+    Please note that if this submission is not made on time, it will not be good for your grade.
+    Even a non-functional ICP is better than nothing!
+
+    \subsection*{Grading}
+    You will be graded on the following criteria:
+
+    \begin{table}[h!]
+        \begin{tabular}{l | c}
+            \toprule
+            Criterion & Points \\
+            \midrule
+            Efficacy & 80 \\
+            Neatness and organization & 10 \\
+            Demonstration & 10 \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+
+\section*{Assignment 4: Assembled Printed Circuit Board}
+Your fourth assignment will be to assemble your PCB and test it!
+You may assemble it by any means you desire.
+For extra credit, you may program and use the pick and place machine located within the Underwater Technology Lab.
+Be advised though, that machine is still in a prototype phase and may be difficult to program and use.
+Please give yourself adequate time to learn it and use it.
+Effort to use will still result in extra credit though, depending on how much time you dedicate to it.
+
+\emph{Note:} You should try to keep a comprehensive assembly and testing log for future reference!
+
+Even though it may be your first time soldering, please ensure that all the solder joints are neat looking and the board is clean.
+The PCB should be as presentable as possible!
+
+If there are any issues, please consult the failure policy listed in the syllabus!
+
+As always, please work with the instructor if you have any questions or concerns about assembly.
+If you feel unsafe working with the soldering machines, talk to the instructor and something can be arranged.
+
+    \subsection*{Requirements}
+    Your PCB assembly must have the following:
+    \begin{itemize}
+        \item All components cleanly attached to the PCB
+        \item Working PCB
+    \end{itemize}
+
+    \subsection*{Submission}
+    You will bring your completed PCB to class on the day the assignment is due and perform a quick (~3 minute) show-and-tell for the instructor and your peers.
+    Please have a suitable demonstration and talking points prepared!
+
+    Please note that if this submission is not made on time, it will not be good for your grade.
+    Even a non-functional ICP is better than nothing!
+
+    \subsection*{Grading}
+    You will be graded on the following criteria:
+
+    \begin{table}[h!]
+        \begin{tabular}{l | c}
+            \toprule
+            Criterion & Points \\
+            \midrule
+            Efficacy & 80 \\
+            Neatness and organization & 10 \\
+            Demonstration & 10 \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+
+\section*{Assignment 5: Final Presentation}
+Your fifth assignment will be to give a comprehensive presentation on your ICP.
+This presentation will be neatly formatted and cover the following topics, at a minimum:
+    
+    \begin{itemize}
+        \item Purpose
+        \item Design Considerations and Philosophy
+        \item Assembly Notes (include build process)
+        \item Testing Notes
+        \item Conclusions
+    \end{itemize}
+    
+    Remember to include citations and plenty of pictures, as needed!
+        
+        \subsection*{Submission}
+        This will be submitted on Canvas in a PDF and/or PowerPoint-compatible form by the time of your ICP presentation.
+        Please consult the late policy in the syllabus for more details.
+    
+        \subsection*{Grading}
+        You will be graded on the following criteria:
+    
+        \begin{table}[h!]
+            \begin{tabular}{l | c}
+                \toprule
+                Criterion & Points \\
+                \midrule
+                Purpose & 5 \\
+                Design Process & 30 \\
+                Testing Process & 30 \\
+                Conclusion & 15 \\
+                Presentation Style and Delivery & 10 \\
+                Formatting & 10 \\
+                \bottomrule
+            \end{tabular}
+        \end{table}
+
+\section*{Assignment 6: Final Report}
+Your sixth and final assignment will be to write a comprehensive report on your ICP.
+This report will be neatly formatted and cover the following topics, at a minimum:
+
+\begin{itemize}
+    \item Executive Summary
+    \item Introduction and Purpose
+    \item Design Considerations and Philosophy
+    \item Assembly Notes (include build process)
+    \item Testing Notes
+    \item Conclusions
+\end{itemize}
+
+Remember to include citations and plenty of pictures, as needed!
+    
+    \subsection*{Submission}
+    This will be submitted on Canvas in a PDF form by 23:59 on the date specified in the syllabus.
+    Please consult the late policy in the syllabus for more details.
+
+    \subsection*{Grading}
+    You will be graded on the following criteria:
+
+    \begin{table}[h!]
+        \begin{tabular}{l | c}
+            \toprule
+            Criterion & Points \\
+            \midrule
+            Executive Summary & 15 \\
+            Purpose & 5 \\
+            Design Process & 30 \\
+            Testing Process & 30 \\
+            Conclusion & 15 \\
+            Formatting & 5 \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+        
+
+\pagelayout{margin} % Restore margins

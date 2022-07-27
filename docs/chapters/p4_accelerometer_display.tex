@@ -130,7 +130,8 @@ struct Quaternion
     double w, x, y, z;
 };
 
-Quaternion ToQuaternion(double yaw, double pitch, double roll) // yaw (Z), pitch (Y), roll (X)
+// yaw (Z), pitch (Y), roll (X)
+Quaternion ToQuaternion(double yaw, double pitch, double roll)
 {
     // Abbreviations for the various angular functions
     double cy = cos(yaw * 0.5);
