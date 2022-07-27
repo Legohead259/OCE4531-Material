@@ -3,7 +3,7 @@
 % Written by: Braidan Duffy
 %
 % Date: 05/30/2022
-% Last Revision: 06/13/2022
+% Last Revision: 07/27/2022
 % ============================================
 
 \chapter{Project 4: MPU6050 Accelerometer and LCD Display}
@@ -36,7 +36,7 @@ For completion of this project, you must demonstrate the following:
         \2 Gyroscope Z,
         \2 Roll,
         \2 Pitch
-    \1 Display the values on distinct pages on the PCD display with appropriate labels and units
+    \1 Display the values on distinct pages on the LCD display with appropriate labels and units
         \2 Page 1: Acceleration values
         \2 Page 2: Gyroscope values
         \2 Page 3: Orientation values
@@ -78,7 +78,8 @@ You will be graded on the following criteria:
 There exists many opportunities for extra credit on this assignment. 
 Ultimately, this is your chance to really explore and learn how to interact with sensors on a low level and gain an in-depth understanding of the relationship between microcontrollers and sensors.
 To that end, it is highly encouraged to pursue the following challenges and earn as many points as possible.
-A successful demonstration of \emph{all} of the challenges below will earn you \textbf{an exemption from one (1) non-ICP assignment}.
+A successful demonstration of \emph{all} of the challenges below will earn you \textbf{an exemption from the midterm exam}.
+If you fail to finish all the challenges, the appropriate amount of points will still be given to you and used as standard extra credit for this assignment.
 
 In your submission, please include a note of which challenges you have completed and videos of the challenge working. 
 You will also need to include source code highlighting the specific challenge sections.
@@ -116,7 +117,7 @@ You will also need to include source code highlighting the specific challenge se
 
     \textbf{FOR CREDIT:} you must submit a capture of a plot created from your data that shows either roll, pitch, yaw values.
     One line must be the method you used previously, and one line must be the Kalman-filtered estimate.
-    Quickly discuss the results in you submission.
+    Quickly discuss the results in your submission.
 
     \subsection*{Challenge 3: Removing Gravity}
     For this challenge, we will convert the acceleration signals into linear acceleration, put that information into the telemetry packet, and display it on a separate page of the LCD module.

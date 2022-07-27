@@ -37,84 +37,84 @@ Since this project is more complicated than previous ones, the schematic for the
 
     \subsection*{Pseudocode}
     \begin{lstlisting}[linewidth=1.5\textwidth]
-        Program: 4-Digit 7-Segment Display Counter
+Program: 4-Digit 7-Segment Display Counter
 
-        Define the 74HC595 data pin as some Arduino pin
-        Define the 74HC595 latch pin as some Arduino pin
-        Define the 74HC595 clock pin as some Arduino pin
-        Define the digit control pins as an array of some Arduino pins
-        Initialize the display digital values as an array of values with Digit One being index 0 (MSB last)
+Define the 74HC595 data pin as some Arduino pin
+Define the 74HC595 latch pin as some Arduino pin
+Define the 74HC595 clock pin as some Arduino pin
+Define the digit control pins as an array of some Arduino pins
+Initialize the display digital values as an array of values with Digit One being index 0 (MSB last)
 
-        Initialize an array of hex values corresponding to letters and numbers
+Initialize an array of hex values corresponding to letters and numbers
 
-        Define the button reset pin on some interrupt-capable Arduino pin
+Define the button reset pin on some interrupt-capable Arduino pin
+
+Define the buzzer pin as some Arduino pin
+Define the buzzer active time as some time in milliseconds
+Initialize the buzzer active flag as false
+Initialize the buzzer start time as 0
+
+Initialize the start time as 0 or the current millisecond value
+
+Function: Setup
+    Set up 7-segment display pins as outputs
+    Set up button input pin as an input pullup
+    Attach the counter reset ISR function to the button input to trigger on the falling edge
+    Set up the buzzer output pin
+    Set the buzzer output pin to LOW to ensure buzzer is off
+
+Function: Loop
+    Update the display
+    If one second has passed since the last execution then
+        Reset execution timer
+        update the counter
+    
+    If the buzzer active flag is true then
+        If the buzzer active time has not elapsed then
+            Turn the buzzer on
+        Else
+            Set the buzzer active flag to false
+            Turn off the buzzer
+
+Function: Turn off Display
+    For every pin in the digit display pins array
+        Set the pin to low to turn off the digit
+
+Function: Display
+    Arguments: Index of value to be displayed, found in the table of values
+    Set the latch pin to low to enable shift register writing
+    Shift out the value of table at the specified index to the shift register
+    Set the latch pin to high to disable shift register writing
+
+Function: Update Display
+    For every digit in the display digits array
+        Turn off the display
+        Display the value of the current digit
+        Turn on the specific digit in the display
+        Delay a little bit to give everything time to process (~1 ms)
+    Turn off the display to reduce power consumption
+
+Function: Update Counter
+    If every digit in the digit display array is equal to 9 then
+        Reset every value in the digit display array to 0
         
-        Define the buzzer pin as some Arduino pin
-        Define the buzzer active time as some time in milliseconds
-        Initialize the buzzer active flag as false
-        Initialize the buzzer start time as 0
+    Initialize the an increment value flag as true
+    For every digit in the digit display array
+        Store the value of the specific digit in a temporary variable
+        If the increment value flag is true then
+            Increment the temporary variable by one
+            Set the increment value flag to false
+            If the temporary variable is greater than 9 then
+                Reset the specific digit to 0
+                Set the increment value flag to true
+            Else
+                Set the specific digit to the new value of the temporary variable
 
-        Initialize the start time as 0 or the current millisecond value
-
-        Function: Setup
-            Set up 7-segment display pins as outputs
-            Set up button input pin as an input pullup
-            Attach the counter reset ISR function to the button input to trigger on the falling edge
-            Set up the buzzer output pin
-            Set the buzzer output pin to LOW to ensure buzzer is off
-
-        Function: Loop
-            Update the display
-            If one second has passed since the last execution then
-                Reset execution timer
-                update the counter
-            
-            If the buzzer active flag is true then
-                If the buzzer active time has not elapsed then
-                    Turn the buzzer on
-                Else
-                    Set the buzzer active flag to false
-                    Turn off the buzzer
-
-        Function: Turn off Display
-            For every pin in the digit display pins array
-                Set the pin to low to turn off the digit
-        
-        Function: Display
-            Arguments: Index of value to be displayed, found in the table of values
-            Set the latch pin to low to enable shift register writing
-            Shift out the value of table at the specified index to the shift register
-            Set the latch pin to high to disable shift register writing
-
-        Function: Update Display
-            For every digit in the display digits array
-                Turn off the display
-                Display the value of the current digit
-                Turn on the specific digit in the display
-                Delay a little bit to give everything time to process (~1 ms)
-            Turn off the display to reduce power consumption
-
-        Function: Update Counter
-            If every digit in the digit display array is equal to 9 then
-                Reset every value in the digit display array to 0
-             
-            Initialize the an increment value flag as true
-            For every digit in the digit display array
-                Store the value of the specific digit in a temporary variable
-                If the increment value flag is true then
-                    Increment the temporary variable by one
-                    Set the increment value flag to false
-                    If the temporary variable is greater than 9 then
-                        Reset the specific digit to 0
-                        Set the increment value flag to true
-                    Else
-                        Set the specific digit to the new value of the temporary variable
-        
-        Function: Counter Reset ISR
-            For every digit in the display digits array
-                Set the specific digit value to 0
-            Set the buzzer active flag to true
-            Set the buzzer start time to the current millisecond value
+Function: Counter Reset ISR
+    For every digit in the display digits array
+        Set the specific digit value to 0
+    Set the buzzer active flag to true
+    Set the buzzer start time to the current millisecond value
     \end{lstlisting}
 
     \newpage

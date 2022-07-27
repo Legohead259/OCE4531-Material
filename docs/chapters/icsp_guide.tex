@@ -147,38 +147,38 @@ The pinout for this configuration can be found in the figure, which we will use 
     First, in the open terminal execute the following command:
 
     \begin{lstlisting}[style=kaolstplain,linewidth=1.5\textwidth]
-        sudo apt-get install avrdude
+    sudo apt-get install avrdude
     \end{lstlisting}
 
     This will install AVRDUDE on the Raspberry Pi so we can flash .hex files onto the microcontroller. To verify the installation, execute:
 
     \begin{lstlisting}[style=kaolstplain,linewidth=1.5\textwidth]
-        avrdude -v
+    avrdude -v
     \end{lstlisting}
 
     If the output is something like:
 
     \begin{lstlisting}[style=kaolstplain,linewidth=1.5\textwidth]
-        avrdude: Version 6.3-20171130
-            Copyright (c) 2000-2005 Brian Dean, http://www.bdmicro.com/
-            Copyright (c) 2007-2014 Joerg Wunsch
+    avrdude: Version 6.3-20171130
+        Copyright (c) 2000-2005 Brian Dean, http://www.bdmicro.com/
+        Copyright (c) 2007-2014 Joerg Wunsch
 
-            System wide configuration file is "/etc/avrdude.conf"
-            User configuration file is "/home/pi/.avrduderc"
-            User configuration file does not exist or is not a regular file, skipping
+        System wide configuration file is "/etc/avrdude.conf"
+        User configuration file is "/home/pi/.avrduderc"
+        User configuration file does not exist or is not a regular file, skipping
 
-        avrdude: no programmer has been specified on the command line or the config file
-            Specify a programmer using the -c option and try again
+    avrdude: no programmer has been specified on the command line or the config file
+        Specify a programmer using the -c option and try again
     \end{lstlisting}
 
     Then the installation is good and AVRDUDE has created a user configuration file that we can edit. To begin this process, execute the following commands in the terminal:
 
     \begin{lstlisting}[style=kaolstplain,linewidth=1.5\textwidth]
-        cp /etc/avrdude.conf ~/avrdude_gpio.conf
+    cp /etc/avrdude.conf ~/avrdude_gpio.conf
     \end{lstlisting}
 
     \begin{lstlisting}[style=kaolstplain,linewidth=1.5\textwidth]
-        nano ~/avrdude_gpio.conf
+    nano ~/avrdude_gpio.conf
     \end{lstlisting}
 
     The first command copies the default AVRDUDE configuration file to a new file in the home directory of user. 
@@ -193,15 +193,15 @@ The pinout for this configuration can be found in the figure, which we will use 
     Once in the file, press CTRL\+\_, then CTRL\+V to navigate to the bottom of the file. There, paste the following block of code:
 
     \begin{lstlisting}[style=kaolstplain,linewidth=1.5\textwidth]
-        programmer
-            id = "gpio_icsp";
-            desc = "Use the Linux sysfs interface to bitbang GPIO lines for programming the Arduino;
-            type = "linuxgpio";
-            reset = 17;
-            sck = 11;
-            mosi = 10;
-            miso = 9;
-        ;
+    programmer
+        id = "gpio_icsp";
+        desc = "Use the Linux sysfs interface to bitbang GPIO lines for programming the Arduino;
+        type = "linuxgpio";
+        reset = 17;
+        sck = 11;
+        mosi = 10;
+        miso = 9;
+    ;
     \end{lstlisting}
 
     This creates an AVRDUDE programmer that uses the GPIO pins specified in Table \ref{tab:rpi_icsp_hookup} to program the Arduino over ICSP. Press CTRL+X then Y then ENTER to save and exit the file; the AVRDUDE programming tool is now configured.
@@ -233,7 +233,7 @@ The pinout for this configuration can be found in the figure, which we will use 
     In VS Code, open the ``arduino.json'' file in the /.vscode folder of your workspace. Add the following line to the bottom of the file:
 
     \begin{lstlisting}[style=kaolstplain,linewidth=1.5\textwidth]
-        "output": ".arduinobuild"
+    "output": ".arduinobuild"
     \end{lstlisting}
 
     This will create a new folder in the root directory of the workspace called ``.arduinobuild'' that will hold all of pre-compiled binaries for your Arduino sketch, logs, and other things that are not important right now.
@@ -249,7 +249,7 @@ The pinout for this configuration can be found in the figure, which we will use 
     Then, open a terminal on the Raspberry Pi and execute the following command:
     
     \begin{lstlisting}[style=kaolstplain,linewidth=1.5\textwidth]
-        sudo avrdude -p [Microcontroller] -C ~/avrdude_gpio.conf -c gpio_icsp -v
+    sudo avrdude -p [Microcontroller] -C ~/avrdude_gpio.conf -c gpio_icsp -v
     \end{lstlisting}
 
     Note: the \textbf{[Microcontroller]} in this command needs to be replaced with the name of the microcontroller in use (e.g. ``atmega328p'' for the Arduino Uno or ``atmega2560'' for the Arduino Mega).
@@ -261,46 +261,46 @@ The pinout for this configuration can be found in the figure, which we will use 
     Once you have established communications with the Arduino, execute:
 
     \begin{lstlisting}[style=kaolstplain,linewidth=1.5\textwidth]
-        sudo avrdude -p [Microcontroller] -C ~/avrdude_gpio.conf -c gpio_icsp -v -U flash:w:[filename]:i
+    sudo avrdude -p [Microcontroller] -C ~/avrdude_gpio.conf -c gpio_icsp -v -U flash:w:[filename]:i
     \end{lstlisting}
 
     Where again \textbf{[Microcontroller]} needs to be replaced with the name of the microcontroller and \textbf{[filename]} needs to be replaced with the path and name of the binary sketch file you copied to the Raspberry Pi.
     The end of a successful write should look something like this:
 
     \begin{lstlisting}[style=kaolstplain,linewidth=1.5\textwidth]
-        avrdude: AVR device initialized and ready to accept instructions
+    avrdude: AVR device initialized and ready to accept instructions
 
-        Reading | ################################################## | 100% 0.00s
+    Reading | ################################################## | 100% 0.00s
 
-        avrdude: Device signature = 0x1e9801 (probably m2560)
-        avrdude: safemode: lfuse reads as FF
-        avrdude: safemode: hfuse reads as D8
-        avrdude: safemode: efuse reads as FD
-        avrdude: NOTE: "flash" memory has been specified, an erase cycle will be performed
-                To disable this feature, specify the -D option.
-        avrdude: erasing chip
-        avrdude: reading input file "Blink_Hex.ino.mega.hex"
-        avrdude: writing flash (1462 bytes):
+    avrdude: Device signature = 0x1e9801 (probably m2560)
+    avrdude: safemode: lfuse reads as FF
+    avrdude: safemode: hfuse reads as D8
+    avrdude: safemode: efuse reads as FD
+    avrdude: NOTE: "flash" memory has been specified, an erase cycle will be performed
+            To disable this feature, specify the -D option.
+    avrdude: erasing chip
+    avrdude: reading input file "Blink_Hex.ino.mega.hex"
+    avrdude: writing flash (1462 bytes):
 
-        Writing | ################################################## | 100% 0.41s
+    Writing | ################################################## | 100% 0.41s
 
-        avrdude: 1462 bytes of flash written
-        avrdude: verifying flash memory against Blink_Hex.ino.mega.hex:
-        avrdude: load data flash data from input file Blink_Hex.ino.mega.hex:
-        avrdude: input file Blink_Hex.ino.mega.hex contains 1462 bytes
-        avrdude: reading on-chip flash data:
+    avrdude: 1462 bytes of flash written
+    avrdude: verifying flash memory against Blink_Hex.ino.mega.hex:
+    avrdude: load data flash data from input file Blink_Hex.ino.mega.hex:
+    avrdude: input file Blink_Hex.ino.mega.hex contains 1462 bytes
+    avrdude: reading on-chip flash data:
 
-        Reading | ################################################## | 100% 0.82s
+    Reading | ################################################## | 100% 0.82s
 
-        avrdude: verifying ...
-        avrdude: 1462 bytes of flash verified
+    avrdude: verifying ...
+    avrdude: 1462 bytes of flash verified
 
-        avrdude: safemode: lfuse reads as FF
-        avrdude: safemode: hfuse reads as D8
-        avrdude: safemode: efuse reads as FD
-        avrdude: safemode: Fuses OK (E:FD, H:D8, L:FF)
+    avrdude: safemode: lfuse reads as FF
+    avrdude: safemode: hfuse reads as D8
+    avrdude: safemode: efuse reads as FD
+    avrdude: safemode: Fuses OK (E:FD, H:D8, L:FF)
 
-        avrdude done.  Thank you.
+    avrdude done.  Thank you.
     \end{lstlisting}
 
     If there is an error (most commonly with a file name) it will likely occur after the first reading block. 
