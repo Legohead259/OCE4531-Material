@@ -56,39 +56,39 @@ If you want to try and get the extra credit points, please let the instructor kn
 \section*{Psuedocode}
 
 \begin{lstlisting}[linewidth=1.5\textwidth]
-    Program: RGB LED Cycler
+Program: RGB LED Cycler
 
-    Define an input button pin as some Arduino pin
-    Define the red LED pin as some Arduino pin
-    Define the green LED pin as some Arduino pin
-    Define the blue LED pin as some Arduino pin
-    Define the number of LED functions as the number of modes you want
+Define an input button pin as some Arduino pin
+Define the red LED pin as some Arduino pin
+Define the green LED pin as some Arduino pin
+Define the blue LED pin as some Arduino pin
+Define the number of LED functions as the number of modes you want
 
-    Initialize the current LED mode as 0
+Initialize the current LED mode as 0
 
-    Function: Setup
-        Initialize Serial communication for debugging
-        Initialize input pins
-        Initialize output pins
+Function: Setup
+    Initialize Serial communication for debugging
+    Initialize input pins
+    Initialize output pins
 
-    Function: Loop
-        Check for button pressed
-        If button is pressed then
-            If the current LED mode is the last LED mode
-                Reset the current LED mode to the first one
-            Else
-                Increment the LED mode by 1
-        Switch the current LED mode
-            Case the current LED mode is set to 0
-                Execute first LED function
-            Case the current LED mode is set to 1
-                Execute second LED function
-            Case the current LED mode is set to 2
-                Execute third LED function
-            ...
-    
-    Function: First LED Function
-        [YOUR CODE HERE]
-    ...
+Function: Loop
+    Check for button pressed
+    If button is pressed then
+        If the current LED mode is the last LED mode
+            Reset the current LED mode to the first one
+        Else
+            Increment the LED mode by 1
+    Switch the current LED mode
+        Case the current LED mode is set to 0
+            Execute first LED function
+        Case the current LED mode is set to 1
+            Execute second LED function
+        Case the current LED mode is set to 2
+            Execute third LED function
+        ...
+
+Function: First LED Function
+    [YOUR CODE HERE]
+...
 
 \end{lstlisting}

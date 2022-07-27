@@ -64,10 +64,10 @@ You will be graded on the following criteria:
         Efficacy & 50 \\
         Well organized and neat schematic & 20 \\
         Well organized and neat source code & 30 \\
-        Extra Credit Challenge 0 \footnotemark & 25 \\
-        Extra Credit Challenge 1 & 25 \\
+        Extra Credit Challenge 1 \footnotemark & 25 \\
         Extra Credit Challenge 2 & 25 \\
         Extra Credit Challenge 3 & 25 \\
+        Extra Credit Challenge 4 & 25 \\
 
         \bottomrule
     \end{tabular}
@@ -84,35 +84,82 @@ In your submission, please include a note of which challenges you have completed
 You will also need to include source code highlighting the specific challenge sections.
 \emph{If it is not clear where your challenge-specific code is, it may not be counted.}
 
-    \subsection*{Challenge 0: Velocity, and Position}
+    \subsection*{Challenge 1: Sensor Fusion - Attitude and Heading Reference System}
     \marginnote{\textbf{Note:} This challenge is \emph{mandatory} for graduate students.}
-    In this challenge, you are tasked with integrating the velocity, and position values from the accelerometer and gyroscope data.
-    You must store these values in your telemetry packet and display them on separate pages on your LCD module.
-    The button used to change display pages will also act as a position reset button when held for a certain amount of time.
-    If you combine the previous challenges together, you should be able to get pretty accurate readings based on how you move your board.
+    In this challenge, you are tasked with combining the accelerometer and gyroscope readings from the MPU6050 into a unified AHRS.
+    There are a multitude of different ways to accomplish this task, but at the end, you should be able to store the values into a telemetry packet and display them on separate pages on your LCD module.
+    You will be required to capture and store:
 
-    \textbf{FOR CREDIT:} In your submission video, find a ruler and place your board next to it with one of the acclerometer axes parallel to the straight edge, and the accelerometer chip centered on the ruler's 0 mark.
-    Change the LCD to the position display page and reset the position.
-    Push the board 6-10 inches along the ruler and stop, showing the position of the board and the reading it captured.
-    \textit{Make sure you are constantly accelerating it for the best results!}
+    \begin{itemize}
+        \item Acceleration (X, Y, Z)
+        \item Gyroscope (X, Y, Z)
+        \item Orientation (Roll, Pitch, Yaw [heading])
+        \item Velocity (X, Y, Z)
+        \item Displacement (X, Y, Z)
+    \end{itemize}
 
-    \subsection*{Challenge 1: Filtering}
-    Depending on what you set the update rate of the MPU6050 sensor, there may be a substantial amount of high frequency noise in your readings.
-    There are a multitude of ways of dealing with this noise.
-    For this challenge, implement a Butterworth filter on the Arduino to act as a low-pass digital filter for your data. 
-    You need to tune your Butterworth filter to significantly attenuate noisy movements in your data, without \textit{significantly} attenuating the good data signal.
-    \marginnote{\emph{Hint:} You can view this \href{https://tttapa.github.io/Arduino-Filters/Doxygen/index.html}{link} for more information on getting started.}
+    The button used to change the display page will also act as a position and velocity reset when held for a certain amount of time.
+    Keep in mind, that the coming challenges will build upon this one, so make sure you build and format your code such that new blocks can be easily added!
+
+    \textbf{FOR CREDIT:} in your submission video scroll through the different pages of the LCD module and show that you are, in fact, capturing the appropriate data.
+    When you reach the position page, reset the position values back to 0 after a couple of seconds.
+
+    \subsection*{Challenge 2: Kalman Filtering}
+    \marginnote{For information, consult the lecture notes Chapter \ref{ch:data_processing}, Section \ref{sec:kalman_filter}, 
+    \href{http://blog.tkjelectronics.dk/2012/09/a-practical-approach-to-kalman-filter-and-how-to-implement-it/}{TJKElectronics' excellent brief}, 
+    \href{https://github.com/TKJElectronics/Example-Sketch-for-IMU-including-Kalman-filter/tree/master/IMU}{TJKElectronics' example code}, and 
+    \href{https://www.kalmanfilter.net/default.aspx}{This excellent tutorial} (focus on the 1-dimensional application for now).}
+
+    In this section we are going to expand upon the AHRS challenge and try to clean up the data by using a Kalman filter to improve the estimations of the "real" orientation.
+    You will construct three 1-dimensional Kalman filters that will predict the board's current orientation in Euler angles.
+    Again, the telemetry packet will be updated with these values and displayed on the LCD module.
+
+    \textbf{FOR CREDIT:} you must submit a capture of a plot created from your data that shows either roll, pitch, yaw values.
+    One line must be the method you used previously, and one line must be the Kalman-filtered estimate.
+    Quickly discuss the results in you submission.
+
+    \subsection*{Challenge 3: Removing Gravity}
+    For this challenge, we will convert the acceleration signals into linear acceleration, put that information into the telemetry packet, and display it on a separate page of the LCD module.
+    For this challenge, it is strongly recommended to use a quaternion rotation as this method is immune to \href{https://www.youtube.com/watch?v=zc8b2Jo7mno}{gimbal lock} - a phenomenon where rotations require additional euler transformations at certain points.
+
+    To assist you, the code to convert from Euler angles to Quaternion is below:
+    \begin{lstlisting}[linewidth=1.5\textwidth, language=C++]
+struct Quaternion
+{
+    double w, x, y, z;
+};
+
+Quaternion ToQuaternion(double yaw, double pitch, double roll) // yaw (Z), pitch (Y), roll (X)
+{
+    // Abbreviations for the various angular functions
+    double cy = cos(yaw * 0.5);
+    double sy = sin(yaw * 0.5);
+    double cp = cos(pitch * 0.5);
+    double sp = sin(pitch * 0.5);
+    double cr = cos(roll * 0.5);
+    double sr = sin(roll * 0.5);
+
+    Quaternion q;
+    q.w = cr * cp * cy + sr * sp * sy;
+    q.x = sr * cp * cy - cr * sp * sy;
+    q.y = cr * sp * cy + sr * cp * sy;
+    q.z = cr * cp * sy - sr * sp * cy;
+
+    return q;
+}
+    \end{lstlisting}
+
+    From there, you will define a Quaternion vector for gravity defined in the North, East, Down (NED) reference frame.
+    \marginnote{\emph{Hint:} it's just a normal gravitational acceleration vector with another term for the 'w' component of the Quaternion.}
+    Then, you will rotate the gravity quaternion from the NED reference frame to the body reference frame using:
     
-    \textbf{FOR CREDIT:} Show two plots using the Arduino Serial plotter: one should show the unfiltered signal, the other should show the \textit{filtered} signal. 
-    Only one axis should be shown.
+    \begin{equation*}
+        Q_{g,b} = Q_b^{-1} * Q_{g,NED} * Q_b
+    \end{equation*}
 
-    \subsection*{Challenge 2: Removing Gravity}
-    This challenge will involve understanding some of the higher order concepts of inertial measurements and motion.
-    Your task will be to record the linear acceleration of the sensor, i.e. acceleration \textit{without} gravity measured.
+    Finally, subtract the X,Y,Z components of the rotated Quaternion vector for gravity from the recorded body accelerations and you will have linear acceleration! \emph{Easy right!?}
     
-
-    \textbf{FOR CREDIT:} Show two plots using the Arduino Serial plotter of the board's Z-axis reading. 
-    One plot should be the raw or filtered accelerations, the other should be the linear acceleration. 
+    As always, display these values on a new page of the LCD module!
     
     \subsection*{Challenge 4: MPU6050 Motion Detect Interrupt}
     The interrupt pin on the MPU6050 can be configured to serve as a motion detection trigger.
