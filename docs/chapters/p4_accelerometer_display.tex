@@ -100,19 +100,28 @@ You will also need to include source code highlighting the specific challenge se
     \end{itemize}
 
     The button used to change the display page will also act as a position and velocity reset when held for a certain amount of time.
-    Keep in mind, that the coming challenges will build upon this one, so make sure you build and format your code such that new blocks can be easily added!
 
     \textbf{FOR CREDIT:} in your submission video scroll through the different pages of the LCD module and show that you are, in fact, capturing the appropriate data.
     When you reach the position page, reset the position values back to 0 after a couple of seconds.
 
-    \subsection*{Challenge 2: Kalman Filtering}
+    \subsection*{Challenge 2: AHRS Filtering}
     \marginnote{For information, consult the lecture notes Chapter \ref{ch:data_processing}, Section \ref{sec:kalman_filter}, 
     \href{http://blog.tkjelectronics.dk/2012/09/a-practical-approach-to-kalman-filter-and-how-to-implement-it/}{TJKElectronics' excellent brief}, 
     \href{https://github.com/TKJElectronics/Example-Sketch-for-IMU-including-Kalman-filter/tree/master/IMU}{TJKElectronics' example code}, and 
     \href{https://www.kalmanfilter.net/default.aspx}{This excellent tutorial} (focus on the 1-dimensional application for now).}
 
-    In this section we are going to expand upon the AHRS challenge and try to clean up the data by using a Kalman filter to improve the estimations of the "real" orientation.
-    You will construct three 1-dimensional Kalman filters that will predict the board's current orientation in Euler angles.
+    You should have noticed from the AHRS challenge that the velocity, displacement, and orientation values are extremely inaccurate and drift significantly over time.
+    This is due to the inherent inaccuracies and drift built into the accelerometer and gyroscope readings.
+    In that challenge, you were working directly with the raw values without filtering them out.
+    These values accumulate over time, causing the massive divergence.
+
+    Therefore, to combat these inaccuracies, we will implement some filters to increase the estimation accuracy.
+    First, you will implement a Mahony filter to convert the IMU readings to orientation values.
+    Do not worry, you will not need to research the theory or algorithm behind this filter, there is a \href{https://github.com/PaulStoffregen/MahonyAHRS}{handy library} that is easy to use and has some example code.
+    
+    Second, you will use a Kalman filter to estimate the velocity and displacement values.
+    Realistically, this would be done with complex matrix math and with a single 9-dimensional Kalman filter object, but for sake of ease, we will just use six 1-dimensional Kalman filters; three for velocity X/Y/Z, and three for displacement X/Y/Z.
+
     Again, the telemetry packet will be updated with these values and displayed on the LCD module.
 
     \textbf{FOR CREDIT:} you must submit a capture of a plot created from your data that shows either roll, pitch, yaw values.

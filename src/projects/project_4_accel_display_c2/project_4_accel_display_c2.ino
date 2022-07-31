@@ -291,69 +291,11 @@ void loop() {
 
 
 void updateVelocity(sensors_event_t& a) {
-    // Get previous time, acceleration, and speed values
-    long _oldTimestamp = data.timestamp;
-    float _oldAccels[3] = {data.accelX, data.accelY, data.accelZ};
-    float _oldSpeeds[3] = {data.speedX, data.speedY, data.speedZ};
 
-        // Update telemetry package
-    data.accelX = a.acceleration.x;
-    data.accelY = a.acceleration.y;
-    data.accelZ = a.acceleration.z;
-    data.timestamp = millis();
-
-    float _newAccels[3] = {data.accelX, data.accelY, data.accelZ};
-    long dt = millis() - _oldTimestamp;
-    float _newSpeeds[3];
-
-    for (int i=0; i<3; i++) { // For every axis (0=X, 1=Y, 2=Z)
-        float _avgAccel = (_oldAccels[i] + _newAccels[i]) / 2.0;            
-        _newSpeeds[i] = _oldSpeeds[i] + _avgAccel*dt; // Calculate the new speeds
-
-        // Serial.print(_avgAccel); Serial.print(", "); // DEBUG
-        Serial.print(_oldSpeeds[i]); Serial.print(", "); // DEBUG
-        // Serial.print(_newSpeeds[i], 1); Serial.print(", "); // DEBUG
-    }
-    Serial.println(); // DEBUG
-
-    data.speedX = _newSpeeds[0];
-    data.speedY = _newSpeeds[1];
-    data.speedZ = _newSpeeds[2];
 }
 
 void updateDisplacement(sensors_event_t& a) {
-    // Get previous time, acceleration, and speed values
-    long _oldTimestamp = data.timestamp;
-    float _oldAccels[3] = {data.accelX, data.accelY, data.accelZ};
-    float _oldSpeeds[3] = {data.speedX, data.speedY, data.speedZ};
-    float _oldDisps[3] = {data.dispX, data.dispY, data.dispZ};
 
-    // Update telemetry package
-    data.accelX = a.acceleration.x;
-    data.accelY = a.acceleration.y;
-    data.accelZ = a.acceleration.z;
-    data.timestamp = millis();
-
-    float _newAccels[3] = {data.accelX, data.accelY, data.accelZ};
-    long dt = millis() - _oldTimestamp;
-    float _newSpeeds[3];
-    float _newDisps[3];
-
-    for (int i=0; i<3; i++) { // For every axis (0=X, 1=Y, 2=Z)
-        float _avgAccel = (_oldAccels[i] + _newAccels[i]) / 2.0;            
-        _newSpeeds[i] = _oldSpeeds[i] + _avgAccel*dt; // Calculate the new speeds
-        float _avgSpeed = (_oldSpeeds[i] + _newSpeeds[i]) / 2.0;
-        _newDisps[i] = _oldDisps[i] + _avgSpeed*dt + _avgAccel*dt*dt; // Calculate the new displacements
-
-        // Serial.print(_avgAccel); Serial.print(", "); // DEBUG
-        // Serial.print(_oldSpeeds[i]); Serial.print(", "); // DEBUG
-        // Serial.print(_newSpeeds[i], 1); Serial.print(", "); // DEBUG
-    }
-    Serial.println(); // DEBUG
-
-    data.dispX = _newDisps[0];
-    data.dispY = _newDisps[1];
-    data.dispZ = _newDisps[2];
 }
 
 
