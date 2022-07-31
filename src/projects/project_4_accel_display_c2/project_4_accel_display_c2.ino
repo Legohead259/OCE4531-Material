@@ -26,6 +26,26 @@ LiquidCrystal lcd(7, 8, 9, 10, 11, 12); // RS, En, D4, D5, D6, D7
 #include <math.h>
 
 Adafruit_MPU6050 mpu;
+sensors_event_t a, g, temp;
+
+// Kalman filter instantiation
+#include <Kalman.h>
+
+#define N_state 9 // Number of states - Position (XYZ), Speed (XYZ), Acceleration (XYZ)
+#define N_obs 3 // Number of observation - Acceleration (XYZ)
+#define r_a 5.0 // Acceleration measurement noise
+#define q_p 0.1 // Process error - position
+#define q_s 0.1 // Process error - speed
+#define q_a 0.5 // Process error - acceleration
+
+BLA::Matrix<N_obs> obs; // Observation vector
+KALMAN<N_state, N_obs> K; // Kalman filter object
+unsigned long currMillis;
+float dt;
+
+// Mahony Filter Instantiation
+#include <MahonyAHRS.h>
+Mahony M; // Mahony filter
 
 // General instantiations
 #define PAGE_CHANGE_BUTTON_PIN 2
@@ -42,7 +62,7 @@ uint8_t curPageNum = 0; // 0: acceleration, 1: gyroscope, 2: orientation
 bool isPageChanged = false;
 bool isResetTriggered = true;
 
-struct Telemetry {
+struct telemetry_t {
     long timestamp = 0;
     float accelX = 0;
     float accelY = 0;
@@ -144,13 +164,120 @@ void setup() {
         break;
     }
 
+    // time evolution matrix (whatever... it will be updated inloop)
+    //       P  | S  | A  | P  | S  | A  | P  | S  | A
+    K.F = { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, // X
+            0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, // Y
+            0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, // Z
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
+
+    // measurement matrix (position, velocity, acceleration)
+    K.H = { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,    // X
+            0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,    // Y
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 };  // Z
+    
+    // measurement covariance matrix
+    K.R = { r_a*r_a,  0.0,      0.0,
+            0.0,      r_a*r_a,  0.0,
+            0.0,      0.0,      r_a*r_a };
+    
+    // model covariance matrix
+    K.Q = { q_p*q_p, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, // X
+            0.0, q_s*q_s, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, q_a*q_a, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, q_p*q_p, 0.0, 0.0, 0.0, 0.0, 0.0, // Y
+            0.0, 0.0, 0.0, 0.0, q_s*q_s, 0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 0.0, 0.0, q_a*q_a, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, q_p*q_p, 0.0, 0.0, // Z
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, q_s*q_s, 0.0,
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, q_a*q_a };
+    
+    currMillis = millis();
+
     Serial.println();
     delay(100);
 }
 
 void loop() {
-    sensors_event_t a, g, temp;
+    // Compute time difference since last cycle
+    dt = (millis() - currMillis)/1000.0;
+    currMillis = millis();
+
+    // =========================
+    // === RUN KALMAN FILTER ===
+    // =========================
+
+    // Update state equation
+    // Here we make use of the Taylor expansion on the (position,speed,acceleration)
+    // position_{k+1}     = position_{k} + dt*speed_{k} + (dt*dt/2)*acceleration_{k}
+    // speed_{k+1}        = speed_{k} + dt*acceleration_{k}
+    // acceleration_{k+1} = acceleration_{k}
+    K.F = { 1.0, dt,  dt*dt/2,  0.0, 0.0, 0.0,      0.0, 0.0, 0.0,
+            0.0, 1.0, dt,       0.0, 0.0, 0.0,      0.0, 0.0, 0.0,
+            0.0, 0.0, 1.0,      0.0, 0.0, 0.0,      0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0,      1.0, dt,  dt*dt/2,  0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0,      0.0, 1.0, dt,       0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0,      0.0, 0.0, 1.0,      0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0,      0.0, 0.0, 0.0,      1.0, dt,  dt*dt*2,
+            0.0, 0.0, 0.0,      0.0, 0.0, 0.0,      0.0, 1.0, dt,
+            0.0, 0.0, 0.0,      0.0, 0.0, 0.0,      0.0, 0.0, 1.0};
+
+    // Poll IMU to get measurements
     mpu.getEvent(&a, &g, &temp);
+    BLA::Matrix<N_obs> meas;
+    meas(0) = a.acceleration.x;
+    meas(1) = a.acceleration.y;
+    meas(2) = a.acceleration.z;
+    obs = meas;
+    
+    // Update Kalman filter
+    K.update(obs);
+
+    // --- UPDATE TELEMETRY PACKET ---
+
+    // Displacement
+    data.dispX = K.x(0);
+    data.dispY = K.x(3);
+    data.dispZ = K.x(6);
+
+    // Velocity
+    data.speedX = K.x(1);
+    data.speedY = K.x(4);
+    data.speedZ = K.x(7);
+
+    // Acceleration
+    data.accelX = K.x(2);
+    data.accelY = K.x(5);
+    data.accelZ = K.x(8);
+
+    // ==========================
+    // === RUN MAHONY AHRS FILTER
+    // ==========================
+
+    // Update Mahony filter
+    M.updateIMU(g.gyro.x, g.gyro.y, g.gyro.z,
+                data.accelX, data.accelY, data.accelZ);
+
+    // --- UPDATE TELEMETRY PACKET ---
+
+    // Gyroscope
+    data.gyroX = g.gyro.x;
+    data.gyroX = g.gyro.x;
+    data.gyroX = g.gyro.x;
+
+    // Orientation
+    data.roll = M.getRoll();
+    data.pitch = M.getPitch();
+    data.yaw = M.getYaw();
+
+    // =========================
+    // === UPDATE LCD MODULE ===
+    // =========================
 
     // Wipe LCD screen on mode change
     if (isPageChanged) { // Check the page changed flag
@@ -163,13 +290,6 @@ void loop() {
 
     switch (curPageNum) {
         case 0: // Acceleration page
-            // Update telemetry package
-            data.timestamp = millis();
-            data.accelX = a.acceleration.x;
-            data.accelY = a.acceleration.y;
-            data.accelZ = a.acceleration.z;
-
-            // Update LCD display
             lcd.setCursor(0,0); // Set cursor to top row
             lcd.print("Ax   Ay   Az  g"); // Write headers
             lcd.setCursor(0,1); // Set cursor to bottom row
@@ -180,9 +300,6 @@ void loop() {
             break;
         
         case 1: // Velocity page
-            updateVelocity(a);
-
-            // Update LCD display
             lcd.setCursor(0,0); // Set cursor to top row
             lcd.print("Ux   Uy   Uz m/s"); // Write headers
             lcd.setCursor(0,1); // Set cursor to bottom row
@@ -193,9 +310,6 @@ void loop() {
             break;
 
         case 2: // Displacement page
-            updateDisplacement(a);
-
-            // Update LCD display
             lcd.setCursor(0,0); // Set cursor to top row
             lcd.print("Sx   Sy   Sz  m"); // Write headers
             lcd.setCursor(0,1); // Set cursor to bottom row
@@ -206,13 +320,6 @@ void loop() {
             break;
         
         case 3: // Gyroscope page
-            // Update telemetry package
-            data.timestamp = millis();
-            data.gyroX = g.gyro.x;
-            data.gyroY = g.gyro.y;
-            data.gyroZ = g.gyro.z;
-
-            // Update LCD display
             lcd.setCursor(0,0); // Set cursor to top row
             lcd.print("Gx   Gy   Gz r/s"); // Write headers
             lcd.setCursor(0,1); // Set cursor to bottom row
