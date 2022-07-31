@@ -24,6 +24,7 @@ LiquidCrystal lcd(7, 8, 9, 10, 11, 12); // RS, En, D4, D5, D6, D7
 #include <Adafruit_Sensor.h>
 #include "Wire.h"
 #include <math.h>
+#include "util/quaternion.h"
 
 Adafruit_MPU6050 mpu;
 sensors_event_t a, g, temp;
@@ -53,7 +54,7 @@ Mahony M; // Mahony filter
 #define RESET_HOLD_TIME 500 // ms
 #define BUZZER_ACTIVE_PIN 6
 #define BUZZER_ACTIVE_TIME 250 // ms
-#define MAX_NUM_PAGES 5
+#define MAX_NUM_PAGES 6 // Acceleration, Lin. Accel., Speed, Displacement, Gyro, Orientation
 
 bool isBuzzerActive = false;
 long buzzerStartTime = 0;
@@ -81,7 +82,13 @@ struct telemetry_t {
     float dispX = 0;
     float dispY = 0;
     float dispZ = 0;
+
+    float linAccelX = 0;
+    float linAccelY = 0;
+    float linAccelZ = 0;
 } data;
+
+
 
 void setup() {
     Serial.begin(115200);
@@ -204,9 +211,48 @@ void setup() {
 }
 
 void loop() {
+    // Poll IMU
+    mpu.getEvent(&a, &g, &temp);
+
     // Compute time difference since last cycle
     dt = (millis() - currMillis)/1000.0;
     currMillis = millis();
+
+    // ==========================
+    // === RUN MAHONY AHRS FILTER
+    // ==========================
+
+    // Update Mahony filter
+    M.updateIMU(g.gyro.x, g.gyro.y, g.gyro.z,
+                data.accelX, data.accelY, data.accelZ);
+
+    // --- UPDATE TELEMETRY PACKET ---
+
+    // Gyroscope
+    data.gyroX = g.gyro.x;
+    data.gyroY = g.gyro.y;
+    data.gyroZ = g.gyro.z;
+
+    // Orientation
+    data.roll = M.getRoll();
+    data.pitch = M.getPitch();
+    data.yaw = M.getYaw();
+
+    // =====================================
+    // === CALCULATE LINEAR ACCELERATION ===
+    // =====================================
+
+    sensors_vec_t linAccel;
+    imu::Vector<3> gravNED = {0, 0, 9.81}; // Gravitational acceleration in NED
+
+    imu::Quaternion Qb;
+    Qb.fromEuler(data.roll, data.pitch, data.yaw);
+    imu::Quaternion Qg = Qb.invert() imu::Quaternion(0, gravNED) * Qb; // Rotate gravity from NED reference frame to body
+
+    // --- UPDATE TELEMETRY PACKET ---
+    data.linAccelX = a.acceleration.x - Qg.x();
+    data.linAccelY = a.acceleration.y - Qg.y();
+    data.linAccelZ = a.acceleration.z - Qg.z();
 
     // =========================
     // === RUN KALMAN FILTER ===
@@ -227,12 +273,11 @@ void loop() {
             0.0, 0.0, 0.0,      0.0, 0.0, 0.0,      0.0, 1.0, dt,
             0.0, 0.0, 0.0,      0.0, 0.0, 0.0,      0.0, 0.0, 1.0};
 
-    // Poll IMU to get measurements
-    mpu.getEvent(&a, &g, &temp);
+    // Use linear acceleration for better accuracy
     BLA::Matrix<N_obs> meas;
-    meas(0) = a.acceleration.x;
-    meas(1) = a.acceleration.y;
-    meas(2) = a.acceleration.z;
+    meas(0) = data.linAccelX;
+    meas(1) = data.linAccelY;
+    meas(2) = data.linAccelZ;
     obs = meas;
     
     // Update Kalman filter
@@ -254,26 +299,6 @@ void loop() {
     data.accelX = K.x(2);
     data.accelY = K.x(5);
     data.accelZ = K.x(8);
-
-    // ==========================
-    // === RUN MAHONY AHRS FILTER
-    // ==========================
-
-    // Update Mahony filter
-    M.updateIMU(g.gyro.x, g.gyro.y, g.gyro.z,
-                data.accelX, data.accelY, data.accelZ);
-
-    // --- UPDATE TELEMETRY PACKET ---
-
-    // Gyroscope
-    data.gyroX = g.gyro.x;
-    data.gyroY = g.gyro.y;
-    data.gyroZ = g.gyro.z;
-
-    // Orientation
-    data.roll = M.getRoll();
-    data.pitch = M.getPitch();
-    data.yaw = M.getYaw();
 
     // =========================
     // === UPDATE LCD MODULE ===
@@ -298,8 +323,18 @@ void loop() {
             lcd.print(data.accelZ/9.81, 1); data.accelZ > 0 ? lcd.print("  ") : lcd.print(" ");
 
             break;
+
+        case 1: // Linear Acceleration page
+            lcd.setCursor(0,0); // Set cursor to top row
+            lcd.print("Ax   Ay   Az  g"); // Write headers
+            lcd.setCursor(0,1); // Set cursor to bottom row
+            lcd.print(data.linAccelX, 1); data.accelX > 0 ? lcd.print("  ") : lcd.print(" ");
+            lcd.print(data.linAccelY, 1); data.linAccelY > 0 ? lcd.print("  ") : lcd.print(" ");
+            lcd.print(data.linAccelZ, 1); data.linAccelZ > 0 ? lcd.print("  ") : lcd.print(" ");
+
+            break;
         
-        case 1: // Velocity page
+        case 2: // Velocity page
             lcd.setCursor(0,0); // Set cursor to top row
             lcd.print("Ux   Uy   Uz m/s"); // Write headers
             lcd.setCursor(0,1); // Set cursor to bottom row
@@ -309,7 +344,7 @@ void loop() {
 
             break;
 
-        case 2: // Displacement page
+        case 3: // Displacement page
             lcd.setCursor(0,0); // Set cursor to top row
             lcd.print("Sx   Sy   Sz  m"); // Write headers
             lcd.setCursor(0,1); // Set cursor to bottom row
@@ -319,7 +354,7 @@ void loop() {
 
             break;
         
-        case 3: // Gyroscope page
+        case 4: // Gyroscope page
             lcd.setCursor(0,0); // Set cursor to top row
             lcd.print("Gx   Gy   Gz r/s"); // Write headers
             lcd.setCursor(0,1); // Set cursor to bottom row
@@ -329,7 +364,7 @@ void loop() {
 
             break;
 
-        case 4: // Orientation page
+        case 5: // Orientation page
             lcd.setCursor(0,0); // Set cursor to top row
             lcd.print("R    P    Y deg"); // Write headers, 0xDF is the code for °
             lcd.setCursor(0,1); // Set cursor to bottom row
