@@ -9,7 +9,7 @@
  * 
  * @author Braidan Duffy
  * 
- * @date May 30, 2022
+ * @date July 31, 2022
  * 
  * @version v1.0
  */
@@ -389,20 +389,6 @@ void loop() {
     }
 
     delay(100);
-}
-
-
-// ========================
-// === UPDATE FUNCTIONS ===
-// ========================
-
-
-void updateVelocity(sensors_event_t& a) {
-
-}
-
-void updateDisplacement(sensors_event_t& a) {
-
 }
 
 
