@@ -128,6 +128,21 @@
  - [ ] Layers
  - [ ] Submodules
  - [ ] Electronics Rule Check (ERC)
+
+### Component Libraries
+- [ ] Component Selection
+- [ ] Aside: Component searching and filtering in catalog websites like DigiKey
+- [ ] Locating a Library Source
+- [ ] Installation in Fusion360
+
+- [ ] Creating A Custom Library
+     - [ ] Guided example with the Xsens MTi-3 AHRS
+     - [ ] Component Selection and Datasheet
+         - [ ] Creating a Library
+         - [ ] Creating a Symbol
+     - [ ] Creating a Footprint
+     - [ ] Creating a 3D Package
+         - [ ] Aside: Find user-generated 3D models on sites like GrabCAD
 ---
 ## Printed Circuit Boards
 ### PCB Basics
@@ -142,20 +157,8 @@
  - [ ] Vias
      - [ ] Silkscreen
  - [ ] Generating Copper Planes
-     - [ ] Design Rules Check (DRC)
- - [ ] Download Component Library
-	 - [ ] Component Selection
-		 - [ ] Aside: Component searching and filtering in catalog websites like DigiKey
-	 - [ ] Locating a Library Source
-	 - [ ] Installation in Fusion360
-### Creating A Custom Library
- - [ ] Guided example with the Xsense MTi-300 AHRS
- - [ ] Component Selection and Datasheet
-     - [ ] Creating a Library
-     - [ ] Creating a Symbol
- - [ ] Creating a Footprint
- - [ ] Creating a 3D Package
-     - [ ] Aside: Find user-generated 3D models on sites like GrabCAD
+ - [ ] Design Rules Check (DRC)
+
 ### Guided Example: Thetis Instrumentation Package
  - [ ] Generating requirements
  - [ ] Making schematic
@@ -244,9 +247,9 @@
  - [X] Homework 3: 4-Digit 7-Segment Display Counter
  - [ ] Homework 4: Accelerometer and LCD
 	
- - [ ] Project: Undergraduate Project Overview and Requirements
+ - [X] Project: Undergraduate Project Overview and Requirements
  - [ ] Project: Graduate Project Overview and Requirements
 	
- - [ ] Supplement: Using a Raspberry Pi to Program Arduino Over ICSP
+ - [X] Supplement: Using a Raspberry Pi to Program Arduino Over ICSP
 ---
 ## Bibliography
