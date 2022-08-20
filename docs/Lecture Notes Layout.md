@@ -37,18 +37,18 @@
  - [X] What is Binary?
      - [X] Example 1.1 Arduino Blink
  - [X] Binary Arithmetic
- - [X] Binary Conversions
-     - [X] Octal
-     - [X] Hexadecimal
+ - [ ] Binary Conversions
+     - [ ] Octal
+     - [ ] Hexadecimal
 ### Introduction to Logic Gates
  - [X] Truth Tables
  - [X] Basic Logical Operations
      - [X] Example: Basic Gates 1
      - [X] Example: Basic Gates 2
+     - [X] Exercise: Arduino and Logic Gates
  - [X] Combination Logical Operations
  - [X] Advanced Logical Operations
      - [X] Example: Advanced Gates
-     - [ ] Exercise: Arduino and Logic Gates
 ### Boolean Algebra
  - [X] Logical Optimization
      - [X] Karnaugh maps
