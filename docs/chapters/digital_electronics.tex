@@ -58,6 +58,29 @@ The MSB, on the other hand, can change the value by upto an infinite value, depe
     \caption[Byte Breakdown]{Breakdown of a byte from the largest unit, to the smallest, with indexing.}
 \end{figure*}
 
+% \pagelayout{wide} % Remove margins
+
+\begin{example}
+    Let's take a look at a practical demonstration of binary using your Arduino kit.
+    You will need:
+    \begin{itemize}
+        \item 1 x Red LED
+        \item 1 x button
+        \item 1 x 220 $\Omega$ resistor
+        \item 2 x Male-to-Male jumper wires
+    \end{itemize}
+
+    Wire these components to a breadboard like so:
+    % \begin{figure}
+        
+    % \end{figure}
+
+    The dfault state for this system should be active high, meaning the LED will be off when the button is not pressed - a logical 0.
+    When you press the button, you push the system to the high state and turn on the LED - a logical 1!
+\end{example}
+
+% \pagelayout{margin} % Restore margins
+
     \subsection{Binary Arithmetic}
     Much like our beloved arabic numerals, binary numbers can be added, subtracted, multiplied, and divided.
 
@@ -416,9 +439,55 @@ This allows you to "construct" logical equations with visual representations or 
         \begin{center}
             \includegraphics[height=2.5in]{digital_logic/BasicGatesEx2.png}
         \end{center}
-
-        % \todo{Insert Arduino example!}
     \end{example}
+
+    \pagebreak
+
+    \subsubsection*{Arduino Example: Basic Logic Gates}
+        Let's practically demonstrate the circuit found in Example \ref{ex:basic-logic-gates-2} using your Arduino Kit!
+        
+        You will need:
+        \begin{itemize}
+            \item 4 Buttons
+            \item 10 Male-to-Male jumper wires
+            \item 1 220-$\Omega$ resistor
+            \item 1 Red LED
+        \end{itemize}
+
+        Connect these components together in the following circuit:
+        \begin{center}
+            \includegraphics[]{examples/logic_gates_2_sch.png}
+        \end{center}
+
+        Then, we will use the following code to turn on or off the LED according to our button inputs.
+
+        \lstinputlisting[language=C++, firstline=13]{../../src/examples/222-basic_logic_gates_2/222-basic_logic_gates_2.ino}
+
+        Let's break down this code to understand what is occurring.
+        First, we define the input pins for our four input buttons: A, B, C, and D.
+        The C++ pre-processor command \lstinline[language=C++]{#define} essentially substitutes all calls of the variable name with the value we define in the second parameter.
+        Ergo, whenever we have \lstinline[language=C++]{A} passed as a variable, the code will automatically substitute it with the value 2.
+        We also create an array of all these pin numbers so we can more easily initialize them later.
+
+        \lstinputlisting[language=C++, linerange={13-20}]{../../src/examples/222-basic_logic_gates_2/222-basic_logic_gates_2.ino}
+
+        Then, we can define \lstinline[language=C++]{setup()} which is the first function the Arduino will call when it boots up.
+        Any code that needs to be initialized first needs to be included within this function!
+        Here, we have a simple for-loop that iterates through the pin array we defined earlier to initialize them all as \lstinline[language=C++]{INPUT_PULLUP}.
+        This particular mode means the Arduino is able to take digital input signals on this pins and pull up these inputs to 5V using internal resistors.
+        When we press a button, the pins are pulled low, giving a clear distinction between not pressed and pressed.
+        We also set the builtin LED pin to an output so we can turn it on or off.
+
+        \lstinputlisting[language=C++, linerange={22-28}]{../../src/examples/222-basic_logic_gates_2/222-basic_logic_gates_2.ino}
+
+        This finally brings us to \lstinline[language=C++]{loop()} where we implement the actual digital logic.
+        We first encounter the if-statement that is our logical expression for this example.
+        It is important to note that here, \lstinline[language=C++]{&} is the bitwise AND operator, \lstinline[language=C++]{|} is the bitwise OR operator, and the \lstinline[language=C++]{!} is the bang or bitwise INVERT operator.
+        Since this circuit is an active-low configuration, we must invert the readings from the input pins hence \lstinline[language=C++]{!digitalRead(A)}.
+        If our logical expression is found to be true, we turn the LED on; otherwise, we turn it off using \lstinline[language=C++]{digitalWrite(LED_BUILTIN, HIGH/LOW)}.
+        We then implement a delay of 125 milliseconds which is useful for debouncing the button inputs.
+
+        \lstinputlisting[language=C++, linerange={30-36}]{../../src/examples/222-basic_logic_gates_2/222-basic_logic_gates_2.ino}
 
     \pagelayout{margin} % Restore margins
 
@@ -683,78 +752,78 @@ Using these basic definitions, we can define all of the logic gates described ab
         Q = AB + \overline{BD}
     \end{equation*}
 
-\pagelayout{wide} % Remove margins
+    \pagelayout{wide} % Remove margins
 
-\begin{example}[Applied Logic Gate Simplification] \label{ex:advanced-logic-gates}
-    For this example, we will be combining everything we have learned through this section into a single problem.
-    We will start with the logic gate diagram shown below:
-    
-    \begin{center}
-        \includegraphics[height=2.5in]{digital_logic/AdvancedGatesEx.png}
-    \end{center}
+    \begin{example}[Applied Logic Gate Simplification] \label{ex:advanced-logic-gates}
+        For this example, we will be combining everything we have learned through this section into a single problem.
+        We will start with the logic gate diagram shown below:
+        
+        \begin{center}
+            \includegraphics[height=2.5in]{digital_logic/AdvancedGatesEx.png}
+        \end{center}
 
-    We can represent these gates with the expression:
+        We can represent these gates with the expression:
 
-    \begin{equation*}
-        Q = (A+B)C \oplus \overline{D}
-    \end{equation*}
+        \begin{equation*}
+            Q = (A+B)C \oplus \overline{D}
+        \end{equation*}
 
-    Which expands to:
+        Which expands to:
 
-    \begin{equation*}
-        Q = \left((AC + BC)\overline{D}\right) + \left((\overline{AB} + \overline{C})D\right)
-    \end{equation*}
+        \begin{equation*}
+            Q = \left((AC + BC)\overline{D}\right) + \left((\overline{AB} + \overline{C})D\right)
+        \end{equation*}
 
-    This expression is a little complicated and is not ideal to determine what inputs will result in our desired outputs.
-    Therefore, we will construct a truth table to represent these logic gates so that we can directly check a given output with an expected output.
+        This expression is a little complicated and is not ideal to determine what inputs will result in our desired outputs.
+        Therefore, we will construct a truth table to represent these logic gates so that we can directly check a given output with an expected output.
 
-    \begin{center}
-        \begin{tabular}{c c c c | c}
-            \toprule
-            Input D & Input C & Input B & Input A & Output \\
-            \midrule
-                0    &    0     &    0     &    0     &    0    \\
-                0    &    0     &    0     &    1     &    1    \\
-                0    &    0     &    1     &    0     &    0    \\
-                0    &    0     &    1     &    1     &    0    \\
-                0    &    1     &    0     &    0     &    0    \\
-                0    &    1     &    0     &    1     &    1    \\
-                0    &    1     &    1     &    0     &    1    \\
-                0    &    1     &    1     &    1     &    0    \\
-                1    &    0     &    0     &    0     &    0    \\
-                1    &    0     &    0     &    1     &    1    \\
-                1    &    0     &    1     &    0     &    1    \\
-                1    &    0     &    1     &    1     &    0    \\
-                1    &    1     &    0     &    0     &    0    \\
-                1    &    1     &    0     &    1     &    1    \\
-                1    &    1     &    1     &    0     &    1    \\
-                1    &    1     &    1     &    1     &    0    \\
-            \bottomrule
-        \end{tabular}
-    \end{center}
+        \begin{center}
+            \begin{tabular}{c c c c | c}
+                \toprule
+                Input D & Input C & Input B & Input A & Output \\
+                \midrule
+                    0    &    0     &    0     &    0     &    0    \\
+                    0    &    0     &    0     &    1     &    1    \\
+                    0    &    0     &    1     &    0     &    0    \\
+                    0    &    0     &    1     &    1     &    0    \\
+                    0    &    1     &    0     &    0     &    0    \\
+                    0    &    1     &    0     &    1     &    1    \\
+                    0    &    1     &    1     &    0     &    1    \\
+                    0    &    1     &    1     &    1     &    0    \\
+                    1    &    0     &    0     &    0     &    0    \\
+                    1    &    0     &    0     &    1     &    1    \\
+                    1    &    0     &    1     &    0     &    1    \\
+                    1    &    0     &    1     &    1     &    0    \\
+                    1    &    1     &    0     &    0     &    0    \\
+                    1    &    1     &    0     &    1     &    1    \\
+                    1    &    1     &    1     &    0     &    1    \\
+                    1    &    1     &    1     &    1     &    0    \\
+                \bottomrule
+            \end{tabular}
+        \end{center}
 
-    Both the representative expression and truth table are a little large and inefficient.
-    If we look at the representative expression, we will notice that it is difficult, if not impossible, to algebraically simplify by hand. 
-    So, we will simplify the truth table with a Karnaugh map and determine the simplified algebraic expression from there.
-    
-    \begin{center}
-        \begin{karnaugh-map}(label=corner)[4][4][1][$B$][$A$][$D$][$C$]
-            \manualterms{0,0,0,0,1,1,1,1,0,1,1,1,0,0,0,0}
-            \implicant{4}{6}
-            \implicant{9}{11}
-            \implicant{11}{10}
-        \end{karnaugh-map}
-    \end{center}
+        Both the representative expression and truth table are a little large and inefficient.
+        If we look at the representative expression, we will notice that it is difficult, if not impossible, to algebraically simplify by hand. 
+        So, we will simplify the truth table with a Karnaugh map and determine the simplified algebraic expression from there.
+        
+        \begin{center}
+            \begin{karnaugh-map}(label=corner)[4][4][1][$B$][$A$][$D$][$C$]
+                \manualterms{0,0,0,0,1,1,1,1,0,1,1,1,0,0,0,0}
+                \implicant{4}{6}
+                \implicant{9}{11}
+                \implicant{11}{10}
+            \end{karnaugh-map}
+        \end{center}
 
-    From the K-map, we can simplify the algebraic expression for the logic diagram as:
+        From the K-map, we can simplify the algebraic expression for the logic diagram as:
 
-    \begin{equation*}
-        Q = \overline{C}D + BC\overline{D} + AC\overline{D}
-    \end{equation*}
+        \begin{equation*}
+            Q = \overline{C}D + BC\overline{D} + AC\overline{D}
+        \end{equation*}
 
-    This expression is the most basic form for the logic diagram and now we can check any arbitrary value of $A$, $B$, $C$, or $D$ without have to directly look it up in the truth table or run it through the logic diagram.
-\end{example}
+        This expression is the most basic form for the logic diagram and now we can check any arbitrary value of $A$, $B$, $C$, or $D$ without have to directly look it up in the truth table or run it through the logic diagram.
+    \end{example}
 
-% TODO: Integrate Arduino exercise as a subsection
+    \pagelayout{margin} % Restore margins
 
-\pagelayout{margin} % Restore margins
+\section[]{Multiplexing and Demultiplexing}
