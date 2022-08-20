@@ -72,7 +72,15 @@ Course lectures will be supplemented by weekly (or as weekly as possible) demons
     
     Due to the recent chip shortage, Raspberry Pis may be hard to find or prohibitively expensive. If students are unable to acquire their own Raspberry Pis or similar SBCs, they may ask for a loaner unit from the instructor. \textbf{Please note that if the loaner unit is \emph{not} returned by the end of the semester, the student will be given an ``Incomplete'' grade until the instructor has been given the device.}
 
-\pagebreak
+    \paragraph*{Recommended Readings} Students are not required to purchase any particular textbooks or reference guides, but the following are recommended:
+    
+    \begin{enumerate}
+        \item \href{https://www.amazon.com/Art-Electronics-Paul-Horowitz/dp/0521809266/}{The Art of Electronics}
+        \item \href{https://www.amazon.com/Learning-Art-Electronics-Hands-Course/dp/0521177235/}{The Art of Electronics: Lab Course}
+        \item \href{https://www.amazon.com/Arduino-Cookbook-2nd-Michael-Margolis/dp/1449313876}{The Arduino Cookbook}
+        \item \href{https://www.amazon.com/Programming-Arduino-Getting-Started-Sketches/dp/1259641635/}{Programming Arduino}
+        \item \href{https://www.amazon.com/Arduino-Technical-Reference-Technicians-Engineers/dp/1491921765/}{The Arduino Technical Reference Handbook}
+    \end{enumerate}
 
 \section*{Grading Policies}
 This course covers several student performance metrics: (i) Assignments, (ii) Participation, (iii) Midterm Exam, and (iv) an Individual Course Project. The weighting for this metrics is below:
@@ -118,28 +126,26 @@ Students will be assigned the following letter grade and GPA quality points base
         Week & Monday & Wednesday & Friday \\
 
         \midrule
-        1   & Syllabus, setup       & Binary and boolean logic          & Project discussion    \\
-        2   & Digital logic         & Digital logic                     & YSI Castaway demo     \\    
-        3   & \textbf{NO CLASS}     & Multiplexers, registers, states   & HOBO meter demo       \\
-        4   & ADC Conversion        & Communication methods             & Survey gear demo      \\
-        5   & Electrical comps      & Simple circuit debugging          & Launchsonde demo      \\
-        6   & Intro to Fusion 360   & ECAD-Schematics                   & Lowell/Thetis demo    \\
-        7   & ECAD-Schematics       & ECAD-PCB basics                   & Sidescan SONAR demo   \\
-        8   & \textbf{NO CLASS}     & Inertial Measurement Units        & Midterm exam          \\
-        9   & Sensor Fusion         & AHRS design                       & CODAR system demo     \\
-        10  & Distance sensors      & Environmental sensors             & Soldering workshop    \\
-        11  & Analog filtering      & Digital filtering                 & Remote sensing demo   \\
-        12  & Gerber gen. and order & PCB manufacture techniques        & \textbf{NO CLASS}     \\
-        13  & PCB assembly (hand)   & PCB assembly (PnP)                & Robotics demo         \\
-        14  & Buffer day            & \textbf{NO CLASS}                 & \textbf{NO CLASS}     \\
-        15  & Data transmission     & Power considerations              & Work day              \\
-        16  & ICP Presentations     & ICP Presentations                 & ICP Presentations     \\
+        1   & Syllabus                      & Software Setup                    & Project and Kit Discussion        \\
+        2   & Project 1 Review              & Digital Logic                     & Multiplexers, Registers, States   \\    
+        3   & \textbf{NO CLASS}             & Project 2 Review                  & Electrical Components             \\
+        4   & Analog Measurements           & Distance Sensors and Measurement  & YSI/HOBO Demo                     \\
+        5   & Project 3 Review              & Environmental Sensors             & Launchsonde Demo                  \\
+        6   & Inertial Measurement Units    & Sensor Fusion/AHRS Design         & Lowell/Thetis Demo                \\
+        7   & Work Day                      & Transducers                       & Sidescan SONAR Demo               \\
+        8   & \textbf{NO CLASS}             & Project 4 Review                  & Midterm Exam                      \\
+        9   & Midterm Review                & Intro to Fusion 360               & ECAD-Introduction                 \\
+        10  & ECAD-Schematics               & ECAD-Libraries and Creation       & Schematic Review                  \\
+        11  & ECAD-PCB Basics               & Measurement Filtering Techniques  & Data Processing Demo              \\
+        12  & Gerber Gen. and Order         & PCB Manufacture Techniques        & \textbf{NO CLASS}                 \\
+        13  & PCB assembly (hand)           & PCB assembly (PnP)                & Robotics Demo                     \\
+        14  & Work Day                      & \textbf{NO CLASS}                 & \textbf{NO CLASS}                 \\
+        15  & Data Storage/Transmission     & Power Considerations              & Work Day                          \\
+        16  & ICP Presentations             & ICP Presentations                 & ICP Presentations                 \\
 
         \bottomrule
     \end{tabular}
 \end{table*}
-
-\pagebreak
 
 \section*{Assignment Schedule} \labsec{assignment_sch}
 \begin{table*}[h!]
@@ -152,11 +158,11 @@ Students will be assigned the following letter grade and GPA quality points base
         Project 1: RGB LED                                          & August 29     \\
         Project 2: Digital inputs and interrupts                    & September 7   \\
         Project 3: 7-Segment Counter, ICP: Proposal\footnotemark[2] & September 19  \\
-        Project 4: Sensor module and display                        & October 14     \\
+        Project 4: Sensor module and display                        & October 12     \\
         Midterm Exam                                                & October 14    \\
-        ICP: Schematic                                              & October 24    \\
-        ICP: PCB design                                             & November 11   \\
-        ICP: Assembled PCB                                          & December 3   \\
+        ICP: Schematic                                              & October 28    \\
+        ICP: PCB design                                             & November 7   \\
+        ICP: Assembled PCB                                          & December 2   \\
         ICP: Final presentation                                     & December 5    \\
         ICP: Final report                                           & December 12   \\
 
@@ -197,14 +203,25 @@ Students will be assigned the following letter grade and GPA quality points base
     The Canvas may be periodically updated to reflect changes or addendums to course content, but it may not necessarily reflect the most up-to-date information.
     For the most updated course material, please consult the class \href{https://github.com/Legohead259/OCE4531-Materials}{GitHub Repository}. \emph{You may be surprised what you find in there...}
 
+    \paragraph*{Remote Learning} The COVID-19 pandemic has radically changed the learning environment we are in.
+    The traditional ideology of in-person, all the time, has been fundamentally destroyed by two years of remote working.
+    As the pandemic has lessened, Florida Tech has resumed in-person classes, full-time.
+    However, the benefits of remote and asynchronous learning cannot be understated to those that can effictively learn that way, or need to for whatever reason.
+
+    Therefore, the class will be taught with a hybrid option.
+    Lectures, projects, and assignments will be primarily done in-person in accordance with Florida Tech policies and instructor preferences but, students will have the option to perform assignments or attend lectures remotely.
+    There is a Zoom link below that will be active for all of the class lectures; lecture presentations and classes will be recorded and uploaded to Panopto.
+    Students who elect to perform remote learning will need to submit a video of their working projects on Canvas as a part of their submission.
+    They are also encouraged to be in-person for the ICP presentations at the end of the course to minimize technical difficulties.
+    However, accomodations will be made if the presentation is given remotely.
+
     \subsection*{Weekly Projects}
     For the first couple of weeks of the course, students will be expected to put their Arduino starter kits to use with various projects.
     These are intended to slowly ramp up in complexity and give students a glimpse of what practical electronics and programming looks like.
-    Projects will be due by 23:59 Eastern Time on the day specified in the \hyperref[sec:assignment_sch]{Assignment Schedule} section.
+    Projects will be due by the start of class on the day specified in the \hyperref[sec:assignment_sch]{Assignment Schedule} section.
     
     \paragraph*{Late Policy} Submissions for assignments will be accepted up to the date of the students ICP presentation.
     However, for every day (24 hours) after the deadline, starting the minute after the deadline passes, 10 points will be deducted from the assignment down to an absolute maximum of 50\%.
-
 
     \subsection*{Individual Course Project}
     The Individual Course Project (ICP) is designed to encompass all of the elements taught throughout the course into a single package.
