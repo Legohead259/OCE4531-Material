@@ -97,7 +97,7 @@ void setup() {
     pinMode(PAGE_CHANGE_BUTTON_PIN, INPUT_PULLUP);
     pinMode(RESET_BUTTON_PIN, INPUT_PULLUP);
     attachInterrupt(digitalPinToInterrupt(PAGE_CHANGE_BUTTON_PIN), pageChangeISR, FALLING);
-    attachInterrupt(digitalPinToInterrupt(RESET_BUTTON_PIN), resetButtonISR, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(RESET_BUTTON_PIN), resetButtonISR, FALLING);
 
     // Set up the LCD's number of columns and rows:
     Serial.print("Initializing LCD...");
@@ -247,7 +247,7 @@ void loop() {
 
     imu::Quaternion Qb;
     Qb.fromEuler(data.roll, data.pitch, data.yaw);
-    imu::Quaternion Qg = Qb.invert() imu::Quaternion(0, gravNED) * Qb; // Rotate gravity from NED reference frame to body
+    imu::Quaternion Qg = Qb.invert() * imu::Quaternion(0, gravNED) * Qb; // Rotate gravity from NED reference frame to body
 
     // --- UPDATE TELEMETRY PACKET ---
     data.linAccelX = a.acceleration.x - Qg.x();
@@ -296,9 +296,9 @@ void loop() {
     data.speedZ = K.x(7);
 
     // Acceleration
-    data.accelX = K.x(2);
-    data.accelY = K.x(5);
-    data.accelZ = K.x(8);
+    data.accelX = a.acceleration.x;
+    data.accelY = a.acceleration.y;
+    data.accelZ = a.acceleration.z;
 
     // =========================
     // === UPDATE LCD MODULE ===
@@ -326,11 +326,11 @@ void loop() {
 
         case 1: // Linear Acceleration page
             lcd.setCursor(0,0); // Set cursor to top row
-            lcd.print("Ax   Ay   Az  g"); // Write headers
+            lcd.print("lAx  lAy  lAz  g"); // Write headers
             lcd.setCursor(0,1); // Set cursor to bottom row
-            lcd.print(data.linAccelX, 1); data.accelX > 0 ? lcd.print("  ") : lcd.print(" ");
-            lcd.print(data.linAccelY, 1); data.linAccelY > 0 ? lcd.print("  ") : lcd.print(" ");
-            lcd.print(data.linAccelZ, 1); data.linAccelZ > 0 ? lcd.print("  ") : lcd.print(" ");
+            lcd.print(data.linAccelX/9.81, 1); data.linAccelX > 0 ? lcd.print("  ") : lcd.print(" ");
+            lcd.print(data.linAccelY/9.81, 1); data.linAccelY > 0 ? lcd.print("  ") : lcd.print(" ");
+            lcd.print(data.linAccelZ/9.81, 1); data.linAccelZ > 0 ? lcd.print("  ") : lcd.print(" ");
 
             break;
         
@@ -425,13 +425,5 @@ void pageChangeISR() {
 }
 
 void resetButtonISR() {
-    if (digitalRead(RESET_BUTTON_PIN)) { // Button was released
-        isResetTriggered = false; // Reset the reset button flag
-        // Serial.println("Set reset trigger to FALSE"); // DEBUG
-    }
-    else { // Button was pressed
-        resetStartTime = millis();
-        isResetTriggered = true; // Set the reset button flag
-        // Serial.println("Set reset trigger to TRUE"); // DEBUG
-    }
+    isResetTriggered = true;
 }
