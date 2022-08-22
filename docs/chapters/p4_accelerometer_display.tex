@@ -10,7 +10,7 @@
 \labch{p4_accelerometer_display}
 
 \section*{Overview} \labsec{p4_overview}
-This project will introduce to you the concepts of reading sensor values and storing them in a packet, and displaying those values on an LCD display. 
+This project will introduce to you the concepts of reading sensor values, data storage inside a structure, and displaying recorded values on an LCD display. 
 You will read the accelerometer and gyroscope readings from the MPU6050 sensor (also referred to as the GY-521 module) and store them in an internal structured data packet for reporting to the LCD module.
 Your LCD1602 module will have several different pages: one page will show the accelerometer values, another will show the gyroscope values, a third will show roll and pitch data, and others will show any additional information you desire.
 \marginnote{See the \hyperref[sec:p4_extra_credit]{Extra Credit} section for more details.}
@@ -21,37 +21,38 @@ You will have some additional work for this project.
 Since an accelerometer provides accelerations, it will be your task to extrapolate (integrate) velocity and position as well as the other tasks outline above.
 You will be required to store this information in your storage packet and display the velocity and position values on separate pages on the LCD module.
 Since the MPU6050 module lacks a magnetometer, it will also be your task to integrate the heading angle and save it to the telemetry packet.
-You will also program the button to act as position and heading reset after you hold the button down for a certain amount of time.
+You will also program a button to act as velocity, position, and heading reset after you hold the button down for a certain amount of time.
 
 \section*{Requirements} \labsec{p4_requirements}
 For completion of this project, you must demonstrate the following:
-\begin{outline}
-    \1 Successful wiring of the MPU6050 IMU, LCD1602 module, piezoelectric buzzer, and button input (with appropriate debounce filtering)
-    \1 Reading and calculating a variety of values from the MPU6050 sensor and storing them in a telemetry packet.
-        \2 Acceleration X,
-        \2 Acceleration Y,
-        \2 Acceleration Z,
-        \2 Gyroscope X,
-        \2 Gyroscope Y,
-        \2 Gyroscope Z,
-        \2 Roll,
-        \2 Pitch
-    \1 Display the values on distinct pages on the LCD display with appropriate labels and units
-        \2 Page 1: Acceleration values
-        \2 Page 2: Gyroscope values
-        \2 Page 3: Orientation values
-    \1 Use a button tied to an interrupt service routine on the Arduino to cycle between the different LCD pages
-    \2 Use a buzzer to provide auditory feedback on each button press 
-\end{outline}
+\begin{itemize}
+    \item Successful wiring of the MPU6050 IMU, LCD1602 module, piezoelectric buzzer, and button input (with appropriate debounce filtering)
+    \item Reading and calculating a variety of values from the MPU6050 sensor and storing them in a telemetry packet.
+        \begin{itemize}
+            \item Acceleration X,
+            \item Acceleration Y,
+            \item Acceleration Z,
+            \item Gyroscope X,
+            \item Gyroscope Y,
+            \item Gyroscope Z,
+            \item Roll,
+            \item Pitch
+        \end{itemize}    
+    \item Display the values on distinct pages on the LCD display with appropriate labels and units
+        \begin{itemize}
+            \item Page 1: Acceleration values
+            \item Page 2: Gyroscope values
+            \item Page 3: Orientation values
+        \end{itemize}
+    \item Use a button tied to an interrupt service routine on the Arduino to cycle between the different LCD pages. Use a buzzer to provide auditory feedback on each button press.
+\end{itemize}
 
 \section*{Submission}
 You will be required to submit the following on Canvas:
-\begin{outline}
-    \1 a video of the project working with narration of what is occurring
-    \1 a well-organized and documented schematic of the project setup
-    \1 the source code file
-\end{outline}
-Please package all of these items into a compressed (zipped) folder and upload them to Canvas.
+\begin{itemize}
+    \item a well-organized and documented schematic of the project setup
+    \item the source code file
+\end{itemize}
 
 \section*{Grading} \labsec{p4_grading}
 You will be graded on the following criteria:
@@ -81,8 +82,8 @@ To that end, it is highly encouraged to pursue the following challenges and earn
 A successful demonstration of \emph{all} of the challenges below will earn you \textbf{an exemption from the midterm exam}.
 If you fail to finish all the challenges, the appropriate amount of points will still be given to you and used as standard extra credit for this assignment.
 
-In your submission, please include a note of which challenges you have completed and videos of the challenge working. 
-You will also need to include source code highlighting the specific challenge sections.
+In your submission, please include a note of which challenges you have completed.
+Your source code will also need to broken into specific files for each challenge, or have each challenge highlighted clearly in different sections.
 \emph{If it is not clear where your challenge-specific code is, it may not be counted.}
 
     \subsection*{Challenge 1: Sensor Fusion - Attitude and Heading Reference System}
@@ -99,15 +100,13 @@ You will also need to include source code highlighting the specific challenge se
         \item Displacement (X, Y, Z)
     \end{itemize}
 
-    The button used to change the display page will also act as a position and velocity reset when held for a certain amount of time.
+    A button will be used to reset the velocity, position, and heading when held for a certain amount of time.
 
-    \textbf{FOR CREDIT:} in your submission video scroll through the different pages of the LCD module and show that you are, in fact, capturing the appropriate data.
-    When you reach the position page, reset the position values back to 0 after a couple of seconds.
+    \textbf{FOR CREDIT:} You must scroll through the different pages of the LCD module and show that you are capturing the appropriate data.
+    You must also demonstrate resetting the velocity, position, and heading values with the reset button.
 
     \subsection*{Challenge 2: AHRS Filtering}
-    \marginnote{For information, consult the lecture notes Chapter \ref{ch:data_processing}, Section \ref{sec:kalman_filter}, 
-    \href{http://blog.tkjelectronics.dk/2012/09/a-practical-approach-to-kalman-filter-and-how-to-implement-it/}{TJKElectronics' excellent brief}, 
-    \href{https://github.com/TKJElectronics/Example-Sketch-for-IMU-including-Kalman-filter/tree/master/IMU}{TJKElectronics' example code}, and 
+    \marginnote{For information, consult the lecture notes Chapter \ref{ch:data_processing}, Section \ref{sec:kalman_filter} and 
     \href{https://www.kalmanfilter.net/default.aspx}{This excellent tutorial} (focus on the 1-dimensional application for now).}
 
     You should have noticed from the AHRS challenge that the velocity, displacement, and orientation values are extremely inaccurate and drift significantly over time.
@@ -116,23 +115,26 @@ You will also need to include source code highlighting the specific challenge se
     These values accumulate over time, causing the massive divergence.
 
     Therefore, to combat these inaccuracies, we will implement some filters to increase the estimation accuracy.
-    First, you will implement a Mahony filter to convert the IMU readings to orientation values.
-    Do not worry, you will not need to research the theory or algorithm behind this filter, there is a \href{https://github.com/PaulStoffregen/MahonyAHRS}{handy library} that is easy to use and has some example code.
-    
-    Second, you will use a Kalman filter to estimate the velocity and displacement values.
-    Realistically, this would be done with complex matrix math and with a single 9-dimensional Kalman filter object, but for sake of ease, we will just use six 1-dimensional Kalman filters; three for velocity X/Y/Z, and three for displacement X/Y/Z.
+    First, you will implement a Kalman filter to "smooth" out your raw acceleration and gyroscope data to give you better readings to use.
+    Here, it will be beneficial to a 6-axis Kalman filter which can be created using the \href{https://github.com/rfetick/Kalman}{Arduino Kalman libary} by \textit{rfetick}. It is strongly recommended to study Kalman filtering and the basic theory before attempting this.
+    It will make a lot more sense after some studying!
 
-    Again, the telemetry packet will be updated with these values and displayed on the LCD module.
+    You will then feed the filtered acceleration and gyroscope data into a \href{https://ahrs.readthedocs.io/en/latest/filters/mahony.html}{Mahony Filter} that can generate the appropriate orientation data.
+    You will not need to understand the theory of this filter, you may just use the example code provided by the \href{https://www.arduino.cc/reference/en/libraries/mahony/}{Arduino Mahony library}.
 
-    \textbf{FOR CREDIT:} you must submit a capture of a plot created from your data that shows either roll, pitch, yaw values.
-    One line must be the method you used previously, and one line must be the Kalman-filtered estimate.
+    If you established and tuned the Kalman filter correctly, you should have some more accurate readings of velocity, position, and orientation.
+    Again, update the telemetry packet with these values and display them on the LCD module on separate pages.
+
+    \textbf{FOR CREDIT:} you must submit a capture of a plot created from your data that shows one accelerometer axis (X, Y, or Z).
+    One line must be the method you used previously, and one line must be the filtered estimate.
     Quickly discuss the results in your submission.
 
     \subsection*{Challenge 3: Removing Gravity}
     For this challenge, we will convert the acceleration signals into linear acceleration, put that information into the telemetry packet, and display it on a separate page of the LCD module.
-    For this challenge, it is strongly recommended to use a quaternion rotation as this method is immune to \href{https://www.youtube.com/watch?v=zc8b2Jo7mno}{gimbal lock} - a phenomenon where rotations require additional euler transformations at certain points.
+    For this challenge, it is strongly recommended to use a quaternion rotation as this method is immune to \href{https://www.youtube.com/watch?v=zc8b2Jo7mno}{gimbal lock} - a phenomenon where rotations require additional euler transformations at certain orientations.
 
     To assist you, the code to convert from Euler angles to Quaternion is below:
+    \sidenote{You may also want to look into the \href{https://github.com/adafruit/Adafruit_BNO055/tree/master/utility}{Adafruit IMU maths helper libraries}}
     \begin{lstlisting}[linewidth=1.5\textwidth, language=C++]
 struct Quaternion
 {
@@ -161,14 +163,14 @@ Quaternion ToQuaternion(double yaw, double pitch, double roll)
     \end{lstlisting}
 
     From there, you will define a Quaternion vector for gravity defined in the North, East, Down (NED) reference frame.
-    \marginnote{\emph{Hint:} it's just a normal gravitational acceleration vector with another term for the 'w' component of the Quaternion.}
+    \sidenote{\emph{Hint:} it's just a normal gravitational acceleration vector with another term for the 'w' component of the Quaternion.}
     Then, you will rotate the gravity quaternion from the NED reference frame to the body reference frame using:
     
     \begin{equation*}
         Q_{g,b} = Q_b^{-1} * Q_{g,NED} * Q_b
     \end{equation*}
 
-    Finally, subtract the X,Y,Z components of the rotated Quaternion vector for gravity from the recorded body accelerations and you will have linear acceleration! \emph{Easy right!?}
+    Finally, subtract the X,Y,Z components of the rotated Quaternion vector for gravity from the recorded body accelerations and you will have linear acceleration. \emph{Easy right!?}
     
     As always, display these values on a new page of the LCD module!
     
@@ -176,5 +178,5 @@ Quaternion ToQuaternion(double yaw, double pitch, double roll)
     The interrupt pin on the MPU6050 can be configured to serve as a motion detection trigger.
     This challenge's task will be to put the Arduino into a sleep mode after the initialization and use the motion detection interrupt to wake the Arduino up and read sensor data for a defined period of time before going back to sleep.
 
-    \textbf{FOR CREDIT:} In your submission video, demonstrate the Arduino not capturing any data (asleep), then you jolting the Arduino awake by moving the accelerometer, and the values changing on the LCD module.
+    \textbf{FOR CREDIT:} You must demonstrate the Arduino not capturing any data (asleep), then you jolting the Arduino awake by moving the accelerometer, and the values changing on the LCD module.
     After a set time, these readings should stop updating as the Arduino goes back to sleep.
