@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Rename and move PDF
-cp .latexoutput/main.pdf publish/lecture_notes_f22.pdf
+cp .latexoutput/main.pdf ../publish/lecture_notes_f22.pdf
 
 # Move into the publish directory
-cd publish/
+cd ../publish/
 
 # Chapter location declarations
 doc_start=97
