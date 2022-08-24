@@ -173,6 +173,9 @@ Quaternion ToQuaternion(double yaw, double pitch, double roll)
     Finally, subtract the X,Y,Z components of the rotated Quaternion vector for gravity from the recorded body accelerations and you will have linear acceleration. \emph{Easy right!?}
     
     As always, display these values on a new page of the LCD module!
+
+    \textbf{FOR CREDIT:} You must demonstrate a page on the LCD module that shows linear acceleration correctly and detects acceleration in the X, Y, or Z directions.
+    Your velocity and position estimates should also use these linear accelerations to decrease drift.
     
     \subsection*{Challenge 4: MPU6050 Motion Detect Interrupt}
     The interrupt pin on the MPU6050 can be configured to serve as a motion detection trigger.
