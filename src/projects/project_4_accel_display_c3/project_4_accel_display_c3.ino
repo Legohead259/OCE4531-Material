@@ -9,10 +9,12 @@
  * 
  * @author Braidan Duffy
  * 
- * @date July 31, 2022
+ * @date July 31, 2022. Last modified 08/24/2022
  * 
  * @version v1.0
  */
+
+#define SENSOR_SAMPLE_RATE 40 // Hz
 
 // LCD Instantiation
 #include <LiquidCrystal.h>
@@ -24,7 +26,7 @@ LiquidCrystal lcd(7, 8, 9, 10, 11, 12); // RS, En, D4, D5, D6, D7
 #include <Adafruit_Sensor.h>
 #include "Wire.h"
 #include <math.h>
-#include "util/quaternion.h"
+#include "utility/quaternion.h"
 
 Adafruit_MPU6050 mpu;
 sensors_event_t a, g, temp;
@@ -32,28 +34,42 @@ sensors_event_t a, g, temp;
 // Kalman filter instantiation
 #include <Kalman.h>
 
-#define N_state 9 // Number of states - Position (XYZ), Speed (XYZ), Acceleration (XYZ)
-#define N_obs 3 // Number of observation - Acceleration (XYZ)
-#define r_a 5.0 // Acceleration measurement noise
+// IMU Kalman filter
+#define N_state_imu 6 // Number of states - Acceleration (XYZ), Gyroscope (XYZ)
+#define N_obs_imu 6 // Number of observations - Acceleration (XYZ), Gyroscope (XYZ)
+#define r_a 0.1 // Acceleration measurement noise
+#define r_g 0.1 // Gyroscope measurement noise
+#define q_a 0.5 // Process error - acceleration
+#define q_g 0.5 // Process error - gyroscope
+
+BLA::Matrix<N_obs_imu> obs_imu; // Observation vector for the SVA filter
+KALMAN<N_state_imu, N_obs_imu> K_imu; // Kalman filter object
+
+// SVA Kalman filter
+#define N_state_sva 9 // Number of states - Position (XYZ), Speed (XYZ), Linear Acceleration (XYZ)
+#define N_obs_sva 3 // Number of observation - Linear Acceleration (XYZ)
+#define q_a 0.5 // Process error - linear acceleration
 #define q_p 0.1 // Process error - position
 #define q_s 0.1 // Process error - speed
 #define q_a 0.5 // Process error - acceleration
 
-BLA::Matrix<N_obs> obs; // Observation vector
-KALMAN<N_state, N_obs> K; // Kalman filter object
+BLA::Matrix<N_obs_sva> obs_sva; // Observation vector for the SVA filter
+KALMAN<N_state_sva, N_obs_sva> K_sva; // Kalman filter object
 unsigned long currMillis;
 float dt;
 
+float sxOffset, syOffset, szOffset, vxOffset, vyOffset, vzOffset, hdgOffset = 0;
+
 // Mahony Filter Instantiation
-#include <MahonyAHRS.h>
-Mahony M; // Mahony filter
+#include "MahonyAHRS.h"
+Mahony M(SENSOR_SAMPLE_RATE, 10.0f, 0.1f); // Mahony filter
 
 // General instantiations
 #define PAGE_CHANGE_BUTTON_PIN 2
 #define RESET_BUTTON_PIN 3
 #define RESET_HOLD_TIME 500 // ms
-#define BUZZER_ACTIVE_PIN 6
-#define BUZZER_ACTIVE_TIME 250 // ms
+#define BUZZER_ACTIVE_PIN 4
+#define BUZZER_ACTIVE_TIME 125 // ms
 #define MAX_NUM_PAGES 6 // Acceleration, Lin. Accel., Speed, Displacement, Gyro, Orientation
 
 bool isBuzzerActive = false;
@@ -91,7 +107,7 @@ struct telemetry_t {
 
 
 void setup() {
-    Serial.begin(115200);
+    Serial.begin(9600);
     // Pin initializations
     pinMode(BUZZER_ACTIVE_PIN, OUTPUT);
     pinMode(PAGE_CHANGE_BUTTON_PIN, INPUT_PULLUP);
@@ -110,6 +126,23 @@ void setup() {
         while (true); // Block further code execution
     }
     Serial.println("done!"); Serial.println();
+
+    mpu.setCycleRate(MPU6050_CYCLE_40_HZ);
+    Serial.print("Cycle Rate set to: ");
+    switch (mpu.getCycleRate()) {
+    case MPU6050_CYCLE_1_25_HZ:
+        Serial.println("1.25 Hz");
+        break;
+    case MPU6050_CYCLE_5_HZ:
+        Serial.println("5 Hz");
+        break;
+    case MPU6050_CYCLE_20_HZ:
+        Serial.println("20 Hz");
+        break;
+    case MPU6050_CYCLE_40_HZ:
+        Serial.println("40 Hz");
+        break;
+    }
     
     mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
     Serial.print("Accelerometer range set to: ");
@@ -145,64 +178,107 @@ void setup() {
         break;
     }
 
-    mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);
-    Serial.print("Filter bandwidth set to: ");
-    switch (mpu.getFilterBandwidth()) {
-    case MPU6050_BAND_260_HZ:
-        Serial.println("260 Hz");
-        break;
-    case MPU6050_BAND_184_HZ:
-        Serial.println("184 Hz");
-        break;
-    case MPU6050_BAND_94_HZ:
-        Serial.println("94 Hz");
-        break;
-    case MPU6050_BAND_44_HZ:
-        Serial.println("44 Hz");
-        break;
-    case MPU6050_BAND_21_HZ:
-        Serial.println("21 Hz");
-        break;
-    case MPU6050_BAND_10_HZ:
-        Serial.println("10 Hz");
-        break;
-    case MPU6050_BAND_5_HZ:
-        Serial.println("5 Hz");
-        break;
-    }
+    // mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);
+    // Serial.print("Filter bandwidth set to: ");
+    // switch (mpu.getFilterBandwidth()) {
+    // case MPU6050_BAND_260_HZ:
+    //     Serial.println("260 Hz");
+    //     break;
+    // case MPU6050_BAND_184_HZ:
+    //     Serial.println("184 Hz");
+    //     break;
+    // case MPU6050_BAND_94_HZ:
+    //     Serial.println("94 Hz");
+    //     break;
+    // case MPU6050_BAND_44_HZ:
+    //     Serial.println("44 Hz");
+    //     break;
+    // case MPU6050_BAND_21_HZ:
+    //     Serial.println("21 Hz");
+    //     break;
+    // case MPU6050_BAND_10_HZ:
+    //     Serial.println("10 Hz");
+    //     break;
+    // case MPU6050_BAND_5_HZ:
+    //     Serial.println("5 Hz");
+    //     break;
+    // }
 
-    // time evolution matrix (whatever... it will be updated in loop)
-    //       P  | S  | A  | P  | S  | A  | P  | S  | A
-    K.F = { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, // X
-            0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-            0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-            0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, // Y
-            0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
-            0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
-            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, // Z
-            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
-            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
+    // Initialize IMU Kalman Filter
+    // IMU time evolution matrix
+    //          Ax | Ay | Az | Gx | Gy | Gz
+    K_imu.F = { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
+                0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
+                0.0, 0.0, 0.0, 1.0, 0.0, 0.0,
+                0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
+                0.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
+    
+    // IMU measurement matrix
+    //          Ax | Ay | Az | Gx | Gy | Gz
+    K_imu.H = { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
+                0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
+                0.0, 0.0, 0.0, 1.0, 0.0, 0.0,
+                0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
+                0.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
 
-    // measurement matrix (position, velocity, acceleration)
-    K.H = { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,    // X
-            0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,    // Y
-            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 };  // Z
+    double ra2 = r_a*r_a;
+    double rg2 = r_g*r_g;
+    // IMU measurement covariance matrix
+    //          Ax | Ay | Az | Gx | Gy | Gz
+    K_imu.R = { ra2, 0.0, 0.0, 0.0, 0.0, 0.0,
+                0.0, ra2, 0.0, 0.0, 0.0, 0.0,
+                0.0, 0.0, ra2, 0.0, 0.0, 0.0,
+                0.0, 0.0, 0.0, rg2, 0.0, 0.0,
+                0.0, 0.0, 0.0, 0.0, rg2, 0.0,
+                0.0, 0.0, 0.0, 0.0, 0.0, rg2 };
+
+    // IMU model covariance matrix
+    double qa2 = q_a*q_a;
+    double qg2 = q_g*q_g;
+    K_imu.Q = { qa2, 0.0, 0.0, 0.0, 0.0, 0.0,
+                0.0, qa2, 0.0, 0.0, 0.0, 0.0,
+                0.0, 0.0, qa2, 0.0, 0.0, 0.0,
+                0.0, 0.0, 0.0, qg2, 0.0, 0.0,
+                0.0, 0.0, 0.0, 0.0, qg2, 0.0,
+                0.0, 0.0, 0.0, 0.0, 0.0, qg2 };
     
-    // measurement covariance matrix
-    K.R = { r_a*r_a,  0.0,      0.0,
-            0.0,      r_a*r_a,  0.0,
-            0.0,      0.0,      r_a*r_a };
+    // Initialize SVA Kalman Filter
+    // SVA time evolution matrix
+    //          P  | S  | lA | P  | S  | lA | P  | S  | lA
+    K_sva.F = { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, // X
+                0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, // Y
+                0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
+                0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
+                0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, // Z
+                0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
+                0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
+
+    // SVA measurement matrix (position, velocity, linear acceleration)
+    K_sva.H = { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,    // X
+                0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,    // Y
+                0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 };  // Z
     
-    // model covariance matrix
-    K.Q = { q_p*q_p, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, // X
-            0.0, q_s*q_s, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-            0.0, 0.0, q_a*q_a, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-            0.0, 0.0, 0.0, q_p*q_p, 0.0, 0.0, 0.0, 0.0, 0.0, // Y
-            0.0, 0.0, 0.0, 0.0, q_s*q_s, 0.0, 0.0, 0.0, 0.0,
-            0.0, 0.0, 0.0, 0.0, 0.0, q_a*q_a, 0.0, 0.0, 0.0,
-            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, q_p*q_p, 0.0, 0.0, // Z
-            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, q_s*q_s, 0.0,
-            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, q_a*q_a };
+    // SVA measurement covariance matrix
+    K_sva.R = { ra2, 0.0, 0.0,
+                0.0, ra2, 0.0,
+                0.0, 0.0, ra2 };
+    
+    // SVA model covariance matrix
+    double qp2 = q_p*q_p;
+    double qs2 = q_s*q_s;
+    K_sva.Q = { qp2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, // X
+                0.0, qs2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                0.0, 0.0, qa2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                0.0, 0.0, 0.0, qp2, 0.0, 0.0, 0.0, 0.0, 0.0, // Y
+                0.0, 0.0, 0.0, 0.0, qs2, 0.0, 0.0, 0.0, 0.0,
+                0.0, 0.0, 0.0, 0.0, 0.0, qa2, 0.0, 0.0, 0.0,
+                0.0, 0.0, 0.0, 0.0, 0.0, 0.0, qp2, 0.0, 0.0, // Z
+                0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, qs2, 0.0,
+                0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, qa2 };
     
     currMillis = millis();
 
@@ -211,94 +287,121 @@ void setup() {
 }
 
 void loop() {
-    // Poll IMU
-    mpu.getEvent(&a, &g, &temp);
+    static long _lastIMUPoll = 0;
+    if (millis() > _lastIMUPoll+(1000/SENSOR_SAMPLE_RATE)) {
+        _lastIMUPoll = millis();
 
-    // Compute time difference since last cycle
-    dt = (millis() - currMillis)/1000.0;
-    currMillis = millis();
+        // Poll IMU
+        mpu.getEvent(&a, &g, &temp);
 
-    // ==========================
-    // === RUN MAHONY AHRS FILTER
-    // ==========================
+        // Compute time difference since last cycle
+        dt = (millis() - currMillis)/1000.0;
+        currMillis = millis();
 
-    // Update Mahony filter
-    M.updateIMU(g.gyro.x, g.gyro.y, g.gyro.z,
-                data.accelX, data.accelY, data.accelZ);
+        // ===============================
+        // === FILTER IMU MEASUREMENTS ===
+        // ===============================
 
-    // --- UPDATE TELEMETRY PACKET ---
+        // Since the measurements do not have a time-dependent component, we can just update the filter with the current measurements
+        obs_imu(0) = a.acceleration.x;
+        obs_imu(1) = a.acceleration.y;
+        obs_imu(2) = a.acceleration.z;
+        obs_imu(3) = g.gyro.x;
+        obs_imu(4) = g.gyro.y;
+        obs_imu(5) = g.gyro.z;
+        
+        // Update IMU Kalman filter
+        K_imu.update(obs_imu);
 
-    // Gyroscope
-    data.gyroX = g.gyro.x;
-    data.gyroY = g.gyro.y;
-    data.gyroZ = g.gyro.z;
+        // Update telemetry packet
+        data.accelX = K_imu.x(0);
+        data.accelY = K_imu.x(1);
+        data.accelZ = K_imu.x(2);
+        data.gyroX  = K_imu.x(3);
+        data.gyroY  = K_imu.x(4);
+        data.gyroZ  = K_imu.x(5);
 
-    // Orientation
-    data.roll = M.getRoll();
-    data.pitch = M.getPitch();
-    data.yaw = M.getYaw();
+        // ==========================
+        // === RUN MAHONY AHRS FILTER
+        // ==========================
 
-    // =====================================
-    // === CALCULATE LINEAR ACCELERATION ===
-    // =====================================
+        // Update Mahony filter
+        M.updateIMU(data.gyroX, data.gyroY, data.gyroZ,
+                    data.accelX, data.accelY, data.accelZ); // TODO: Filter needs tuning to decrease phase shift
+        // M.updateIMU(g.gyro.x, g.gyro.y, g.gyro.z,
+        //             a.acceleration.x, a.acceleration.y, a.acceleration.z);
 
-    sensors_vec_t linAccel;
-    imu::Vector<3> gravNED = {0, 0, 9.81}; // Gravitational acceleration in NED
+        // Orientation
+        data.roll = M.getRoll();
+        data.pitch = M.getPitch();
+        data.yaw = M.getYaw();
 
-    imu::Quaternion Qb;
-    Qb.fromEuler(data.roll, data.pitch, data.yaw);
-    imu::Quaternion Qg = Qb.invert() * imu::Quaternion(0, gravNED) * Qb; // Rotate gravity from NED reference frame to body
+        // DEBUG
+        // Serial.print("Ax: "); Serial.print(data.accelX); Serial.println(",");
+        // Serial.print("Ay: "); Serial.print(data.accelY); Serial.println(",");
+        // Serial.print("Az: "); Serial.print(data.accelZ); Serial.println(",");
+        // Serial.print("Gx: "); Serial.print(data.gyroX); Serial.println(",");
+        // Serial.print("Gy: "); Serial.print(data.gyroY); Serial.println(",");
+        // Serial.print("Gz: "); Serial.print(data.gyroZ); Serial.println(",");
+        // Serial.print("Roll: ");     Serial.print(data.roll); Serial.println(",");
+        // Serial.print("Pitch: ");    Serial.print(data.pitch); Serial.println(",");
+        // Serial.print("Yaw: ");      Serial.print(data.yaw); // Serial.println(",");
+        // Serial.println(); Serial.println();
 
-    // --- UPDATE TELEMETRY PACKET ---
-    data.linAccelX = a.acceleration.x - Qg.x();
-    data.linAccelY = a.acceleration.y - Qg.y();
-    data.linAccelZ = a.acceleration.z - Qg.z();
+        // =====================================
+        // === CALCULATE LINEAR ACCELERATION ===
+        // =====================================
 
-    // =========================
-    // === RUN KALMAN FILTER ===
-    // =========================
+        sensors_vec_t linAccel;
+        imu::Vector<3> gravNED = {0, 0, 9.81}; // Gravitational acceleration in NED
 
-    // Update state equation
-    // Here we make use of the Taylor expansion on the (position,speed,acceleration)
-    // position_{k+1}     = position_{k} + dt*speed_{k} + (dt*dt/2)*acceleration_{k}
-    // speed_{k+1}        = speed_{k} + dt*acceleration_{k}
-    // acceleration_{k+1} = acceleration_{k}
-    K.F = { 1.0, dt,  dt*dt/2,  0.0, 0.0, 0.0,      0.0, 0.0, 0.0,
-            0.0, 1.0, dt,       0.0, 0.0, 0.0,      0.0, 0.0, 0.0,
-            0.0, 0.0, 1.0,      0.0, 0.0, 0.0,      0.0, 0.0, 0.0,
-            0.0, 0.0, 0.0,      1.0, dt,  dt*dt/2,  0.0, 0.0, 0.0,
-            0.0, 0.0, 0.0,      0.0, 1.0, dt,       0.0, 0.0, 0.0,
-            0.0, 0.0, 0.0,      0.0, 0.0, 1.0,      0.0, 0.0, 0.0,
-            0.0, 0.0, 0.0,      0.0, 0.0, 0.0,      1.0, dt,  dt*dt*2,
-            0.0, 0.0, 0.0,      0.0, 0.0, 0.0,      0.0, 1.0, dt,
-            0.0, 0.0, 0.0,      0.0, 0.0, 0.0,      0.0, 0.0, 1.0};
+        imu::Quaternion Qb = M.getQuaternion();
+        imu::Quaternion Qg = Qb.invert() * imu::Quaternion(0, gravNED) * Qb; // Rotate gravity from NED reference frame to body
 
-    // Use linear acceleration for better accuracy
-    BLA::Matrix<N_obs> meas;
-    meas(0) = data.linAccelX;
-    meas(1) = data.linAccelY;
-    meas(2) = data.linAccelZ;
-    obs = meas;
-    
-    // Update Kalman filter
-    K.update(obs);
+        // --- UPDATE TELEMETRY PACKET ---
+        data.linAccelX = a.acceleration.x - Qg.x();
+        data.linAccelY = a.acceleration.y - Qg.y();
+        data.linAccelZ = a.acceleration.z - Qg.z();
 
-    // --- UPDATE TELEMETRY PACKET ---
+        // =========================
+        // === RUN KALMAN FILTER ===
+        // =========================
 
-    // Displacement
-    data.dispX = K.x(0);
-    data.dispY = K.x(3);
-    data.dispZ = K.x(6);
+        // Update state equation
+        // Here we make use of the Taylor expansion on the (position,speed,acceleration)
+        // position_{k+1}     = position_{k} + dt*speed_{k} + (dt*dt/2)*acceleration_{k}
+        // speed_{k+1}        = speed_{k} + dt*acceleration_{k}
+        // acceleration_{k+1} = acceleration_{k}
+        K_sva.F = { 1.0, dt,  dt*dt/2,  0.0, 0.0, 0.0,      0.0, 0.0, 0.0,
+                    0.0, 1.0, dt,       0.0, 0.0, 0.0,      0.0, 0.0, 0.0,
+                    0.0, 0.0, 1.0,      0.0, 0.0, 0.0,      0.0, 0.0, 0.0,
+                    0.0, 0.0, 0.0,      1.0, dt,  dt*dt/2,  0.0, 0.0, 0.0,
+                    0.0, 0.0, 0.0,      0.0, 1.0, dt,       0.0, 0.0, 0.0,
+                    0.0, 0.0, 0.0,      0.0, 0.0, 1.0,      0.0, 0.0, 0.0,
+                    0.0, 0.0, 0.0,      0.0, 0.0, 0.0,      1.0, dt,  dt*dt*2,
+                    0.0, 0.0, 0.0,      0.0, 0.0, 0.0,      0.0, 1.0, dt,
+                    0.0, 0.0, 0.0,      0.0, 0.0, 0.0,      0.0, 0.0, 1.0};
 
-    // Velocity
-    data.speedX = K.x(1);
-    data.speedY = K.x(4);
-    data.speedZ = K.x(7);
+        // Use linear acceleration for better accuracy
+        obs_sva(0) = data.linAccelX;
+        obs_sva(1) = data.linAccelY;
+        obs_sva(2) = data.linAccelZ;
+        
+        // Update Kalman filter
+        K_sva.update(obs_sva);
 
-    // Acceleration
-    data.accelX = a.acceleration.x;
-    data.accelY = a.acceleration.y;
-    data.accelZ = a.acceleration.z;
+        // --- UPDATE TELEMETRY PACKET ---
+
+        // Displacement
+        data.dispX = K_sva.x(0) - sxOffset;
+        data.dispY = K_sva.x(3) - syOffset;
+        data.dispZ = K_sva.x(6) - szOffset;
+
+        // Velocity
+        data.speedX = K_sva.x(1) - vxOffset;
+        data.speedY = K_sva.x(4) - vyOffset;
+        data.speedZ = K_sva.x(7) - vzOffset;
+    }
 
     // =========================
     // === UPDATE LCD MODULE ===
@@ -389,22 +492,25 @@ void loop() {
     // Integral reset handler
     if (isResetTriggered && !digitalRead(RESET_BUTTON_PIN) && millis() >= resetStartTime + RESET_HOLD_TIME) { // Check for a button press and if the button is held for RESET_HOLD_TIME
         isResetTriggered = false; // Reset the reset button flag
-        // Reset speed values
-        data.speedX = 0; 
-        data.speedY = 0;
-        data.speedZ = 0;
-
         // Reset displacement values
-        data.dispX = 0;
-        data.dispY = 0;
-        data.dispZ = 0;
+        sxOffset += data.dispX; 
+        syOffset += data.dispY;
+        szOffset += data.dispZ;
+
+        // Reset speed values
+        vxOffset += data.speedX;
+        vyOffset += data.speedY;
+        vzOffset += data.speedZ;
 
         // Reset heading value
-        data.yaw = 0;
-        // Serial.println("Reset values!"); // DEBUG
+        hdgOffset += data.yaw;
+
+        isBuzzerActive = true;
+        buzzerStartTime = millis();
+        Serial.println("Reset values!"); // DEBUG
     }
 
-    delay(100);
+    // delay(1000/SENSOR_SAMPLE_RATE);
 }
 
 
@@ -414,8 +520,8 @@ void loop() {
 
 
 void pageChangeISR() {
-    buzzerStartTime = millis(); // Start the buzzer active timer
-    isBuzzerActive = true; // Set the buzzer active flag
+    // buzzerStartTime = millis(); // Start the buzzer active timer
+    // isBuzzerActive = true; // Set the buzzer active flag
     isPageChanged = true; // Set the page changed flag
     curPageNum++; // Change the page number
     if (curPageNum >= MAX_NUM_PAGES) { // Increment the page number and check if it is greater than the max pages
@@ -426,4 +532,6 @@ void pageChangeISR() {
 
 void resetButtonISR() {
     isResetTriggered = true;
+    resetStartTime = millis(); 
+    Serial.println("Reset button pressed!"); // DEBUG
 }
