@@ -14,8 +14,8 @@
 
 // Define button pins according to schematic
 #define HWREG_BUTTON_PIN 18 // Button that is regulated by a RC low-pass filter
-#define SWREG_BUTTON_PIN 3 // Button that is regulated by a software debounce
-#define UNREG_BUTTON_PIN 2 // Button that has an unregulated input
+#define SWREG_BUTTON_PIN 2 // Button that is regulated by a software debounce
+#define UNREG_BUTTON_PIN 3 // Button that has an unregulated input
 
 // Define LED pins according to schematic
 #define HWREG_LED_PIN 10

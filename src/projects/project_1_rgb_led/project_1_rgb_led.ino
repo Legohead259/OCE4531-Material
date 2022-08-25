@@ -12,9 +12,9 @@
  */
 
 #define BUTTON_PIN 2
-#define LED_RED_PIN 12
-#define LED_GREEN_PIN 11
-#define LED_BLUE_PIN 10
+#define LED_RED_PIN 11
+#define LED_GREEN_PIN 10
+#define LED_BLUE_PIN 9
 #define MAX_NUM_FUNCS 5
 #define PI 3.1415
 
