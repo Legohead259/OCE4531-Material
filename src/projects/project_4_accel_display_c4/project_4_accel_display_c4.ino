@@ -133,6 +133,11 @@ void setup() {
     }
     Serial.println("done!"); Serial.println();
 
+    mpu.setMotionInterrupt(true); // Enable motion interrupt
+    mpu.setMotionDetectionThreshold(16); // Set detection threshold
+    mpu.setMotionDetectionDuration(10); // Set detection duration
+    mpu.setInterruptPinPolarity(true); // Set interrupt pin to be active LOW
+
     mpu.setCycleRate(MPU6050_CYCLE_40_HZ);
     Serial.print("Cycle Rate set to: ");
     switch (mpu.getCycleRate()) {
@@ -562,22 +567,30 @@ void wakeUpISR() {
 void arduinoSleep() {
     set_sleep_mode(SLEEP_MODE_PWR_DOWN); // sleep mode is set here  
     sleep_enable(); // enables the sleep bit in the mcucr register  
-    delay(5);
+    delay(500);
     Serial.println("About to sleep");
-    delay(5);
-    attachInterrupt(digitalPinToInterrupt(ARDUINO_WAKE_PIN), wakeUpISR, LOW); // use interrupt 0 (pin 2) and run function  
-    delay(5);
+    delay(500);
+
+    // Update LCD display
+    lcd.setCursor(0, 0); // Set cursor to top row
+    lcd.print("Arduino Asleep! "); // Clear top row
+    lcd.setCursor(0, 1); // Set cursor to bottom row
+    lcd.print("                "); // Clear bottom row
+    isPageChanged = true; // Set flag to clear screen on wake
+
+    attachInterrupt(digitalPinToInterrupt(ARDUINO_WAKE_PIN), wakeUpISR, LOW); // use WAKE UP Pin for interrupt 
+    delay(500);
     Serial.println("Interrupt attached");
-    delay(5);
+    delay(500);
     sleep_mode(); // here the device is actually put to sleep...!!
 
     // THE PROGRAM CONTINUES FROM HERE AFTER INTERRUPT IS CLOSED
-    delay(5);
+    delay(500);
     Serial.println("Continuing main program after interrupt");
-    delay(5);
+    delay(500);
 
     sleep_disable(); // first thing after waking from sleep: disable sl¯eep...  
-    delay(5);
+    delay(500);
     Serial.println("Sleep disabled");
-    delay(5);
+    delay(500);
 }
