@@ -61,25 +61,25 @@ Students will be considered to have completed the project when they demonstrate 
     \textbf{Category} & \textbf{No Credit} & \textbf{Half Credit} & \textbf{Full Credit} \\
 
     \hline
-    Efficacy & 
+    Efficacy (60 pts) & 
     Student did not demonstrate their working project & 
     student demonstrated a working project, but it did not meet all of the requirements specified in the project handout & 
     student demonstrated a feature-complete project that accomplished all of the goals specified in the project handout \\
     \hline
-    3 types of input filtering & 
-    Student did not implement enough unique filters &
-    &
-    Student implemented enough filters \\
-    \hline
-    Printout of Serial monitor & 
+    Printout of Serial monitor (20 pts) & 
     Student did not provide a printout of the Serial monitor &
     Student provided a printout, but it was not appropriately labeled or incoherent&
     Student provided an acceptable printout \\
     \hline
-    Schematic neatness & 
+    Schematic neatness (10 pts) & 
     Student did not provide a schematic, or it is illegible &
     Student provided a schematic, but it is difficult to read or understand &
     Student provided a schematic that is easy to read and understand \\
+    \hline
+    Code neatness (10 pts) & 
+    Student did not provide code, or it is difficult to read and follow &
+    Student provided code, but it is difficult to read, variable names are nonsensical, functions are not documented or commented, code structure is not helpful &
+    Student provided well-documented, easy to read and follow code pursuant to best coding practices and/or C++ standards \\
     \hline
     Mystery extra credit &
     Student did not request extra credit or reach the necessary thresholds & 
@@ -90,14 +90,15 @@ Students will be considered to have completed the project when they demonstrate 
 \end{tabular}
 
     \subsection*{Extra Credit}
-    Students will be granted extra credit if they demonstrated that they record a button press \emph{after} a certain time period and follow the rest of the requirements following the detected press.
+    Students will be granted extra credit if they demonstrated that they change the LED state for the appropriate button after it being held for a determined time. 
+    \textbf{Note:} the respective counter should still increment as normal, when the button is pressed.
 
 \section*{Guide}
     \subsection*{Wiring the Breadboard}
     Students should have three buttons and three LEDs on their breadboard connected to the Arduino's GPIO pins.
     The GND pin of the Arduino should be connected to the negative (blue) rail of the breadboard.
     Each LED should have a current-limiting resistor in series with the anode (long wire) and the Arduino output pin with the cathode (short pin) connected to  the negative rail.
-    Two buttons should have a 10k-ohm pulldown resistor on one contact end to the negative rail and the other contact end conected directly to an interrupt-capable input pin.
+    Two buttons should have a 10k-ohm pulldown resistor on one contact end to the negative rail and the other contact end connected directly to an interrupt-capable input pin.
     The third button should have an RC circuit in series with the Arduino input wire as shown in Figure \ref{fig:p2_digital_inputs_bb}. 
 
     \begin{figure*}
@@ -124,7 +125,7 @@ Students will be considered to have completed the project when they demonstrate 
     Both \lstinline[language=C++, style=mystyle]{unregBtnISR()} and \lstinline[language=C++, style=mystyle]{hwregBtnISR()} do the same thing because the debouncing is either not handled or done so externally to the program.
     The software trick comes inside \lstinline[language=C++, style=mystyle]{swregBtnISR()}.
     Here, a static variable is initialized that will retain its value after the ISR is finished executing.
-    This value holds the last known millisecond reading of the ress detection logic.
+    This value holds the last known millisecond reading of the press detection logic.
     Then, the current millisecond reading is captured and used to compare with the previous value.
     If 100 ms have passed since the ISR was last executed, then the code block assumes it was a valid button press and increments the counter, changes the LED state, and prints out the counter to the Serial port.
     If an appropriate time has not passed, then the ISR assumes the detection was a bounce and resets the last millisecond reading before exiting.
