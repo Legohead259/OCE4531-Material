@@ -3,7 +3,7 @@
 % Written by: Braidan Duffy
 %
 % Date: 05/30/2022
-% Last Revision: 07/27/2022
+% Last Revision: 08/25/2022
 % ============================================
 
 \chapter{Project 4: MPU6050 Accelerometer and LCD Display}
@@ -14,7 +14,7 @@ This project will introduce to you the concepts of reading sensor values, data s
 You will read the accelerometer and gyroscope readings from the MPU6050 sensor (also referred to as the GY-521 module) and store them in an internal structured data packet for reporting to the LCD module.
 Your LCD1602 module will have several different pages: one page will show the accelerometer values, another will show the gyroscope values, a third will show roll and pitch data, and others will show any additional information you desire.
 \marginnote{See the \hyperref[sec:p4_extra_credit]{Extra Credit} section for more details.}
-A button will be used to cycle between the different pages and a buzzer will be used to provide auditory feedback on every press.
+A button will be used to cycle between the different pages and a buzzer will be used to provide auditory feedback.
 
 \section*{Graduate Students} \labsec{p4_graduate_students}
 You will have some additional work for this project. 
@@ -25,7 +25,7 @@ You will also program a button to act as velocity, position, and heading reset a
 
 \section*{Requirements} \labsec{p4_requirements}
 For completion of this project, you must demonstrate the following:
-\begin{itemize}
+\begin{enumerate}
     \item Successful wiring of the MPU6050 IMU, LCD1602 module, piezoelectric buzzer, and button input (with appropriate debounce filtering)
     \item Reading and calculating a variety of values from the MPU6050 sensor and storing them in a telemetry packet.
         \begin{itemize}
@@ -45,14 +45,14 @@ For completion of this project, you must demonstrate the following:
             \item Page 3: Orientation values
         \end{itemize}
     \item Use a button tied to an interrupt service routine on the Arduino to cycle between the different LCD pages. Use a buzzer to provide auditory feedback on each button press.
-\end{itemize}
+\end{enumerate}
 
 \section*{Submission}
 You will be required to submit the following on Canvas:
-\begin{itemize}
-    \item a well-organized and documented schematic of the project setup
+\begin{enumerate}
+    \item a well-organized and documented schematic of the project setup \sidenote{\textbf{Graduate Students:} Not Fritzing, "professional-looking"}
     \item the source code file
-\end{itemize}
+\end{enumerate}
 
 \section*{Grading} \labsec{p4_grading}
 You will be graded on the following criteria:
@@ -62,9 +62,9 @@ You will be graded on the following criteria:
         Criterion & Points \\
 
         \midrule
-        Efficacy & 50 \\
+        Efficacy & 60 \\
         Well organized and neat schematic & 20 \\
-        Well organized and neat source code & 30 \\
+        Well organized and neat source code & 20 \\
         Extra Credit Challenge 1 \footnotemark & 25 \\
         Extra Credit Challenge 2 & 25 \\
         Extra Credit Challenge 3 & 25 \\

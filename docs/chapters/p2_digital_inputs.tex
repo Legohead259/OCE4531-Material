@@ -3,7 +3,7 @@
 % Written by: Braidan Duffy
 %
 % Date: 05/25/2022
-% Last Revision: 05/25/2022
+% Last Revision: 08/25/2022
 % ============================================
 
 \chapter{Project 2: Digital Inputs and Interrupts}
@@ -13,11 +13,13 @@
 \marginnote{For more information on digital inputs, interrupts, and filtering, please consult Chapter \ref{} and Example \ref{}}
 \todo{Make these parts and put it into the book}
 This project is designed to introduce you to concepts of filtering digital inputs and handling interrupts inside a microcontroller's program. It will also introduce a little bit about the Serial monitor.
-You will wire up three buttons to your Arduino and use them to turn on and off an LED.
+You will wire up three buttons to your Arduino along with three corresponding LEDs.
 One button will not have any filtering or regulation at all; another will have a software-defined debounce filter; and the third will have a low-pass RC circuit filter.
 You will use an interrupt attached to each input pin to increment a counter and display the current press count to the Serial monitor.
-This will demonstrate how inputs to a program need to be considered as false readings can create undesired program behaviors. 
-You should notice that the unregulated button has difficulty incrementing the counter by 1 every time you press it and may not always switch the light from off to on or vice versa.
+Additionally, each press will toggle on or off one LED \sidenote{\textbf{Reminder:} The LED \emph{must} be connected to the Arduino pins with resistors in series in order to protect the diodes. Please consult your Arduino kit manual for specific resistor values}.
+This will demonstrate that inputs into a program need to be carefully considered, as false readings can create undesired program behaviors. 
+You should notice that the unregulated button has difficulty incrementing the counter by 1 every time you press it.
+The LED may also not toggle on or off, as expected.
 The software-regulated button input should be a little more accurate and reliable, but you may still notice some problems.
 The hardware-regulated button input should throw few, if any false positives - always incrementing by 1 with every press and switching the LED state consistently.
 
@@ -33,26 +35,25 @@ Alternatively, you may demonstrate the project in two parts. In the first part, 
 In the second part, you will implement the unregulated and hardware filtered button input.
 Please discuss this with your instructor for additional information.
 
+\pagelayout{wide} % Remove margins
+
 \section*{Requirements}
 For this project you will be required to demonstrate:
-\marginnote{\textbf{Reminder:} The LED \emph{must} be connected to the Arduino pins with resistors in series in order to protect the diodes. Please consult your Arduino kit manual for specific resistor values}
 
-\begin{outline}
-    \1 appropriately wiring three buttons and three LEDs to your Arduino and breadboard with all supporting components
-    \1 reading in the three digital inputs and attaching appropriate interrupt service routines to the pins
-    \1 incrementing counters for each button press and switching the corresponding LED on and off
-    \1 appropriately printing the counters to the Serial monitor
-\end{outline}
+\begin{enumerate}
+    \item Appropriately wiring three buttons and three LEDs to your Arduino and breadboard with all supporting components
+    \item Reading in the three digital inputs and attaching appropriate interrupt service routines to the pins
+    \item Incrementing counters for each button press and switching the corresponding LED on and off
+    \item Appropriately printing the counters to the Serial monitor
+\end{enumerate}
 
 \section*{Submission}
 You will be required to submit the following on Canvas:
-\begin{outline}
-    \1 a video of the project working with narration of what is occurring
-    \1 a well-organized and documented schematic of the project setup
-    \1 the source code file
-    \1 a printout of the Serial monitor showing a counter increment when you press the corresponding button
-\end{outline}
-Please package all of these items into a compressed (zipped) folder and upload them to Canvas.
+\begin{enumerate}
+    \item A well-organized and documented schematic of the project setup
+    \item The source code file
+    \item A printout of the Serial monitor showing a counter increment when you press the corresponding button. Please note which counter is being displayed (e.g. \lstinline[]{SW-Regulated button: 99}).
+\end{enumerate}
 
 \section*{Grading}
 You will be graded along the following criteria:
@@ -78,3 +79,5 @@ An extra credit opportunity exists with this project!
 To earn the credits, you must program the buttons to increment their counters and change LED states \emph{after} holding the button for a certain period of time.
 How you implement this is up to you.
 If you want to try and get the extra credit points, please let the instructor know in the submission and detail why you believe you earn the points.
+
+\pagelayout{margin} % Restore margins
